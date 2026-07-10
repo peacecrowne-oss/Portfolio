@@ -6,19 +6,19 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ## Project Status
 
-**Status:** ✔ **Version 1.0.2 Released** (navigation cleanup + full resume-accuracy sync applied post-release). All core content sections (Hero, About, Experience, Projects, Professional Qualifications, Contact) are built, integrated, verified, and polished for consistency and recruiter scannability. Experience, Skills, and Projects data now match the resume verbatim, including the Database Administrator role and the resume's actual 6 skill categories. Navigation is fully centralized and offset-corrected. Production readiness work (resume download, SEO metadata, web metadata, custom 404 page) is complete. The site is live at https://portfolio-jade-one-7e2va8v8ab.vercel.app/.
+**Status:** ✔ **Version 1.0.2 Released** on the live client. ✔ **Version 2.0 (React + Node.js migration) complete locally, not yet deployed.** The repo is now a monorepo (`client/`, `server/`, `shared/`) with a working Express API alongside the unchanged React client. The **deployed** site's behavior is unaffected by this migration — the client still renders from `shared/data` at build time, exactly as it did before, since the section components were deliberately not switched to live API calls (that cutover requires the backend to be deployed first, and is a separate, not-yet-approved step).
 
 ---
 
 ## Current Phase
 
-**Phase:** Version 1.0.2 released and content-synced — ready for Version 1.1 planning (see Next Tasks / optional enhancements below).
+**Phase:** Version 2.0 migration complete and validated locally — awaiting approval to deploy the Node.js backend (and, separately, to wire the client over to consume it).
 
 ---
 
 ## Overall Progress
 
-`100%` of Version 1.0.2 scope complete — documentation, project scaffold, application shell, every content section (Hero, About, Experience, Projects, Professional Qualifications, Contact), resume download (now pointing at the latest resume PDF), SEO/social metadata, web metadata (robots.txt, sitemap.xml, site.webmanifest), a custom 404 page, a UI consistency/polish pass, centralized navigation, and a full resume-accuracy content sync (Experience, Skills, Projects) are all built, composed, and verified (build, lint, dev server all passing). Formal automated accessibility/performance audits (axe-core, Lighthouse) were not run in this environment and remain a recommended follow-up.
+`100%` of Version 1.0.2 scope remains live and complete. Version 2.0 (full-stack migration) is `100%` complete for everything explicitly scoped: client moved to `client/`, data/types consolidated into `shared/`, a full Express API built and validated (health, profile, experience, projects, skills, certifications, contact), root workspace orchestration (`npm install`/`dev`/`build`/`lint`), environment variable examples, and documentation, all verified working. Not done, by design: the backend is not deployed anywhere, and the client has not been switched to consume it — both are explicitly separate, future, approved steps.
 
 ---
 
@@ -312,19 +312,95 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ---
 
+## Version 2.0 Migration
+
+**Objective:** migrate the static React/Vite portfolio into a client/server monorepo (React 19 + Vite client, Node.js + Express API), preserving the existing UI, design system, accessibility, and content exactly. Architectural migration only, not a redesign.
+
+### Tracking
+
+- [x] **Planning** — Proposal presented (files affected, reasons, expected outcome, two flagged spec conflicts) and approved before any file was touched.
+- [x] **Client migration** — `src/`, `public/`, `index.html`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js`, `package.json` moved into `client/`. Data (`profile.ts`, `experience.ts`, `projects.ts`, `skills.ts`, `certifications.ts`, `education.ts`) and their types moved out to `shared/`. All `@/data/*` imports across `About.tsx`, `Contact.tsx`, `Experience.tsx`, `Hero.tsx`, `Projects.tsx`, `Skills.tsx` updated to `@shared/data/*` / `@shared/types/*`. `vite.config.ts` and `client/tsconfig.json` given a `@shared` alias.
+- [x] **Server creation** — `server/` scaffolded with the requested layered structure (`routes/`, `controllers/`, `services/`, `middleware/`, `config/`, `types/`, `utils/`, `app.ts`, `server.ts`). Express 5, Helmet, CORS, compression, Morgan, Zod, dotenv installed. TypeScript pinned to `6.0.3` (same as client) for `typescript-eslint` compatibility. Server uses CommonJS rather than ESM, specifically to avoid Node's mandatory `.js`-extension requirement on relative imports under `NodeNext` module resolution — sidesteps a whole class of friction for a project this size with no compelling reason to need ESM.
+- [x] **API creation** — All 7 requested endpoints implemented and manually verified against the compiled production build (`node dist/server/src/server.js`, not just dev mode):
+  - `GET /api/health` → `{"status":"ok"}` (exact shape requested)
+  - `GET /api/profile`, `/api/experience`, `/api/projects`, `/api/skills`, `/api/certifications` → `{"success":true,"data":...}`, reading from `shared/data` via `dataService`
+  - `POST /api/contact` → Zod-validated (`name`, `email`, `message`); valid payloads return `{"success":true,"data":{"message":"Message received."}}`; invalid payloads return `400` with field-level `details`. Email sending is stubbed (`emailService` logs only, sends nothing, no secrets).
+  - Unmatched routes return `404` with a structured JSON error via `notFound` middleware.
+- [x] **Integration** — `client/src/services/api.ts` built as a complete, typed API client (all 7 endpoints) but **deliberately not wired into any section component** — see the flagged decision below. Vite dev server proxies `/api/*` to `http://localhost:3001` for local integration testing. Root `package.json` added with npm workspaces (`client`, `server`) and `concurrently`-based `dev` script; `build`/`lint` fan out to both workspaces. Root `eslint.config.js` split into a client block (browser+node globals, React rules) and a server/shared block (node globals, `no-unused-vars` tuned for Express's required 4-arg error-handler signature).
+- [x] **Testing** — Manual validation only (no automated test suite exists yet in either workspace, consistent with the rest of the project). See Validation Results below for everything checked.
+- [ ] **Deployment** — Not started. Per the Stop Condition, waiting for explicit approval before deploying the Node.js backend anywhere.
+
+### Flagged decisions (from the approved proposal, now implemented as described)
+
+1. **No contact form was added.** `POST /api/contact` is fully built and works, but the Contact section's UI is untouched (still direct `mailto:`/`tel:` links, no form) — adding one would be a UI change beyond "preserve existing UI."
+2. **The client was not switched to live API calls.** All section components still import from `shared/data` directly (moved, not duplicated, from the old `src/data`). `api.ts` exists, is fully typed, and was validated via the Vite proxy in local dev — but nothing calls it yet. This means the migration cannot break the live production site, since its runtime behavior is unchanged.
+
+### Files Created
+
+- `shared/types/{profile,experience,projects,skills,certifications,education,index}.ts`
+- `shared/data/{profile,experience,projects,skills,certifications,education,index}.ts`
+- `server/package.json`, `server/tsconfig.json`, `server/.env.example`
+- `server/src/app.ts`, `server/src/server.ts`
+- `server/src/routes/{health,resource,contact,index}.routes.ts` *(index.ts has no suffix)*
+- `server/src/controllers/{health,resource,contact}.controller.ts`
+- `server/src/services/{dataService,emailService}.ts`
+- `server/src/middleware/{notFound,errorHandler}.ts`
+- `server/src/config/env.ts`
+- `server/src/types/index.ts`
+- `server/src/utils/asyncHandler.ts`
+- `client/src/services/api.ts`
+- `client/.env.example`
+- Root `package.json` (new — the old root `package.json` became `client/package.json`)
+
+### Files Moved
+
+- `src/` → `client/src/` (minus `src/data/`, which became `shared/data/` + `shared/types/`)
+- `public/` → `client/public/`
+- `index.html`, `vite.config.ts`, `tsconfig.json`, `tailwind.config.js`, `postcss.config.js` → `client/`
+- Old root `package.json`/`package-lock.json` → `client/package.json`/`client/package-lock.json`
+
+### Files Modified
+
+- `client/vite.config.ts` — added `@shared` alias, added dev-server proxy for `/api`
+- `client/tsconfig.json` — added `@shared/*` path mapping, added `../shared` to `include`
+- `client/src/sections/{About,Contact,Experience,Hero,Projects,Skills}.tsx` — import paths updated from `@/data/*` to `@shared/data/*` / `@shared/types/*` (no logic or rendering changes)
+- `eslint.config.js` (root) — split into client/server-aware blocks
+- `README.md` — full rewrite covering the new architecture, local setup, env vars, API endpoints, deployment
+- `progress.md` — this entry
+
+**Not modified:** `requirements.md` (wasn't in this milestone's explicit scope — its Folder Structure and Technology Stack sections are now stale and should be refreshed in a follow-up), Hero/About/Experience/Projects/Skills/Contact rendering logic, theme system, Tailwind config, design tokens, accessibility markup.
+
+### Validation Results
+
+- `npm run build --workspace=client` — passes (40 modules, `@shared` alias resolves correctly)
+- `npm run build --workspace=server` — passes after fixing a `rootDir`/module-resolution issue (see server creation notes above); compiles to `server/dist/server/src/server.js` and `server/dist/shared/**`
+- `npm run lint --workspace=client` — passes
+- `npm run lint --workspace=server` — passes (after adding the `no-unused-vars` override for Express's error-handler signature)
+- `npm run dev` (root, both workspaces via `concurrently`) — both confirmed running via direct HTTP checks: client `200` at `:5173`, server `200` at `:3001/api/health`
+- Compiled production server (`node server/dist/server/src/server.js`) — manually tested: `/api/health`, `/api/profile`, `/api/experience`, `/api/projects`, `/api/skills`, `/api/certifications` all return correct data; `/api/contact` tested with both a valid payload (`200`, success) and an invalid one (`400`, field-level Zod errors); unmatched route returns `404`
+- Client dev server: all static assets (`resume.pdf`, `favicon.svg`, `robots.txt`, `sitemap.xml`, `site.webmanifest`, `404.html`, `og-image.svg`) still serve `200`; theme flash-prevention script intact; all 7 section anchors (`home`, `about`, `experience`, `projects`, `skills`, `certifications`, `contact`) and all 7 nav hash links present in the built bundle; `scroll-padding-top:4rem` intact; resume link intact
+- Vite dev proxy: `curl http://localhost:5173/api/health` correctly proxied through to the Express server and returned `{"status":"ok"}`
+
+---
+
 ## Pending Approval
 
-*None at this time.*
+*Awaiting explicit approval to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition). No production infrastructure has been touched — the live client is unaffected either way.*
 
 ---
 
 ## Current Sprint
 
-*Version 1.0.2 released — awaiting direction on Version 1.1.*
+*Version 2.0 migration complete locally. Awaiting direction: deploy the backend, wire the client to consume it, refresh `requirements.md` for the new structure, or move on to Version 1.1 content/feature work.*
 
 ---
 
 ## Next Tasks
+
+- [ ] Decide on and execute backend deployment (Render/Railway/Fly.io/Vercel serverless function, etc.), then update `CORS_ORIGIN`/`VITE_API_BASE_URL` accordingly.
+- [ ] Once the backend is live, decide whether to switch the client's section components from static `shared/data` imports to `services/api.ts` calls — and if so, add loading/error states.
+- [ ] Refresh `requirements.md`'s Folder Structure and Technology Stack sections to reflect the `client/`/`server/`/`shared/` monorepo (not done this round — wasn't in this milestone's explicit scope).
+- [ ] Decide whether a contact form should be added to the UI to actually use `POST /api/contact` (currently unused by the frontend by design).
 
 Optional Version 1.1 enhancements (not started, listed for future planning only):
 

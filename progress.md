@@ -285,6 +285,9 @@ This document tracks the real-time status of the portfolio project: what phase i
   - Files modified: `src/data/experience.ts`, `progress.md`
   - No changes to Hero, About, Projects, Skills, Contact, theme, styling, configuration, or build tooling
   - Verified: `npm run build` (40 modules, unchanged — no new components), `npm run lint`, and `npm run dev` all succeed with no errors; confirmed "Database Administrator" and "Improved database processing efficiency by 20%" present in the built bundle; confirmed all 7 section anchors still present (no regressions)
+- **2026-07-09** — Database Administrator bullet correction. The user shared an updated resume PDF that resolved the open question flagged above: **Database Administrator, RCCG (Jan 2020 – Jul 2022) is explicitly its own dated entry** in the resume's sidebar, confirming the earlier interpretation (title + dates) was correct — no split into a separate entry was needed. However, the responsibility bullets used previously were a paraphrased/condensed version; this update replaces them with the **7 bullets exactly as they appear verbatim in the actual resume** (previously 10 shorter, condensed fragments). Role, company, and dates were unchanged.
+  - Modified `src/data/experience.ts` only
+  - Verified: `npm run build`, `npm run lint` both pass; confirmed the verbatim bullet text ("...resulting in a 20% improvement in database processing efficiency") present in the built bundle; confirmed all 7 section anchors still present
 
 ---
 
@@ -304,7 +307,6 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 Optional Version 1.1 enhancements (not started, listed for future planning only):
 
-- [ ] Confirm whether "Database Administrator" (now merged into the Jan 2020 – Jul 2022 RCCG entry) should instead be a separate chronological role — split it back out once/if correct dates are confirmed
 - [ ] Project screenshots
 - [ ] GitHub repository links per project
 - [ ] Live demo links per project

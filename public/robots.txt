@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://portfolio-jade-one-7e2va8v8ab.vercel.app/sitemap.xml

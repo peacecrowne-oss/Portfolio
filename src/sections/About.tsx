@@ -1,9 +1,10 @@
 import { Section } from "@/components/Section";
+import { Badge } from "@/components/Badge";
 import { PROFILE } from "@/data/profile";
 import { EDUCATION } from "@/data/education";
 
-const pillClasses =
-  "rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300";
+const groupLabelClasses =
+  "text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
 
 export function About() {
   const { about } = PROFILE;
@@ -14,14 +15,19 @@ export function About() {
         About Me
       </h2>
 
-      <p className="mt-6 max-w-3xl text-base leading-relaxed text-slate-600 sm:text-lg dark:text-slate-400">
-        {about.intro}
-      </p>
-
-      <div className="mt-12 grid gap-12 lg:grid-cols-2">
+      <div className="mt-10 grid gap-10 lg:grid-cols-2">
         <div>
           <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-            Background
+            Professional Summary
+          </h3>
+          <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+            {about.intro}
+          </p>
+        </div>
+
+        <div>
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+            Career Journey
           </h3>
           <div className="mt-4 space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
             <p>{about.background.journey}</p>
@@ -37,29 +43,30 @@ export function About() {
             ))}
           </div>
         </div>
+      </div>
 
-        <div className="flex flex-col gap-10">
+      <div className="mt-12">
+        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+          Technical Focus
+        </h3>
+        <div className="mt-4 space-y-6">
           <div>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-              Technical Interests
-            </h3>
-            <ul className="mt-4 flex flex-wrap gap-2">
+            <p className={groupLabelClasses}>Technical Interests</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
               {about.technicalInterests.map((interest) => (
-                <li key={interest} className={pillClasses}>
-                  {interest}
+                <li key={interest}>
+                  <Badge>{interest}</Badge>
                 </li>
               ))}
             </ul>
           </div>
 
           <div>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-              Working Style
-            </h3>
-            <ul className="mt-4 flex flex-wrap gap-2">
+            <p className={groupLabelClasses}>Working Style</p>
+            <ul className="mt-3 flex flex-wrap gap-2">
               {about.workingStyle.map((trait) => (
-                <li key={trait} className={pillClasses}>
-                  {trait}
+                <li key={trait}>
+                  <Badge>{trait}</Badge>
                 </li>
               ))}
             </ul>
@@ -75,7 +82,7 @@ export function About() {
           {about.coreStrengths.map((strength) => (
             <div
               key={strength.title}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-800/50"
+              className="rounded-lg border border-slate-200 bg-slate-50 p-5 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800"
             >
               <h4 className="text-base font-semibold text-slate-900 dark:text-white">
                 {strength.title}

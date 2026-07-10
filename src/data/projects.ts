@@ -5,6 +5,9 @@ export interface Project {
   businessProblem: string | null;
   solution: string | null;
   outcome: string | null;
+  githubUrl: string | null;
+  liveDemoUrl: string | null;
+  imageUrl: string | null;
 }
 
 export const PROJECTS: Project[] = [
@@ -16,6 +19,9 @@ export const PROJECTS: Project[] = [
     businessProblem: null,
     solution: null,
     outcome: null,
+    githubUrl: null,
+    liveDemoUrl: null,
+    imageUrl: null,
   },
   {
     title: "Sales Reporting Dashboard",
@@ -24,6 +30,9 @@ export const PROJECTS: Project[] = [
     businessProblem: null,
     solution: null,
     outcome: null,
+    githubUrl: null,
+    liveDemoUrl: null,
+    imageUrl: null,
   },
   {
     title: "Revolution Mortgage Group (RMG)",
@@ -32,6 +41,9 @@ export const PROJECTS: Project[] = [
     businessProblem: null,
     solution: null,
     outcome: null,
+    githubUrl: null,
+    liveDemoUrl: null,
+    imageUrl: null,
   },
   {
     title: "LeadForge AI System",
@@ -41,6 +53,9 @@ export const PROJECTS: Project[] = [
     businessProblem: null,
     solution: null,
     outcome: null,
+    githubUrl: null,
+    liveDemoUrl: null,
+    imageUrl: null,
   },
   {
     title: "LeadInbox",
@@ -50,5 +65,8 @@ export const PROJECTS: Project[] = [
     businessProblem: null,
     solution: null,
     outcome: null,
+    githubUrl: null,
+    liveDemoUrl: null,
+    imageUrl: null,
   },
 ];

@@ -1,0 +1,16 @@
+{
+  "name": "Omolola Peace Makinde | Power BI Data Analyst Portfolio",
+  "short_name": "Peace Makinde",
+  "description": "Microsoft Certified Power BI Data Analyst specializing in Power BI, SQL, DAX, ETL, Azure, dashboard development, business intelligence, and AI-powered analytics solutions.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

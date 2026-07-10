@@ -1,6 +1,10 @@
 import { Section } from "@/components/Section";
 import { EXPERIENCE } from "@/data/experience";
 
+function isQuantifiedAchievement(text: string): boolean {
+  return /\d+%/.test(text);
+}
+
 export function Experience() {
   return (
     <Section id="experience">
@@ -33,7 +37,16 @@ export function Experience() {
               {entry.responsibilities.length > 0 && (
                 <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {entry.responsibilities.map((responsibility) => (
-                    <li key={responsibility}>{responsibility}</li>
+                    <li
+                      key={responsibility}
+                      className={
+                        isQuantifiedAchievement(responsibility)
+                          ? "font-semibold text-slate-900 dark:text-white"
+                          : undefined
+                      }
+                    >
+                      {responsibility}
+                    </li>
                   ))}
                 </ul>
               )}

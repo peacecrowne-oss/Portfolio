@@ -300,7 +300,7 @@ This document tracks the real-time status of the portfolio project: what phase i
   - Modified `src/components/Navbar.tsx` — removed the `displayedNavLinks` splice workaround entirely; both the desktop and mobile menus now map directly over `NAV_LINKS` with no navigation items hard-coded in the component. All navigation config lives in exactly one place again.
   - Navigation now contains exactly the 7 required items, all sourced from `constants/navigation.ts`: Home, About, Experience, Projects, Skills, Certifications, Contact.
   - Verified: `npm run build` (40 modules, unchanged), `npm run lint`, and `npm run dev` all succeed with no errors; confirmed all 7 hash links and all 7 anchor `id`s still present in the built bundle; confirmed `scroll-padding-top:4rem` still present (untouched, from the prior milestone); theme toggle and mobile menu logic untouched, so both continue to function as before.
-  - **Deployed:** committed as `refactor: centralize navigation configuration` and pushed to `origin/main` (see commit SHA below).
+  - **Deployed:** committed as `refactor: centralize navigation configuration` (`ae5e648`) and pushed to `origin/main`. Live site responds 200 post-push; Vercel build/deploy completion could not be directly confirmed (no dashboard/API access in this environment).
 
 ---
 

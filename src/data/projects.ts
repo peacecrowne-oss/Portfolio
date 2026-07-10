@@ -14,7 +14,7 @@ export const PROJECTS: Project[] = [
   {
     title: "BigMart Sales Dashboard",
     description:
-      "Power BI sales dashboard providing sales performance insights and trend analysis.",
+      "Developed a comprehensive Power BI dashboard providing sales performance insights and trend analysis.",
     technologies: ["Power BI", "DAX", "SQL"],
     businessProblem: null,
     solution: null,
@@ -25,7 +25,7 @@ export const PROJECTS: Project[] = [
   },
   {
     title: "Sales Reporting Dashboard",
-    description: "SSRS dashboard for tracking and analyzing sales performance.",
+    description: "Created SSRS dashboards to track and analyze sales performance.",
     technologies: ["SSRS", "SQL Server"],
     businessProblem: null,
     solution: null,
@@ -36,7 +36,7 @@ export const PROJECTS: Project[] = [
   },
   {
     title: "Revolution Mortgage Group (RMG)",
-    description: "Developed SSIS ETL pipelines and SSRS reporting solutions.",
+    description: "Delivered SSIS ETL pipelines and SSRS reporting solutions.",
     technologies: ["SSIS", "SSRS", "SQL Server"],
     businessProblem: null,
     solution: null,
@@ -48,7 +48,7 @@ export const PROJECTS: Project[] = [
   {
     title: "LeadForge AI System",
     description:
-      "AI-powered lead generation system designed to improve customer acquisition.",
+      "Designed an AI-driven lead generation system to improve customer acquisition.",
     technologies: ["AI", "Python", "Claude", "OpenAI"],
     businessProblem: null,
     solution: null,
@@ -60,7 +60,7 @@ export const PROJECTS: Project[] = [
   {
     title: "LeadInbox",
     description:
-      "Admissions management platform for student application, review, and enrollment.",
+      "Built an admissions management platform to streamline the student application, review, and enrollment process.",
     technologies: [],
     businessProblem: null,
     solution: null,

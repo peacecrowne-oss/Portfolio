@@ -6,19 +6,19 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ## Project Status
 
-**Status:** ✔ **Version 1.0.2 Released.** All core content sections (Hero, About, Experience, Projects, Professional Qualifications, Contact) are built, integrated, verified, and polished for consistency and recruiter scannability. Experience data now includes the previously-missing Database Administrator role. Production readiness work (resume download, SEO metadata, web metadata, custom 404 page) is complete. The site is live at https://portfolio-jade-one-7e2va8v8ab.vercel.app/.
+**Status:** ✔ **Version 1.0.2 Released** (navigation cleanup + full resume-accuracy sync applied post-release). All core content sections (Hero, About, Experience, Projects, Professional Qualifications, Contact) are built, integrated, verified, and polished for consistency and recruiter scannability. Experience, Skills, and Projects data now match the resume verbatim, including the Database Administrator role and the resume's actual 6 skill categories. Navigation is fully centralized and offset-corrected. Production readiness work (resume download, SEO metadata, web metadata, custom 404 page) is complete. The site is live at https://portfolio-jade-one-7e2va8v8ab.vercel.app/.
 
 ---
 
 ## Current Phase
 
-**Phase:** Version 1.0.2 released — ready for Version 1.1 planning (see Next Tasks / optional enhancements below).
+**Phase:** Version 1.0.2 released and content-synced — ready for Version 1.1 planning (see Next Tasks / optional enhancements below).
 
 ---
 
 ## Overall Progress
 
-`100%` of Version 1.0.2 scope complete — documentation, project scaffold, application shell, every content section (Hero, About, Experience, Projects, Professional Qualifications, Contact), resume download, SEO/social metadata, web metadata (robots.txt, sitemap.xml, site.webmanifest), a custom 404 page, a UI consistency/polish pass, and a resume-accuracy content update are all built, composed, and verified (build, lint, dev server all passing). Formal automated accessibility/performance audits (axe-core, Lighthouse) were not run in this environment and remain a recommended follow-up.
+`100%` of Version 1.0.2 scope complete — documentation, project scaffold, application shell, every content section (Hero, About, Experience, Projects, Professional Qualifications, Contact), resume download (now pointing at the latest resume PDF), SEO/social metadata, web metadata (robots.txt, sitemap.xml, site.webmanifest), a custom 404 page, a UI consistency/polish pass, centralized navigation, and a full resume-accuracy content sync (Experience, Skills, Projects) are all built, composed, and verified (build, lint, dev server all passing). Formal automated accessibility/performance audits (axe-core, Lighthouse) were not run in this environment and remain a recommended follow-up.
 
 ---
 
@@ -301,6 +301,14 @@ This document tracks the real-time status of the portfolio project: what phase i
   - Navigation now contains exactly the 7 required items, all sourced from `constants/navigation.ts`: Home, About, Experience, Projects, Skills, Certifications, Contact.
   - Verified: `npm run build` (40 modules, unchanged), `npm run lint`, and `npm run dev` all succeed with no errors; confirmed all 7 hash links and all 7 anchor `id`s still present in the built bundle; confirmed `scroll-padding-top:4rem` still present (untouched, from the prior milestone); theme toggle and mobile menu logic untouched, so both continue to function as before.
   - **Deployed:** committed as `refactor: centralize navigation configuration` (`ae5e648`) and pushed to `origin/main`. Live site responds 200 post-push; Vercel build/deploy completion could not be directly confirmed (no dashboard/API access in this environment).
+- **2026-07-10** — Resume Sync (full content accuracy pass). The user provided the latest resume PDF and asked to sync the site fully against it.
+  - Replaced `public/resume.pdf` with the latest resume file (sourced from `OneDrive/JOB APPLICATION/RESUME((.pdf`, the most recently modified matching file on disk) — the Download Resume button (Hero + Contact) now serves the current version automatically, no code changes needed.
+  - Modified `src/data/experience.ts` — Power BI Developer (10 → 8 bullets) and Data Analyst (11 → 10 bullets) responsibilities replaced with verbatim resume text; both were previously paraphrased/condensed, the same issue already fixed for Database Administrator in Version 1.0.2. Cloud Support Specialist and Manager entries were already accurate and left unchanged.
+  - Modified `src/data/skills.ts` — full restructure to match the resume's actual 6 categories exactly: **Business Intelligence & Analytics, Data Engineering & Architecture, Microsoft BI Stack, Cloud & Platforms, AI & Emerging Technologies, Additional Skills** (previously: Business Intelligence, Data Engineering, Cloud, Programming, AI, Professional — a structure invented before the real resume was available, flagged as a discrepancy back in the Skills UI milestone but not fixable at the time). Previously-missing skills added: Data Modeling, T-SQL, Data Architecture, ETL Development, Generative AI, Microsoft Azure, Data Services. The invented "Programming" category (Python, SQL) was removed — Python now correctly sits under AI & Emerging Technologies and SQL under Data Engineering & Architecture, matching the resume. "Business Analysis" (not on the resume) was replaced with "Advanced Analytics" (the actual resume term) under Additional Skills.
+  - Modified `src/data/projects.ts` — all 5 project descriptions replaced with verbatim resume wording (previously paraphrased). `technologies` arrays, `businessProblem`/`solution`/`outcome` (still `null`), and `githubUrl`/`liveDemoUrl`/`imageUrl` were untouched — the resume doesn't provide that detail.
+  - No changes to Hero, About, Contact, Certifications, Education, or any component/section files — this was a data-only pass. `Skills.tsx`'s recruiter-emphasis highlighting logic was not modified, so "Microsoft Azure" won't receive the accent-badge treatment (only "Azure SQL" matches the existing "Azure" term-prefix rule) — flagged as a minor known gap rather than silently changed, since the component wasn't in scope for this pass.
+  - Verified: `npm run build` (40 modules, unchanged), `npm run lint`, and `npm run dev` all succeed with no errors; confirmed verbatim experience/project text, all 6 new skill category names, and all 7 section anchors present in the built bundle
+  - **Not yet committed/pushed** — pending the next deployment step
 
 ---
 

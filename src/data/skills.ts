@@ -5,51 +5,46 @@ export interface SkillCategory {
 
 export const SKILLS: SkillCategory[] = [
   {
-    category: "Business Intelligence",
+    category: "Business Intelligence & Analytics",
     skills: [
       "Power BI",
       "DAX",
       "Power Query",
+      "Data Modeling",
       "Dashboard Development",
       "KPI Reporting",
       "Data Visualization",
     ],
   },
   {
-    category: "Data Engineering",
+    category: "Data Engineering & Architecture",
+    skills: ["SQL", "T-SQL", "Data Warehousing", "Data Architecture", "ETL Development"],
+  },
+  {
+    category: "Microsoft BI Stack",
+    skills: ["SSIS", "SSRS", "SSAS"],
+  },
+  {
+    category: "Cloud & Platforms",
+    skills: ["Microsoft Azure", "Azure SQL", "Data Services"],
+  },
+  {
+    category: "AI & Emerging Technologies",
     skills: [
-      "SQL",
-      "SQL Server",
-      "ETL",
-      "SSIS",
-      "SSRS",
-      "SSAS",
-      "Data Warehousing",
-    ],
-  },
-  {
-    category: "Cloud",
-    skills: ["Azure SQL", "Azure Data Services"],
-  },
-  {
-    category: "Programming",
-    skills: ["Python", "SQL"],
-  },
-  {
-    category: "AI",
-    skills: [
+      "AI-Powered Solutions Development",
+      "Prompt Engineering",
+      "Generative AI",
       "Claude",
       "OpenAI",
-      "Prompt Engineering",
-      "AI Solutions Development",
+      "Python",
     ],
   },
   {
-    category: "Professional",
+    category: "Additional Skills",
     skills: [
-      "Stakeholder Engagement",
+      "Advanced Analytics",
       "Performance Optimization",
-      "Business Analysis",
+      "Stakeholder Engagement",
       "Problem Solving",
     ],
   },

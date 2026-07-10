@@ -308,7 +308,7 @@ This document tracks the real-time status of the portfolio project: what phase i
   - Modified `src/data/projects.ts` — all 5 project descriptions replaced with verbatim resume wording (previously paraphrased). `technologies` arrays, `businessProblem`/`solution`/`outcome` (still `null`), and `githubUrl`/`liveDemoUrl`/`imageUrl` were untouched — the resume doesn't provide that detail.
   - No changes to Hero, About, Contact, Certifications, Education, or any component/section files — this was a data-only pass. `Skills.tsx`'s recruiter-emphasis highlighting logic was not modified, so "Microsoft Azure" won't receive the accent-badge treatment (only "Azure SQL" matches the existing "Azure" term-prefix rule) — flagged as a minor known gap rather than silently changed, since the component wasn't in scope for this pass.
   - Verified: `npm run build` (40 modules, unchanged), `npm run lint`, and `npm run dev` all succeed with no errors; confirmed verbatim experience/project text, all 6 new skill category names, and all 7 section anchors present in the built bundle
-  - **Not yet committed/pushed** — pending the next deployment step
+  - **Deployed:** committed as `docs(data): sync experience, skills, and projects with latest resume` (`0607930`) and pushed to `origin/main`. Live site responds 200 post-push; Vercel build/deploy completion could not be directly confirmed (no dashboard/API access in this environment).
 
 ---
 

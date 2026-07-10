@@ -6,19 +6,19 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ## Project Status
 
-**Status:** ✔ **Version 1.0.1 Released.** All core content sections (Hero, About, Experience, Projects, Professional Qualifications, Contact) are built, integrated, verified, and polished for consistency and recruiter scannability. Production readiness work (resume download, SEO metadata, web metadata, custom 404 page) is complete. The site is live at https://portfolio-jade-one-7e2va8v8ab.vercel.app/.
+**Status:** ✔ **Version 1.0.2 Released.** All core content sections (Hero, About, Experience, Projects, Professional Qualifications, Contact) are built, integrated, verified, and polished for consistency and recruiter scannability. Experience data now includes the previously-missing Database Administrator role. Production readiness work (resume download, SEO metadata, web metadata, custom 404 page) is complete. The site is live at https://portfolio-jade-one-7e2va8v8ab.vercel.app/.
 
 ---
 
 ## Current Phase
 
-**Phase:** Version 1.0.1 released — ready for Version 1.1 planning (see Next Tasks / optional enhancements below).
+**Phase:** Version 1.0.2 released — ready for Version 1.1 planning (see Next Tasks / optional enhancements below).
 
 ---
 
 ## Overall Progress
 
-`100%` of Version 1.0.1 scope complete — documentation, project scaffold, application shell, every content section (Hero, About, Experience, Projects, Professional Qualifications, Contact), resume download, SEO/social metadata, web metadata (robots.txt, sitemap.xml, site.webmanifest), a custom 404 page, and a UI consistency/polish pass are all built, composed, and verified (build, lint, dev server all passing). Formal automated accessibility/performance audits (axe-core, Lighthouse) were not run in this environment and remain a recommended follow-up.
+`100%` of Version 1.0.2 scope complete — documentation, project scaffold, application shell, every content section (Hero, About, Experience, Projects, Professional Qualifications, Contact), resume download, SEO/social metadata, web metadata (robots.txt, sitemap.xml, site.webmanifest), a custom 404 page, a UI consistency/polish pass, and a resume-accuracy content update are all built, composed, and verified (build, lint, dev server all passing). Formal automated accessibility/performance audits (axe-core, Lighthouse) were not run in this environment and remain a recommended follow-up.
 
 ---
 
@@ -274,6 +274,20 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ---
 
+## Version 1.0.2
+
+- **2026-07-09** — Content Accuracy Update (v1.0.2) milestone completed. **Version 1.0.2 released.**
+  - **Interpretation flagged for review:** the resume's dated-roles sidebar lists exactly 5 positions (Power BI Developer, Data Analyst, **Administrator, RCCG (Jan 2020 – Jul 2022)**, Cloud Support Specialist, Manager) — "Database Administrator" is not among them, and the resume body gives no separate date range for it. Rather than invent a 6th chronological entry with an unverified date range, this update treats "Database Administrator" as the full title for the existing "Administrator, RCCG" entry (the bullet content appears in the same position in the resume body as the other roles' bullets, and "Administrator" reads as a natural shorthand for "Database Administrator" at the same organization). **If this reading is wrong** — i.e., if Database Administrator was meant to be a distinct role with its own dates — the entry should be split back out once the correct dates are known.
+  - Modified `src/data/experience.ts` — the "Administrator, RCCG" entry (Jan 2020 – Jul 2022, previously empty `responsibilities`) is now titled **"Database Administrator"** with 10 responsibility bullets transcribed exactly as specified in this milestone's instructions, including "Improved database processing efficiency by 20%."
+  - No changes to `src/sections/Experience.tsx` — the component already renders any `ExperienceEntry` generically (title/company/dates/responsibilities, conditional list, quantified-achievement bold-highlighting via a `\d+%` regex check) — the new entry required no component changes.
+  - No changes to `src/sections/Hero.tsx` — the computed "years of professional experience" is derived from the earliest `startDate` across all entries (July 2005, Manager @ Nestlé), which this update didn't touch, so the calculation is unaffected.
+  - No changes to `src/data/profile.ts` — per the milestone's fallback rule, a 4th Hero metric card was not added (the existing `grid-cols-3` stat row would need a Hero layout change to accommodate a 4th card, which wasn't authorized this round). Instead, the verified 20% achievement is now visible via Experience's existing bold-highlighting of quantified bullets — no code or data changes were needed to surface it there.
+  - Files modified: `src/data/experience.ts`, `progress.md`
+  - No changes to Hero, About, Projects, Skills, Contact, theme, styling, configuration, or build tooling
+  - Verified: `npm run build` (40 modules, unchanged — no new components), `npm run lint`, and `npm run dev` all succeed with no errors; confirmed "Database Administrator" and "Improved database processing efficiency by 20%" present in the built bundle; confirmed all 7 section anchors still present (no regressions)
+
+---
+
 ## Pending Approval
 
 *None at this time.*
@@ -282,7 +296,7 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ## Current Sprint
 
-*Version 1.0.1 released — awaiting direction on Version 1.1.*
+*Version 1.0.2 released — awaiting direction on Version 1.1.*
 
 ---
 
@@ -290,7 +304,7 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 Optional Version 1.1 enhancements (not started, listed for future planning only):
 
-- [ ] Add the missing **Database Administrator** role to `src/data/experience.ts` — present in the resume PDF (with a "20% improvement in database processing efficiency" metric) but not yet in the data file; out of scope for the last two milestones' approved file lists
+- [ ] Confirm whether "Database Administrator" (now merged into the Jan 2020 – Jul 2022 RCCG entry) should instead be a separate chronological role — split it back out once/if correct dates are confirmed
 - [ ] Project screenshots
 - [ ] GitHub repository links per project
 - [ ] Live demo links per project

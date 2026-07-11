@@ -6,29 +6,113 @@ import { EDUCATION } from "@shared/data/education";
 const groupLabelClasses =
   "text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
 
+const featureCardClasses =
+  "hover-lift rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl";
+
+const iconWrapperClasses =
+  "flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary/10 to-brand-secondary/10 text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary";
+
+const iconProps = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  className: "h-5 w-5",
+};
+
+function StrengthIcon({ index }: { index: number }) {
+  switch (index % 6) {
+    case 0:
+      // database
+      return (
+        <>
+          <ellipse cx="12" cy="5" rx="8" ry="3" />
+          <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+        </>
+      );
+    case 1:
+      // workflow / pipeline
+      return (
+        <>
+          <rect x="3" y="3" width="6" height="6" rx="1" />
+          <rect x="15" y="15" width="6" height="6" rx="1" />
+          <path d="M9 6h6a3 3 0 0 1 3 3v6" />
+        </>
+      );
+    case 2:
+      // bar chart
+      return (
+        <>
+          <line x1="4" y1="20" x2="4" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="20" y1="20" x2="20" y2="14" />
+        </>
+      );
+    case 3:
+      // sparkles / AI
+      return (
+        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
+      );
+    case 4:
+      // globe
+      return (
+        <>
+          <circle cx="12" cy="12" r="9" />
+          <path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z" />
+        </>
+      );
+    default:
+      // award / certified
+      return (
+        <>
+          <circle cx="12" cy="8" r="5" />
+          <path d="M8.5 13.5 7 21l5-2.5L17 21l-1.5-7.5" />
+        </>
+      );
+  }
+}
+
 export function About() {
   const { about } = PROFILE;
 
   return (
-    <Section id="about">
+    <Section id="about" className="dark:bg-brand-bg">
       <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
         About Me
       </h2>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-2">
-        <div>
-          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-            Professional Summary
-          </h3>
+      <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className={featureCardClasses}>
+          <div className="flex items-center gap-3">
+            <span className={iconWrapperClasses} aria-hidden="true">
+              <svg {...iconProps}>
+                <path d="M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5a2.5 2.5 0 0 0 0 5H20" />
+              </svg>
+            </span>
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+              Professional Summary
+            </h3>
+          </div>
           <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
             {about.intro}
           </p>
         </div>
 
-        <div>
-          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-            Career Journey
-          </h3>
+        <div className={featureCardClasses}>
+          <div className="flex items-center gap-3">
+            <span className={iconWrapperClasses} aria-hidden="true">
+              <svg {...iconProps}>
+                <path d="M12 20V10M18 20V4M6 20v-6" />
+              </svg>
+            </span>
+            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+              Career Journey
+            </h3>
+          </div>
           <div className="mt-4 space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
             <p>{about.background.journey}</p>
             <p>{about.background.currentFocus}</p>
@@ -79,12 +163,14 @@ export function About() {
           Core Strengths
         </h3>
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {about.coreStrengths.map((strength) => (
-            <div
-              key={strength.title}
-              className="rounded-lg border border-slate-200 bg-slate-50 p-5 shadow-sm transition-colors hover:bg-slate-100 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:bg-slate-800"
-            >
-              <h4 className="text-base font-semibold text-slate-900 dark:text-white">
+          {about.coreStrengths.map((strength, index) => (
+            <div key={strength.title} className={featureCardClasses}>
+              <span className={iconWrapperClasses} aria-hidden="true">
+                <svg {...iconProps}>
+                  <StrengthIcon index={index} />
+                </svg>
+              </span>
+              <h4 className="mt-4 text-base font-semibold text-slate-900 dark:text-white">
                 {strength.title}
               </h4>
               <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">

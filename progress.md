@@ -574,9 +574,62 @@ The first working version of every layer above rendered nothing at all in dark m
 
 ---
 
+## Version 3.0 — Premium UI Redesign ✔
+
+**Objective:** transform the entire portfolio (not just the Hero) into an enterprise-SaaS-quality visual tier, comparable to Microsoft Fabric/Azure/Stripe/Vercel/Linear, without changing any resume text, data, API logic, Docker configuration, or routing.
+
+### Scope decisions made before/during implementation
+
+1. **Design tokens centralized in `client/tailwind.config.js`** (`brand.primary #2563EB`, `brand.secondary #06B6D4`, `brand.accent #3B82F6`, `brand.bg #050816`, `brand.surface #0F172A`) rather than repeating hex literals across a dozen files, since this milestone treats them as a sitewide system.
+2. **`client/src/layouts/RootLayout.tsx`** — dark-mode page background changed from `dark:bg-slate-900` to `dark:bg-brand-bg` (one line). This file wasn't in the originally-listed scope but was a necessary, minimal addition: without it, the elaborate new Hero background would sit next to the old flat slate background at the very next section boundary, undermining the "cohesive premium product" goal. Flagged here for visibility since it was added mid-milestone, not pre-approved by name.
+3. **Skills star ratings were intentionally NOT implemented.** The spec's example (`Power BI ★★★★★ Expert`, etc.) requires a proficiency-level field that doesn't exist in `shared/types/skills.ts` — it's just skill names grouped by category. Inventing star counts and "Expert"/"Advanced" labels per skill would mean fabricating claims not present in the resume or existing data, which this project has avoided everywhere else since `requirements.md`. This was flagged in the pre-approval plan; the Skills section was redesigned (grouped cards, icons, hover effects) without the fabricated ratings.
+4. **All Project entries currently have `null` for `businessProblem`/`solution`/`outcome`/`githubUrl`/`liveDemoUrl`/`imageUrl`.** Rather than inventing placeholder text for these, the card layout keeps them conditionally rendered (unchanged behavior — they simply don't render until real data exists), and adds a CSS-only decorative preview graphic in place of the missing screenshot, plus an honest "GitHub · Coming Soon" / "Live Demo · Coming Soon" placeholder state for missing links (mirroring the existing "Resume Available Upon Request" pattern already used elsewhere in this codebase).
+5. **One draft heading was caught and reverted during implementation:** an early pass of the About section replaced the literal "About Me" H2 with an invented tagline ("The person behind the dashboards"). This was corrected before finishing the section — "About Me" is the exact original text. Noting it here since it's exactly the kind of content drift this project's approval policy exists to prevent, and it's more useful to record that it happened and was fixed than to pretend the first draft was clean.
+6. **Contact's "Open to New Opportunities" badge** is a close paraphrase of the section's own unchanged first sentence ("I'm open to new opportunities...") — not new information, just a visual restatement of existing copy.
+7. **`client/src/components/Button.tsx` and `client/src/components/Badge.tsx` redesigns cascade to every section that uses them** (Hero, Projects, Contact, About, Skills) — intentional, since this milestone (unlike the Hero-only one before it) explicitly wants a consistent sitewide system.
+
+### Files Created
+
+- `client/src/components/HeroIllustration.tsx` — CSS-only analytics illustration (floating dashboard bar-chart panel, KPI trend widget, donut chart, SQL-table-style placeholder, rotated "data cube" accent). No images, no SVG backgrounds, no canvas, no animation/charting libraries — pure Tailwind + the CSS keyframes added to `index.css`. Themed for both light (white cards, shadow) and dark (glass cards, backdrop-blur) mode.
+
+### Files Modified
+
+- `client/tailwind.config.js` — added `brand.*` color tokens
+- `client/src/index.css` — added `.hero-light-streaks` (6th background layer), `.glass-card`, `.hover-lift`, `.illustration-float(-delayed/-2)`, `.animate-fade-slide-up` utilities and their keyframes, all `prefers-reduced-motion`-aware
+- `client/src/layouts/RootLayout.tsx` — dark background token swap (see decision #2 above)
+- `client/src/components/Button.tsx` — primary: gradient (`brand.primary` → `brand.secondary`) + glow shadow; secondary: glass/backdrop-blur + border, both themes
+- `client/src/components/Badge.tsx` — accent variant now a gradient pill; default variant gets a subtle border in dark mode
+- `client/src/sections/Hero.tsx` — two-column layout (content + `HeroIllustration` on `lg:` and up), larger type scale (name up to 80px at `xl:`, subtitle 30px), stat cards redesigned with icons/glass/hover-lift, added a 6th background layer (light streaks)
+- `client/src/sections/About.tsx` — Professional Summary / Career Journey converted to icon-header feature cards; Core Strengths cards get per-strength icons; all original text unchanged
+- `client/src/sections/Experience.tsx` — timeline markers replaced with gradient initials avatars (no real company logos exist to replace), added a prominent gradient year-badge per entry (extracted from the existing date string, not new data), hover-lift on each entry
+- `client/src/sections/Projects.tsx` — cards get a decorative CSS preview placeholder, "Business Impact" label (was "Outcome") for the `outcome` field, and honest "Coming Soon" placeholder states for missing GitHub/Demo links (see decision #4)
+- `client/src/sections/Skills.tsx` — skill categories become icon-header glass cards (no fabricated ratings, see decision #3); certification cards get a gradient accent border for featured credentials and a small "Microsoft" ribbon for Microsoft-issued certifications specifically (detected from the existing `issuer` string, not hardcoded per-item)
+- `client/src/sections/Contact.tsx` — wrapped in a large card CTA with an "Open to New Opportunities" badge (see decision #6), contact/social cards restyled to match the glass/hover-lift system, larger Download Resume button
+- `progress.md` — this entry
+
+**Not modified:** any resume data (`shared/data/*`), any type definition, `server/`, `docker-compose.yml`, any `Dockerfile`, `nginx/`, routing (`App.tsx`, `Navbar.tsx`'s link structure), or the active-section-highlighting logic from the prior milestone.
+
+### Validation Results
+
+- `npm run build` (`tsc --noEmit && vite build`) — passes, 42 modules transformed
+- `npm run lint` (`eslint .`) — passes, no errors
+- `docker compose up --build` — all containers healthy (`server`, `nginx`); `client` exits `0` as expected; `/api/health` → `{"status":"ok"}`
+- Screenshots captured at all four required breakpoints (375 / 768 / 1024 / 1440) in both themes against the Dockerized build — two-column Hero layout with illustration correctly appears at `lg:` (1024px) and up, and correctly stacks to a single column with the illustration hidden below that, with no layout shift or overlap at any width
+- Accessibility spot-check: nav `aria-current="page"` still reports exactly one active link; `Tab` produces a visible focus ring (`box-shadow` ring, unchanged mechanism); primary button computed styles confirmed as the intended gradient (`linear-gradient(to right, rgb(37,99,235), rgb(6,182,212))`) with white text
+- All animations (blob float, illustration float, fade-slide-up) confirmed CSS-only and wrapped in `@media (prefers-reduced-motion: reduce)` overrides consistent with the pattern established in the previous milestone
+- No new npm dependencies were added — grep of `package.json` confirms only existing React/Tailwind tooling; no Three.js, GSAP, or Framer Motion
+
+### Before/After Summary
+
+**Before:** Minimalist, mostly-flat light/dark theme with plain cards, solid-color buttons, a single-column Hero, and a simple bulleted timeline — clean but generic.
+
+**After:** A cohesive enterprise-SaaS visual system across every section. Hero is now two-column with a CSS-only floating analytics illustration (chart panel, KPI widget, donut chart, table placeholder, data-cube accent) and a six-layer ambient dark background. Every card sitewide (stats, About feature/strength cards, Experience timeline, Project cards, Skill/Certification cards, Contact cards) now shares one glassmorphic/hover-lift design language with a consistent blue-to-cyan gradient accent. Buttons carry a gradient-and-glow primary style and a glass-bordered secondary style. Typography hierarchy is substantially larger and more confident (Hero name up to 80px). All factual content — names, dates, numbers, resume bullets, links — is byte-for-byte unchanged from before this milestone.
+
+---
+
 ## Pending Approval
 
-*Awaiting explicit approval before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
+*Awaiting explicit approval before AWS deployment of the Version 3.0 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
 
 ---
 

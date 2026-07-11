@@ -24,12 +24,78 @@ function isHighlighted(skill: string): boolean {
   );
 }
 
-function SkillCard({ category }: { category: SkillCategory }) {
+const iconWrapperClasses =
+  "flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary/10 to-brand-secondary/10 text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary";
+
+const iconProps = {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 2,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  className: "h-5 w-5",
+};
+
+function CategoryIcon({ index }: { index: number }) {
+  switch (index % 6) {
+    case 0:
+      // bar chart / BI & analytics
+      return (
+        <>
+          <line x1="4" y1="20" x2="4" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="20" y1="20" x2="20" y2="14" />
+        </>
+      );
+    case 1:
+      // database / data engineering
+      return (
+        <>
+          <ellipse cx="12" cy="5" rx="8" ry="3" />
+          <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+        </>
+      );
+    case 2:
+      // layers / Microsoft BI stack
+      return (
+        <>
+          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+          <polyline points="2 17 12 22 22 17" />
+          <polyline points="2 12 12 17 22 12" />
+        </>
+      );
+    case 3:
+      // cloud / cloud & platforms
+      return <path d="M6 18a4 4 0 0 1-.6-7.96A5.5 5.5 0 0 1 16.2 7.5 4.5 4.5 0 0 1 17.5 18H6Z" />;
+    case 4:
+      // sparkles / AI
+      return (
+        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
+      );
+    default:
+      // tool / additional skills
+      return (
+        <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6 6a2 2 0 1 0 2.8 2.8l6-6a4 4 0 0 0 5.4-5.4L15 11l-2-2Z" />
+      );
+  }
+}
+
+function SkillCard({ category, index }: { category: SkillCategory; index: number }) {
   return (
-    <div className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm transition-colors hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800/40">
-      <h4 className="text-lg font-semibold text-slate-900 dark:text-white">
-        {category.category}
-      </h4>
+    <div className="hover-lift flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl">
+      <div className="flex items-center gap-3">
+        <span className={iconWrapperClasses} aria-hidden="true">
+          <svg {...iconProps}>
+            <CategoryIcon index={index} />
+          </svg>
+        </span>
+        <h4 className="text-lg font-semibold text-slate-900 dark:text-white">
+          {category.category}
+        </h4>
+      </div>
       <ul className="flex flex-wrap gap-2">
         {category.skills.map((skill) => (
           <li key={skill}>
@@ -62,6 +128,10 @@ function parseCertificationName(name: string): {
   };
 }
 
+function isMicrosoftCertification(issuer: string | null): boolean {
+  return issuer !== null && issuer.toLowerCase().includes("microsoft");
+}
+
 function CertificationCard({
   certification,
 }: {
@@ -69,27 +139,26 @@ function CertificationCard({
 }) {
   const { issuer, credential } = parseCertificationName(certification.name);
   const featured = FEATURED_CERTIFICATIONS.includes(certification.name);
+  const isMicrosoft = isMicrosoftCertification(issuer);
 
   return (
     <div
-      className={`flex items-start gap-3 rounded-lg p-5 shadow-sm transition-colors ${
+      className={`hover-lift relative flex items-start gap-3 overflow-hidden rounded-2xl p-5 shadow-sm transition-colors ${
         featured
-          ? "border-2 border-slate-900 bg-slate-50 hover:bg-slate-100 dark:border-white dark:bg-slate-800/60 dark:hover:bg-slate-800"
-          : "border border-slate-200 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800/40"
+          ? "border-2 border-brand-primary bg-gradient-to-br from-brand-primary/5 to-brand-secondary/5 dark:border-brand-secondary/60 dark:from-brand-primary/10 dark:to-brand-secondary/10"
+          : "border border-slate-200 bg-white dark:glass-card dark:backdrop-blur-xl"
       }`}
     >
-      <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
-        <svg
+      {isMicrosoft && (
+        <span
+          className="absolute right-3 top-0 rounded-b-md bg-gradient-to-r from-brand-primary to-brand-secondary px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm"
           aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="h-4 w-4"
         >
+          Microsoft
+        </span>
+      )}
+      <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-gradient-to-br from-brand-primary/10 to-brand-secondary/10 text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary">
+        <svg {...iconProps}>
           <circle cx="12" cy="8" r="7" />
           <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
         </svg>
@@ -110,7 +179,7 @@ function CertificationCard({
 
 export function Skills() {
   return (
-    <Section id="skills">
+    <Section id="skills" className="dark:bg-brand-bg">
       <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
         Professional Qualifications
       </h2>
@@ -120,8 +189,8 @@ export function Skills() {
           Skills
         </h3>
         <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {SKILLS.map((category) => (
-            <SkillCard key={category.category} category={category} />
+          {SKILLS.map((category, index) => (
+            <SkillCard key={category.category} category={category} index={index} />
           ))}
         </div>
       </div>

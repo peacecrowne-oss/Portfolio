@@ -14,3 +14,78 @@
     }
   }
 }
+
+/*
+ * Premium Hero background (dark mode only). Pure CSS: radial-gradient glows,
+ * layered repeating-linear-gradients standing in for a grain/noise texture
+ * (CSS cannot generate true randomness without an image or canvas), a
+ * linear-gradient grid, and one blurred floating blob. No external images,
+ * no SVG backgrounds, no canvas.
+ */
+@layer utilities {
+  .hero-glow-primary {
+    background: radial-gradient(
+      circle at center,
+      rgba(59, 130, 246, 1) 0%,
+      rgba(59, 130, 246, 0) 70%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .hero-glow-secondary {
+    background: radial-gradient(
+      circle at center,
+      rgba(34, 211, 238, 1) 0%,
+      rgba(34, 211, 238, 0) 70%
+    );
+    mix-blend-mode: screen;
+  }
+
+  .hero-grid-overlay {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.7) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .hero-noise-overlay {
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05) 0px,
+        rgba(255, 255, 255, 0.05) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+  }
+
+  .hero-blob {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(34, 211, 238, 0.9));
+    filter: blur(64px);
+    mix-blend-mode: screen;
+    animation: hero-blob-float 10s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-blob {
+      animation: none;
+    }
+  }
+}
+
+@keyframes hero-blob-float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(24px, -28px);
+  }
+}

@@ -489,9 +489,94 @@ All validation performed against the Dockerized production build (`docker compos
 
 ---
 
+## Local Docker Preview Fix
+
+**Objective:** allow local UI preview of the Dockerized stack on this Windows machine, where host port `80` is reserved by `HTTP.sys` and blocks the `nginx` container from binding. Environment issue only — no application code touched.
+
+**Temporary local preview uses `8080` because Windows reserved port `80`. Production deployment remains `80:80`.**
+
+### Files Modified
+
+- `docker-compose.yml` — `nginx` service port mapping temporarily changed from `"80:80"` to `"8080:80"`, for local preview only. **Not committed** — this change is local-only per the milestone's explicit instruction and remains in the working tree pending the next approval (restoring `80:80` before AWS deployment).
+- `progress.md` — this entry
+
+**Not modified:** container ports, `nginx.conf`, any `Dockerfile`, healthchecks, networks, services, environment variables, or any application code (React, Express).
+
+### Validation Results
+
+- `docker compose down` / `docker compose up --build` — all three images rebuilt successfully
+- `docker compose ps` — matches expected: `portfolio-server` Up (healthy), `portfolio-nginx` Up (healthy), `portfolio-client` Exited (0)
+- `http://localhost:8080/api/health` → `{"status":"ok"}`
+- UI verified at `http://localhost:8080` via Playwright (screenshots) at desktop (1440×900) and mobile (375×900): Hero, About, Experience, Projects, Skills, Certifications, Contact sections all present; navigation and theme toggle work; `resume.pdf` returns `200`
+- Light mode and dark mode both render correctly with no visual regressions
+- Desktop and mobile layouts both confirmed with no regressions from the Navigation Enhancement milestone
+
+### Local preview URL
+
+`http://localhost:8080`
+
+---
+
+## Premium Hero Background ✔
+
+**Objective:** visual-only enhancement of the Hero section's background to a premium, SaaS-landing-page quality (inspired by Microsoft/Vercel/Linear/Framer/Stripe, not a copy), without touching content, layout, typography, or spacing.
+
+### Scope decision: dark mode only
+
+The spec's base color (`#050816`), glass-effect cards (`rgba(255,255,255,.04)` fills), and glow layers only make sense against a dark surface — in light mode the rest of the site is `bg-white` with light cards, and forcing the same values there would both contradict "do not change layout/content" and make the glass cards invisible (a near-0% white fill on a white background has no visible edge). The entire treatment was scoped to `dark:` — **light mode Hero is pixel-identical to before this milestone** (confirmed via screenshot comparison). Dark mode gets the full treatment.
+
+### Layers implemented (`client/src/index.css`, applied in `client/src/sections/Hero.tsx`)
+
+1. **Layer 1** — large radial gradient (blue, `#3b82f6`) behind the heading, div opacity `25%`.
+2. **Layer 2** — large radial gradient (cyan, `#22d3ee`) on the right side, div opacity `18%`. (The spec described this as being "behind the right-side illustration" — the current Hero layout is single-column with no illustration, so the glow was placed as a general right-side ambient accent instead; no illustration or extra content was added, per "do not modify any content.")
+3. **Layer 3** — noise texture via two layered `repeating-linear-gradient`s (crosshatch at 1px/3px, 5% line alpha) — CSS cannot generate true randomness without an image or canvas, so this simulates grain rather than reproducing it exactly.
+4. **Layer 4** — grid pattern via two `linear-gradient` line patterns at 48px spacing, div opacity `3.5%` (rendered alpha ≈2.45%, under the 5% ceiling).
+5. **Layer 5** — one floating blob: `linear-gradient(135deg, blue, cyan)` + `filter: blur(64px)` + `mix-blend-mode: screen`, floating via a `10s ease-in-out infinite` transform animation, disabled under `prefers-reduced-motion: reduce`.
+
+All layers live in a single `aria-hidden="true"`, `pointer-events-none` absolutely-positioned div, shown only via `dark:block` (`hidden` by default), so they never affect layout, tab order, or screen readers.
+
+### Cards
+
+Stat cards' `dark:` classes changed from a flat `border-slate-800`/`bg-slate-800/50` fill to the specified glass effect: `dark:bg-white/[0.04] dark:backdrop-blur-[12px] dark:border-white/[0.08]`. Light mode styling (`border-slate-200 bg-slate-50`) untouched.
+
+### Buttons
+
+Added `dark:shadow-[0_0_30px_-6px_rgba(59,130,246,0.5)]` (soft blue glow) via the `className` prop on the three `<Button>` instances used in Hero, rather than editing the shared `client/src/components/Button.tsx` — that component is also used by Projects and Contact, which are out of this milestone's scope, so a global change risked an unrequested visual change elsewhere. Colors were not touched, only shadow.
+
+### Bug found and fixed: decorative layer was fully invisible due to a stacking-context gap
+
+The first working version of every layer above rendered nothing at all in dark mode, despite every property (`display`, `opacity`, `background-image`, geometry) being individually correct under inspection. Root cause, confirmed by reproducing it in an isolated HTML file with no React/Tailwind involved: the `<section>` had `position: relative` but no explicit `z-index`, so it never established its own CSS stacking context. Its `-z-10` decorative child then had its negative z-index evaluated against the *next* ancestor that does form a stacking context (the document root) rather than being scoped locally to the section — placing it behind the section's own background paint instead of in front of it. Fix: added `z-0` to the section's className, which gives the section its own stacking context, correctly containing the `-z-10` layer between the section's own background (behind it) and its normal content (in front of it). This is a one-line, well-understood CSS fix (`position: relative` + explicit `z-index` together, not `position: relative` alone, whenever a negative-z-index decorative child is involved) — worth remembering for any future layered-background work in this codebase.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — added the decorative background layer, glass-effect card classes, button glow classes
+- `client/src/index.css` — added the five background-layer CSS classes and the float keyframe animation
+- `progress.md` — this entry
+
+**Not modified:** `client/src/components/Button.tsx`, any other component, any section content, spacing, or typography class.
+
+### Validation Results
+
+- `npm run build` (`tsc --noEmit && vite build`) — passes
+- `npm run lint` (`eslint .`) — passes, no errors
+- `docker compose up --build` — all containers healthy (`server`, `nginx`), `client` exits `0` as expected; `/api/health` returns `{"status":"ok"}`; `resume.pdf` returns `200`
+- Desktop (1440×900), tablet (768×1024), and mobile (375×900) all verified via screenshots against the Dockerized build — glow/grid/noise/blob scale proportionally, no overlap with text, no layout shift (Hero's box dimensions are unaffected since the entire background layer is `position: absolute` and out of normal flow)
+- Dark mode: full premium treatment renders correctly (confirmed via direct pixel inspection, not just visual review, after diagnosing and fixing the stacking-context bug above)
+- Light mode: confirmed pixel-identical to the pre-milestone version at all three breakpoints
+- `prefers-reduced-motion: reduce` — confirmed via a reduced-motion browser context that the blob's `animationName` computes to `none`
+- Accessibility: decorative layer is `aria-hidden="true"` and `pointer-events-none`; text contrast is unaffected (all existing dark-mode text colors were already tuned against a comparably dark `slate-900` background, and read at least as well against the new `#050816`)
+
+### Before/After Summary
+
+**Before:** Hero background was flat `bg-white` / `dark:bg-slate-900` in both themes, matching the rest of the site; stat cards used a flat dark fill; buttons had no shadow.
+
+**After (dark mode only):** Hero background is a deep `#050816` with a layered ambient composition — soft blue/cyan radial glows behind the text and to the right, a faint grid and grain texture, and one softly blurred, slowly floating blue-to-cyan orb bottom-right; stat cards use a frosted-glass effect; the three CTA buttons carry a soft blue glow. Light mode is unchanged.
+
+---
+
 ## Pending Approval
 
-*Awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
+*Awaiting explicit approval before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
 
 ---
 

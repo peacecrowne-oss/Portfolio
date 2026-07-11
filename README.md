@@ -108,6 +108,16 @@ npm run dev
 
 Starts client and server concurrently (via `concurrently`), from the repo root.
 
+## Docker Quick Start
+
+The full stack (client, server, and an Nginx reverse proxy) can also run entirely in Docker — no local Node install required:
+
+```bash
+docker compose up --build
+```
+
+The site is then available at `http://localhost/`, with `/api/*` transparently proxied to the Express API. See [docs/docker.md](./docs/docker.md) for the container architecture, individual build/run/stop/logs commands, and production notes.
+
 ## Build
 
 ```bash
@@ -176,7 +186,8 @@ All GET endpoints (except `/health`) return `{ "success": true, "data": ... }`. 
 │   │   ├── App.tsx, main.tsx, index.css
 │   ├── index.html
 │   ├── package.json, vite.config.ts, tsconfig.json, tailwind.config.js, postcss.config.js
-│   └── .env.example
+│   ├── .env.example
+│   └── Dockerfile                # Multi-stage build; hands off built assets to nginx via a shared volume
 ├── server/                     # Node.js + Express API
 │   ├── src/
 │   │   ├── routes/                # health, resource (profile/experience/projects/skills/certifications), contact
@@ -189,13 +200,21 @@ All GET endpoints (except `/health`) return `{ "success": true, "data": ... }`. 
 │   │   ├── app.ts                         # Express app setup (helmet, cors, compression, morgan)
 │   │   └── server.ts                       # Entry point
 │   ├── package.json, tsconfig.json
-│   └── .env.example
+│   ├── .env.example
+│   └── Dockerfile                # Multi-stage build; compiles TS, runs the production output on port 5000
 ├── shared/                     # Single source of truth for content + types (no build step)
 │   ├── data/                     # profile.ts, experience.ts, projects.ts, skills.ts, certifications.ts, education.ts
 │   └── types/                    # Corresponding TypeScript interfaces
+├── nginx/                      # Reverse proxy: serves the client build, proxies /api/* to server
+│   ├── Dockerfile
+│   └── nginx.conf
+├── docs/
+│   └── docker.md                 # Docker architecture, build/run/stop/logs, production notes
 ├── requirements.md              # Project requirements and Claude Code approval policy
 ├── progress.md                   # Milestone tracking, checklist, and changelog
 ├── package.json                  # Root workspace orchestration (install/dev/build/lint)
+├── docker-compose.yml             # Orchestrates client, server, and nginx containers
+├── .dockerignore
 ├── eslint.config.js               # Shared ESLint config for client + server
 ├── .prettierrc, .prettierignore
 └── .gitignore

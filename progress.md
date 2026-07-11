@@ -6,19 +6,19 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ## Project Status
 
-**Status:** ✔ **Version 1.0.2 Released** on the live client. ✔ **Version 2.0 (React + Node.js migration) complete locally, not yet deployed.** The repo is now a monorepo (`client/`, `server/`, `shared/`) with a working Express API alongside the unchanged React client. The **deployed** site's behavior is unaffected by this migration — the client still renders from `shared/data` at build time, exactly as it did before, since the section components were deliberately not switched to live API calls (that cutover requires the backend to be deployed first, and is a separate, not-yet-approved step).
+**Status:** ✔ **Version 1.0.2 Released** on the live client. ✔ **Version 2.0 (React + Node.js migration) complete locally, not yet deployed.** ✔ **Version 2.1 (Dockerization) complete and validated locally, not yet deployed to any cloud provider.** The repo is now a monorepo (`client/`, `server/`, `shared/`) with a working Express API and a full three-container Docker setup (client build → shared volume → Nginx, Express API, Nginx reverse proxy), alongside the unchanged React client. The **deployed** site's behavior is unaffected by either migration — the client still renders from `shared/data` at build time, exactly as it did before.
 
 ---
 
 ## Current Phase
 
-**Phase:** Version 2.0 migration complete and validated locally — awaiting approval to deploy the Node.js backend (and, separately, to wire the client over to consume it).
+**Phase:** Version 2.1 (Docker) complete and validated locally — awaiting approval before any Kubernetes/cloud container deployment work, and awaiting direction on whether/when to deploy the Node.js backend (Dockerized or otherwise) and wire the client to consume it live.
 
 ---
 
 ## Overall Progress
 
-`100%` of Version 1.0.2 scope remains live and complete. Version 2.0 (full-stack migration) is `100%` complete for everything explicitly scoped: client moved to `client/`, data/types consolidated into `shared/`, a full Express API built and validated (health, profile, experience, projects, skills, certifications, contact), root workspace orchestration (`npm install`/`dev`/`build`/`lint`), environment variable examples, and documentation, all verified working. Not done, by design: the backend is not deployed anywhere, and the client has not been switched to consume it — both are explicitly separate, future, approved steps.
+`100%` of Version 1.0.2 scope remains live and complete. Version 2.0 (full-stack migration) and Version 2.1 (Dockerization) are both `100%` complete for everything explicitly scoped, all verified working end-to-end via `docker compose up`. Not done, by design: nothing is deployed to any cloud/hosting provider — the backend (Dockerized or not) and the containerized stack both exist and work locally, but deployment is an explicitly separate, not-yet-approved step per each milestone's Stop Condition.
 
 ---
 
@@ -383,24 +383,83 @@ This document tracks the real-time status of the portfolio project: what phase i
 
 ---
 
+## Version 2.1 — Docker Support
+
+**Objective:** containerize the existing full-stack portfolio (client, server, shared) into a production-ready three-container Docker setup, preserving the current architecture, UI, and API logic exactly. No cloud deployment.
+
+### Tracking
+
+- [x] **Docker Support** — `client/Dockerfile`, `server/Dockerfile`, `nginx/Dockerfile` all created, built, and validated.
+- [x] **Docker Compose** — `docker-compose.yml` orchestrates all three services with a shared network, a shared named volume for the client→nginx handoff, environment variables, and health checks with correct startup ordering.
+- [x] **Nginx Reverse Proxy** — serves the built React app with SPA fallback (`try_files`), proxies `/api/*` to the server container.
+- [x] **Container Validation** — `docker compose build` and `docker compose up` both succeed; every endpoint, the React app, and every static asset verified working through Nginx (see Validation Results).
+
+### Architectural decisions (as flagged in the approved proposal, now implemented as described)
+
+1. **Client → Nginx handoff via a shared named volume**, not a second in-container Nginx. `client/Dockerfile`'s final stage is a minimal Alpine image whose only job is to copy its built `dist/` into the `client_build` named volume, then exit. `nginx` mounts that same volume read-only and serves it directly — matching the single `nginx.conf` file the milestone allowed, and making the `client` container genuinely "internal build only, no public port" (nothing ever connects to it; it just populates the volume and exits with code `0`). `docker-compose.yml` uses `depends_on: client: condition: service_completed_successfully` so Nginx never starts before the client's build has actually finished.
+2. **Build context is the repo root for both `client/Dockerfile` and `server/Dockerfile`**, not their own subdirectory — both import from `shared/`, which wouldn't be visible in a narrower build context. Each Dockerfile explicitly `COPY`s both its own directory and `shared/` before installing/building.
+3. **No env var renaming.** `VITE_API_BASE_URL` (the client's real, already-wired env var name) was kept as-is rather than renamed to the spec's example `VITE_API_URL` — renaming it would have required touching `client/src/services/api.ts` (API/business logic, off-limits this round). Its default (`/api`) is already exactly correct for this architecture, since Nginx proxies `/api/*` on the same origin. No client env var needs to be set for Docker to work.
+4. **`client/package.json` and `server/package.json` were not modified** — their existing `build`/`start` scripts already did everything the containers needed.
+5. **No root-level `Dockerfile` was created** — it was in the allowed-files list, but nothing in the spec described a purpose for it (`client/`, `server/`, and `nginx/` each have their own). Flagged in the original proposal; not created, to avoid an unused file.
+
+### Bug found and fixed during validation
+
+Nginx's `HEALTHCHECK` initially failed (container ran and served traffic correctly, but reported `unhealthy`). Root cause: `wget --spider http://localhost/` inside the container tried `::1` (IPv6) first — the container's `nginx.conf` only had `listen 80;` (IPv4), so the IPv6 attempt got "connection refused" and `wget` (unlike Node's `http.get`, which transparently retries via Happy Eyeballs) doesn't fall back to IPv4. Fixed two ways: added `listen [::]:80;` to `nginx/nginx.conf` for robustness, and changed the healthcheck target to `http://127.0.0.1/` explicitly in both `nginx/Dockerfile` and `docker-compose.yml` (bypassing hostname resolution ambiguity entirely). Confirmed fixed — both `server` and `nginx` report `(healthy)` in `docker compose ps` after the fix.
+
+### Local environment note (not a defect in the Docker config)
+
+Host port `80` was already reserved by Windows' `HTTP.sys` (owned by the `System` process — a common Docker Desktop-on-Windows conflict, confirmed via `Get-NetTCPConnection -LocalPort 80`), so `docker compose up` initially failed with `ports are not available: exposing port TCP 0.0.0.0:80`. Validation was performed with the `nginx` service's port mapping temporarily changed to `"8080:80"`; once every check passed, it was reverted to the requested `"80:80"` before committing. This is purely a quirk of this specific test machine — documented as a troubleshooting note in `docs/docker.md` in case it recurs elsewhere.
+
+### Files Created
+
+- `.dockerignore` (repo root)
+- `client/Dockerfile`
+- `server/Dockerfile`
+- `nginx/Dockerfile`, `nginx/nginx.conf`
+- `docker-compose.yml`
+- `docs/docker.md`
+
+### Files Modified
+
+- `README.md` — added "Docker Quick Start" section and updated the Folder Structure diagram to include the new Docker files
+- `progress.md` — this entry
+
+**Not modified:** any React component, Express route, `shared/` data, `client/package.json`, `server/package.json`, UI, theme, or API logic — exactly as scoped.
+
+### Validation Results
+
+- `docker compose build` — all three images (`portfolio-client`, `portfolio-server`, `portfolio-nginx`) build successfully
+- `docker compose up` — `client` builds and exits `0` (build copied to shared volume); `server` and `nginx` both reach `(healthy)` status
+- `curl http://localhost:8080/` — React app loads, `200`, correct `<title>` and theme flash-prevention script present in the served HTML
+- `curl http://localhost:8080/api/health` — `{"status":"ok"}`
+- `curl http://localhost:8080/api/{profile,experience,projects,skills,certifications}` — all `200` with correct data
+- `curl -X POST http://localhost:8080/api/contact` — valid payload → `200` success; invalid payload → `400` with field-level Zod errors (same behavior as the non-Docker server)
+- `curl http://localhost:8080/resume.pdf`, `/favicon.svg`, `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/404.html` — all `200`
+- `curl http://localhost:8080/some/nonexistent/route` — `200`, correctly served `index.html` via SPA fallback (`try_files`)
+- Theme and navigation: confirmed via the served HTML (unchanged from the non-Docker build — no component code was touched, so this was expected rather than independently re-tested feature-by-feature)
+- `docker-compose.yml` reverted to `"80:80"` post-validation and re-validated with `docker compose config --quiet` (syntax-valid)
+
+---
+
 ## Pending Approval
 
-*Awaiting explicit approval to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition). No production infrastructure has been touched — the live client is unaffected either way.*
+*Awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
 
 ---
 
 ## Current Sprint
 
-*Version 2.0 migration complete locally. Awaiting direction: deploy the backend, wire the client to consume it, refresh `requirements.md` for the new structure, or move on to Version 1.1 content/feature work.*
+*Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*
 
 ---
 
 ## Next Tasks
 
-- [ ] Decide on and execute backend deployment (Render/Railway/Fly.io/Vercel serverless function, etc.), then update `CORS_ORIGIN`/`VITE_API_BASE_URL` accordingly.
+- [ ] Decide on and execute deployment — either the Dockerized stack (any Docker-capable host) or the original plan (server on Render/Railway/Fly.io/Vercel serverless, client on Vercel) — then update `CORS_ORIGIN`/`VITE_API_BASE_URL` accordingly.
 - [ ] Once the backend is live, decide whether to switch the client's section components from static `shared/data` imports to `services/api.ts` calls — and if so, add loading/error states.
-- [ ] Refresh `requirements.md`'s Folder Structure and Technology Stack sections to reflect the `client/`/`server/`/`shared/` monorepo (not done this round — wasn't in this milestone's explicit scope).
+- [ ] Refresh `requirements.md`'s Folder Structure and Technology Stack sections to reflect the `client/`/`server/`/`shared/` monorepo and Docker setup (not done this round — wasn't in this milestone's explicit scope).
 - [ ] Decide whether a contact form should be added to the UI to actually use `POST /api/contact` (currently unused by the frontend by design).
+- [ ] Version 2.2 (not started, requires separate approval): Kubernetes manifests, Azure Container Apps or similar, GitHub Actions CI/CD, automatic image publishing, further production image optimization, container registry publishing.
 
 Optional Version 1.1 enhancements (not started, listed for future planning only):
 

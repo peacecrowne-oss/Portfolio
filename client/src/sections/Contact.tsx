@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
+import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 
 const iconWrapperClasses =
@@ -81,7 +82,7 @@ export function Contact() {
   const telHref = `tel:${phone.replace(/[^\d+]/g, "")}`;
 
   return (
-    <Section id="contact" className="dark:bg-brand-bg">
+    <Section id="contact" className="dark:bg-[#08111F]">
       <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-8 shadow-sm sm:p-12 dark:border-white/10 dark:bg-gradient-to-br dark:from-white/[0.04] dark:to-white/[0.01] dark:shadow-black/20">
         <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-brand-primary/10 to-brand-secondary/10 px-3 py-1 text-xs font-semibold text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary">
           <span className="h-1.5 w-1.5 rounded-full bg-brand-secondary" aria-hidden="true" />
@@ -171,7 +172,7 @@ export function Contact() {
 
         <div className="mt-10">
           {PROFILE.resumeUrl ? (
-            <Button href={PROFILE.resumeUrl} variant="primary" className="px-8 py-3.5 text-base">
+            <Button href={withBasePath(PROFILE.resumeUrl)} variant="primary" className="px-8 py-3.5 text-base">
               Download Resume
             </Button>
           ) : (

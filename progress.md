@@ -627,9 +627,56 @@ The first working version of every layer above rendered nothing at all in dark m
 
 ---
 
+## Version 3.1 — Dark Theme Default & GitHub Pages Deployment ✔
+
+**Objective:** make dark mode the site-wide default, introduce a two-tier dark background system, and add GitHub Pages as an additional deployment target — without touching Docker, Vercel, resume data, or the information architecture.
+
+### Scope decisions made before/during implementation
+
+1. **`client/index.html` was touched even though it wasn't in the originally-listed allowed files.** The site has a pre-hydration inline script (added during Production Readiness) that resolves the theme before React loads, to avoid a flash of the wrong theme. Changing only `useTheme.ts`'s default would have left that script still following system `prefers-color-scheme`, so dark-by-default would only take effect after hydration for light-system visitors — a visible flash on every first load. This was flagged explicitly in the pre-approval plan before proceeding.
+2. **Palette restated by this milestone (`Primary #3B82F6`) vs. Version 3.0's tokens (`brand.primary = #2563EB`, `brand.accent = #3B82F6`)** were not reconciled — `client/tailwind.config.js` isn't in this milestone's allowed files, and the shade difference is subtle. Existing tokens were left as-is; flagged in the pre-approval plan.
+3. **Per-section visual bullets (Hero/About/Experience/Projects/Skills/Certifications/Contact — glass cards, hover glow, accent years, etc.) were treated as "preserve," not "rebuild."** They describe what Version 3.0 already shipped. This milestone's actual new work is the dark-first default, the two-tier background split, and GitHub Pages deployment plumbing.
+4. **A real regression was caught and fixed during implementation, not after:** an initial pass hardcoded `base: "/Portfolio/"` directly in `vite.config.ts`. Since this file is shared by every build (Docker's `client/Dockerfile`, Vercel, local dev), that would have broken asset loading on the Docker/nginx deployment (which serves from `/`, not `/Portfolio/`) the next time it was rebuilt. Fixed by making `base` conditional on a `VITE_BASE_PATH` environment variable, set only by the GitHub Actions workflow — verified by building both ways locally (see Validation).
+5. **`PROFILE.resumeUrl` (`"/resume.pdf"`, a root-relative string in `shared/data`) would 404 under the `/Portfolio/` subpath** since it's a runtime string, not something Vite's HTML asset pipeline rewrites automatically. Added `client/src/lib/basePath.ts` (`withBasePath`) and applied it at the two places `resumeUrl` is used as an `href` (`Hero.tsx`, `Contact.tsx`), rather than changing the shared data itself (out of scope, and would have been wrong for Vercel/Docker anyway).
+6. **`client/public/404.html`'s "Return Home" link** changed from `href="/"` to `href="./"` (relative) — the absolute version would have pointed at the GitHub account root instead of `/Portfolio/` once deployed there. Works correctly under both root and subpath serving.
+7. **Two-tier dark background:** rather than a full alternating zebra pattern across every section (risk of looking busy), Hero keeps the richer `#050816` treatment built in Version 3.0, and About/Experience/Projects/Skills/Contact all move to the slightly lighter `#08111F` as one consistent "content body" tier — giving depth between the hero moment and the rest of the page with a single, simple rule.
+
+### Files Created
+
+- `client/src/lib/basePath.ts` — `withBasePath()` helper (see decision #5)
+- `.github/workflows/deploy.yml` — checkout → install → build (`VITE_BASE_PATH=/Portfolio/`) → upload Pages artifact → deploy, via official `actions/configure-pages` / `actions/upload-pages-artifact` / `actions/deploy-pages` (no third-party action, no PAT)
+
+### Files Modified
+
+- `client/src/hooks/useTheme.ts` — default changed from "follow system preference" to "dark," unless a stored preference exists; removed the now-unused system-preference change listener
+- `client/index.html` — pre-hydration theme script updated to match (see decision #1)
+- `client/src/sections/About.tsx`, `Experience.tsx`, `Projects.tsx`, `Skills.tsx`, `Contact.tsx` — dark section background changed from `dark:bg-brand-bg` (`#050816`) to `dark:bg-[#08111F]`
+- `client/src/sections/Hero.tsx`, `Contact.tsx` — resume link wrapped in `withBasePath()`
+- `client/vite.config.ts` — `base` now reads `process.env.VITE_BASE_PATH`, defaulting to `/` (see decision #4)
+- `client/public/404.html` — home link fixed to a relative path (see decision #6)
+- `README.md` — new "GitHub Pages Deployment" subsection under Deployment; Folder Structure diagram updated (`lib/`, corrected `hooks/` list, `.github/workflows/`)
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/*`, any type definition, `server/`, `docker-compose.yml`, any `Dockerfile`, `nginx/`, `client/tailwind.config.js`, routing/navigation structure, or any Version 3.0 component visuals beyond the background-color and theme-default changes described above.
+
+### Validation Results
+
+- `npm run build` (`tsc --noEmit && vite build`) — passes; built `dist/index.html` confirmed to still reference root-relative asset paths (`/assets/...`) when `VITE_BASE_PATH` is unset, i.e. **zero regression for Docker/Vercel**
+- A second local build with `VITE_BASE_PATH=/Portfolio/` confirmed every asset reference correctly prefixed (`/Portfolio/assets/...`, `/Portfolio/favicon.svg`, etc.) — this build was then physically staged under a `/Portfolio/` subpath on a local static server and loaded in a real browser: **zero failed/4xx/5xx requests**, dark theme active with no stored preference, and the resume link resolved to `/Portfolio/resume.pdf` (confirmed via `getAttribute`, not just visual inspection)
+- `npm run lint` (`eslint .`) — passes, no errors
+- `docker compose up --build` — all containers healthy; `/api/health` → `{"status":"ok"}`; `resume.pdf` → `200` at the root path (`/resume.pdf`, confirming `withBasePath` correctly no-ops when `BASE_URL` is `/`)
+- Dark-by-default confirmed at all four required breakpoints (375 / 768 / 1024 / 1440) against the Dockerized build via direct DOM inspection (`document.documentElement.classList.contains("dark")`), not just visual review; the light-mode toggle was also re-confirmed still functional and still persists via `localStorage` at every breakpoint
+- Visual review at all four breakpoints confirmed the Hero/`#08111F` two-tier background reads correctly with no layout shift or regression to any Version 3.0 component
+
+### GitHub Pages URL
+
+`https://<github-username>.github.io/Portfolio/` — **not yet live.** The workflow exists and is committed, but GitHub Pages has not been enabled in the repository (Settings → Pages → Source → GitHub Actions), per this milestone's explicit instruction to wait for approval before doing so.
+
+---
+
 ## Pending Approval
 
-*Awaiting explicit approval before AWS deployment of the Version 3.0 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
+*Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*
 
 ---
 

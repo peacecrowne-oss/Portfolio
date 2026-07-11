@@ -2,6 +2,7 @@ import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
+import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 import { EXPERIENCE } from "@shared/data/experience";
 
@@ -136,7 +137,7 @@ export function Hero() {
               Contact Me
             </Button>
             {PROFILE.resumeUrl ? (
-              <Button href={PROFILE.resumeUrl} variant="secondary">
+              <Button href={withBasePath(PROFILE.resumeUrl)} variant="secondary">
                 Download Resume
               </Button>
             ) : (

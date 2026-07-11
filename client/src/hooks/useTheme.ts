@@ -9,36 +9,21 @@ function getStoredTheme(): Theme | null {
   return stored === "light" || stored === "dark" ? stored : null;
 }
 
-function getSystemTheme(): Theme {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
 function applyTheme(theme: Theme) {
   document.documentElement.classList.toggle("dark", theme === "dark");
 }
 
+/**
+ * Dark is the site's default. A visitor's stored preference (set via the
+ * toggle) always wins; without one, the site defaults to dark regardless of
+ * OS preference, rather than following prefers-color-scheme.
+ */
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(
-    () => getStoredTheme() ?? getSystemTheme(),
-  );
+  const [theme, setTheme] = useState<Theme>(() => getStoredTheme() ?? "dark");
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
-
-  useEffect(() => {
-    if (getStoredTheme()) return;
-
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = (event: MediaQueryListEvent) => {
-      setTheme(event.matches ? "dark" : "light");
-    };
-
-    media.addEventListener("change", handleChange);
-    return () => media.removeEventListener("change", handleChange);
-  }, []);
 
   const toggleTheme = useCallback(() => {
     setTheme((prev) => {

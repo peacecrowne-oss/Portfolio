@@ -160,6 +160,19 @@ All GET endpoints (except `/health`) return `{ "success": true, "data": ... }`. 
 
 **Server:** not yet deployed. It has no database and no state, so it can run on any Node host (Render, Railway, Fly.io, a Vercel serverless function, etc.) — this is a deliberate, separate next step, not part of this migration.
 
+### GitHub Pages Deployment
+
+The client can additionally be deployed to GitHub Pages, served from `https://<github-username>.github.io/Portfolio/`. This is an additional deployment target — it does not replace Vercel or the Docker setup, and neither of those changed.
+
+`.github/workflows/deploy.yml` builds and deploys the `client` workspace automatically on every push to `main`, using GitHub's official Pages Actions (`actions/configure-pages`, `actions/upload-pages-artifact`, `actions/deploy-pages`) — no personal access token required.
+
+Because GitHub Pages serves the site from a `/Portfolio/` subpath rather than domain root, the client build sets Vite's `base` conditionally via a `VITE_BASE_PATH` environment variable:
+
+- **Unset** (Vercel, Docker/nginx, local dev): `base` stays `/`, exactly as before.
+- **Set to `/Portfolio/`** (the GitHub Actions workflow only): asset URLs and the `resume.pdf` link (via `client/src/lib/basePath.ts`) resolve correctly under the subpath.
+
+To enable: in the repository's **Settings → Pages**, set the source to **GitHub Actions**. The workflow will then run automatically on the next push to `main`.
+
 ---
 
 ## Folder Structure
@@ -180,9 +193,10 @@ All GET endpoints (except `/health`) return `{ "success": true, "data": ... }`. 
 │   │   ├── sections/               # Page sections (Hero, About, Experience, Projects, Skills, Contact)
 │   │   ├── pages/                   # Thin page wrappers composing sections (Home)
 │   │   ├── layouts/                  # RootLayout (Navbar + main + Footer + skip link)
-│   │   ├── hooks/                     # Custom hooks (useTheme)
+│   │   ├── hooks/                     # Custom hooks (useTheme, useActiveSection)
 │   │   ├── services/                   # api.ts — typed API client (not yet wired into components)
 │   │   ├── constants/                   # Static constants (nav links)
+│   │   ├── lib/                          # basePath.ts — resolves root-relative asset URLs against Vite's base
 │   │   ├── App.tsx, main.tsx, index.css
 │   ├── index.html
 │   ├── package.json, vite.config.ts, tsconfig.json, tailwind.config.js, postcss.config.js
@@ -210,6 +224,9 @@ All GET endpoints (except `/health`) return `{ "success": true, "data": ... }`. 
 │   └── nginx.conf
 ├── docs/
 │   └── docker.md                 # Docker architecture, build/run/stop/logs, production notes
+├── .github/
+│   └── workflows/
+│       └── deploy.yml            # Builds client and deploys to GitHub Pages on push to main
 ├── requirements.md              # Project requirements and Claude Code approval policy
 ├── progress.md                   # Milestone tracking, checklist, and changelog
 ├── package.json                  # Root workspace orchestration (install/dev/build/lint)

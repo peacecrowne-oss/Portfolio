@@ -441,6 +441,54 @@ Host port `80` was already reserved by Windows' `HTTP.sys` (owned by the `System
 
 ---
 
+## Navigation Enhancement ✔
+
+**Objective:** implement active-section highlighting in the navigation using `IntersectionObserver`, updating both desktop and mobile navs as the user scrolls or clicks, without redesigning the navbar or touching section content.
+
+### Tracking
+
+- [x] **`useActiveSection` hook** — tracks which section id is currently active via `IntersectionObserver`, scoped to `home`, `about`, `experience`, `projects`, `skills`, `certifications`, `contact`.
+- [x] **Desktop nav active styling** — active link gets `font-semibold`, the existing accent color (`text-slate-900` / `dark:text-white`), and a `border-b-2` underline (space reserved via an always-present `border-transparent` on inactive links, so becoming active never shifts layout).
+- [x] **Mobile nav active styling** — same treatment applied inside `#mobile-menu`, kept in sync with desktop.
+- [x] **Accessibility** — `aria-current="page"` applied to exactly one link at a time; keyboard navigation and focus-visible rings untouched.
+
+### Implementation notes
+
+1. **Document-order "last crossed" algorithm, not first-match.** `certifications` is a nested `<div>` inside `<section id="skills">`, not a sibling section, so both are simultaneously "intersecting" once skills is in view. The hook iterates all observed elements in document order and keeps the *last* one whose top has crossed the activation line (navbar height + a fixed band), rather than a Set-based first-match lookup — this correctly favors the more deeply-scrolled-into section.
+2. **Pixel-based `rootMargin`, not percentage-based.** An initial percentage-based margin (`-99%` for a thin trigger line) inverted the observation region on shorter viewports (bottom boundary computed above the top boundary), since `rootMargin` percentages are relative to the root's own dimensions. Replaced with margins computed in pixels from `window.innerHeight` at effect-setup time.
+3. **Observer trigger band matches the manual check exactly.** The `IntersectionObserver`'s `rootMargin` and the hook's manual `top <= activationLine` comparison both use the same `activationLine` constant. Originally these used different thresholds, which meant a section could register as "intersecting" once (at the wide observer boundary) and then never fire another callback as it continued moving toward the real activation line — silently freezing the active section one step behind. Unifying the boundary fixed this.
+4. **Mobile menu changed from in-flow to an absolutely-positioned overlay.** The mobile `<nav id="mobile-menu">` previously sat in normal document flow inside the sticky `<header>`, so opening it genuinely grew the header's height (~65px → ~346px), pushing every section down and interacting with the browser's native scroll-anchoring in a way that could disturb the active section over time. Changed its className to `absolute inset-x-0 top-full ...`, anchored to the header's existing `position: sticky` containing block — the header's own box no longer changes size when the menu opens or closes. This is a narrow, reasoned exception to "do not redesign the navbar": it changes only how the mobile panel is positioned (an overlay instead of a content-pushing block), not its visual design, spacing, or content, and was necessary to satisfy the explicit "closing/opening the menu should not affect tracking" requirement.
+5. **`ResizeObserver` on the header** as a defensive addition — re-runs the active-section calculation whenever the header's own height changes for any reason, independent of scroll events.
+
+### Files Created
+
+- `client/src/hooks/useActiveSection.ts`
+
+### Files Modified
+
+- `client/src/components/Navbar.tsx` — wired `useActiveSection` into both the desktop and mobile nav lists (active classes + `aria-current`); changed the mobile menu's positioning from in-flow to an absolute overlay (see note 4 above)
+- `progress.md` — this entry
+
+**Not modified:** `client/src/constants/navigation.ts` (already had all 7 correct entries), section content/spacing, any other component.
+
+### Validation Results
+
+All validation performed against the Dockerized production build (`docker compose up --build`, served through Nginx) at desktop (1440×900) and mobile (375×900) viewports, in both light and dark mode, using a Playwright script driving raw DOM-dispatched click events (see note below):
+
+- Clicking each of the 7 desktop nav links updates the active item correctly, one at a time (`aria-current="page"` count always exactly `1`)
+- Clicking `#home` after navigating elsewhere correctly restores Home as active
+- Manual scroll through the page (10%–100% of scroll height) shows the active item advancing through About → Experience → Projects → Skills → Contact in order, matching the scrolled section
+- Scrolling back to the top restores Home as active
+- Dark mode: toggling theme and clicking a nav link correctly updates the active item; underline/accent styling renders correctly in both themes (confirmed visually via screenshot)
+- Mobile: opening the menu, clicking a link (`#skills`), confirming the menu closes and the correct item is marked active, then reopening the menu shows the same correct active item (`Skills`) — no drift on reopen
+- `npm run build` (`tsc --noEmit && vite build`) — passes, 41 modules transformed
+- `npm run lint` (`eslint .`) — passes, no errors
+- `docker compose up --build` — all containers healthy, no regressions to any previously-validated route or asset
+
+**Testing note:** an initial round of Playwright testing using its default `.click()` (which auto-scrolls a target into view before clicking) showed the mobile menu's reopen state reading one section behind. Isolated with a raw `dispatchEvent(new MouseEvent(...))` click, which bypasses Playwright's actionability auto-scroll — the discrepancy disappeared, confirming it was a test-tooling artifact rather than an application bug. The in-flow-to-overlay fix for the mobile menu (note 4 above) was kept regardless, since it fixes a genuine, independently-verified issue (the header's own height growing when the menu opened) and is a strict improvement.
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

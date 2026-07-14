@@ -4,16 +4,6 @@ import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
-import { EXPERIENCE } from "@shared/data/experience";
-
-function getYearsOfExperience(): number {
-  const startYears = EXPERIENCE.map((entry) => {
-    const match = entry.startDate.match(/\d{4}/);
-    return match ? parseInt(match[0], 10) : new Date().getFullYear();
-  });
-  const earliestYear = Math.min(...startYears);
-  return new Date().getFullYear() - earliestYear;
-}
 
 function parseHighlight(highlight: string): { value: string; label: string } {
   const match = highlight.match(/\d+%/);
@@ -63,8 +53,6 @@ const iconProps = {
 };
 
 export function Hero() {
-  const yearsOfExperience = getYearsOfExperience();
-
   return (
     <Section
       id="home"
@@ -94,11 +82,6 @@ export function Hero() {
 
           <p className="text-2xl font-semibold text-slate-700 sm:text-3xl dark:text-slate-300">
             {PROFILE.title}
-          </p>
-
-          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
-            {PROFILE.location} · {PROFILE.social.email} · {PROFILE.phone} ·{" "}
-            {yearsOfExperience}+ Years of Professional Experience
           </p>
 
           <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">

@@ -704,6 +704,26 @@ Initial version centered the photo above the "About Me" heading. Per follow-up r
 
 ---
 
+## Hero Contact Line Removed ✔
+
+**Objective:** remove the "Houston, Texas · peacecrowne@gmail.com · 832-277-7883 · 21+ Years of Professional Experience" line from the Hero section, on request.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — removed the line; also removed `getYearsOfExperience()` and the `yearsOfExperience` variable, since that was their only use (kept the file free of now-dead code rather than leaving an unused helper behind)
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/profile.ts` (location/email/phone are still real data, used elsewhere — e.g., Contact section — just no longer duplicated in the Hero).
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright against the Dockerized build: rendered Hero text no longer contains "Houston, Texas," the phone number, or "Years of Professional Experience"; visually confirmed via screenshot that the remaining Hero content flows correctly with no gap
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

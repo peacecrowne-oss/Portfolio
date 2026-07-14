@@ -151,7 +151,7 @@ export function Hero() {
             Hello, I'm
           </p>
 
-          <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-[64px] xl:text-[80px] dark:text-white">
+          <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:whitespace-nowrap sm:text-5xl lg:text-[64px] xl:text-[80px] dark:text-white">
             {HERO_DISPLAY_NAME}
           </h1>
 

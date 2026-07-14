@@ -778,6 +778,14 @@ Initial version centered the photo above the "About Me" heading. Per follow-up r
 - `docker compose up --build` — all containers healthy
 - Verified via Playwright: Hero `<h1>` renders "Omolola Makinde" at both desktop and mobile widths; About section photo `alt` attribute confirmed unchanged ("Omolola Peace Makinde")
 
+### Follow-up: keep name on one line
+
+The shortened name was still wrapping to two lines ("Omolola" / "Makinde") at larger sizes. Added `sm:whitespace-nowrap` to the Hero `<h1>` (≥640px only) so it renders on a single line from small breakpoint up. Below 640px, wrapping is left available rather than forced `nowrap` everywhere — an unconditional `whitespace-nowrap` was tested first and caused real horizontal page overflow at 320px-wide viewports (confirmed via `document.documentElement.scrollWidth`), since "Omolola Makinde" at the mobile font size doesn't fit 320px minus padding. At 375px and above it already rendered on one line without needing `nowrap` at all.
+
+**Found and flagged, not fixed (out of scope for this request):** while isolating the above, discovered a *pre-existing, unrelated* horizontal overflow at exactly 320px caused by a Contact-section contact-method card (~17px too wide at that width). Confirmed via isolation testing that this exists independently of the Hero `<h1>` or any Version 3.0/3.1 background layer — hiding the `<h1>` entirely didn't change `scrollWidth` at all. Not fixed here since it's unrelated to what was asked; flagging in case it should be a follow-up.
+
+- Re-verified via Playwright across 320/375/768/1024/1440px: `<h1>` renders on exactly one line at 375px and up; at 320px it wraps to two lines with no added overflow from the `<h1>` itself (the only remaining overflow at 320px is the pre-existing Contact card issue noted above, unchanged by this fix)
+
 ---
 
 ## Pending Approval

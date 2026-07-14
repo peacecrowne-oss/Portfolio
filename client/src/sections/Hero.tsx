@@ -7,10 +7,17 @@ import { PROFILE } from "@shared/data/profile";
 
 const ROLE_ROTATE_MS = 2800;
 
-/** Short display labels, derived from PROFILE.title (not new copy). */
-const ROLES = PROFILE.title
-  .split("|")
-  .map((role) => role.trim().replace(/^Microsoft Certified\s+/, ""));
+const ROLES = [
+  "Power BI Data Analyst",
+  "Power BI Developer",
+  "SQL & DAX Expert",
+  "ETL & ELT Specialist",
+  "AI Automation Builder",
+  "Microsoft Fabric Engineer",
+];
+
+/** Full role list joined for screen readers and the reduced-motion fallback. */
+const ROLES_FULL_TEXT = ROLES.join(" | ");
 
 /** Hero-only display name: first + last, middle name(s) dropped. */
 const HERO_NAME_PARTS = PROFILE.name.trim().split(/\s+/);
@@ -43,9 +50,9 @@ function useRotatingRoleIndex(length: number, reducedMotion: boolean): number {
 }
 
 function RoleFrameIcon({ index }: { index: number }) {
-  switch (index % 3) {
+  switch (index % 6) {
     case 0:
-      // bar chart / data analyst
+      // bar chart / Power BI Data Analyst
       return (
         <>
           <line x1="4" y1="20" x2="4" y2="10" />
@@ -54,7 +61,7 @@ function RoleFrameIcon({ index }: { index: number }) {
         </>
       );
     case 1:
-      // layout / developer
+      // layout / Power BI Developer
       return (
         <>
           <rect x="3" y="3" width="7" height="9" rx="1" />
@@ -63,13 +70,36 @@ function RoleFrameIcon({ index }: { index: number }) {
           <rect x="3" y="16" width="7" height="5" rx="1" />
         </>
       );
-    default:
-      // database / SQL & ETL
+    case 2:
+      // database / SQL & DAX Expert
       return (
         <>
           <ellipse cx="12" cy="5" rx="8" ry="3" />
           <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
           <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+        </>
+      );
+    case 3:
+      // pipeline / ETL & ELT Specialist
+      return (
+        <>
+          <rect x="3" y="3" width="6" height="6" rx="1" />
+          <rect x="15" y="15" width="6" height="6" rx="1" />
+          <path d="M9 6h6a3 3 0 0 1 3 3v6" />
+        </>
+      );
+    case 4:
+      // sparkles / AI Automation Builder
+      return (
+        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
+      );
+    default:
+      // layers / Microsoft Fabric Engineer
+      return (
+        <>
+          <polygon points="12 2 2 7 12 12 22 7 12 2" />
+          <polyline points="2 17 12 22 22 17" />
+          <polyline points="2 12 12 17 22 12" />
         </>
       );
   }
@@ -89,7 +119,7 @@ const iconProps = {
 export function Hero() {
   const reducedMotion = usePrefersReducedMotion();
   const roleIndex = useRotatingRoleIndex(ROLES.length, reducedMotion);
-  const displayedRole = reducedMotion ? PROFILE.title : ROLES[roleIndex];
+  const displayedRole = reducedMotion ? ROLES_FULL_TEXT : ROLES[roleIndex];
 
   return (
     <Section
@@ -119,7 +149,7 @@ export function Hero() {
           </h1>
 
           <div className="relative">
-            <span className="sr-only">{PROFILE.title}</span>
+            <span className="sr-only">{ROLES_FULL_TEXT}</span>
             <p
               key={reducedMotion ? "static" : roleIndex}
               aria-hidden="true"

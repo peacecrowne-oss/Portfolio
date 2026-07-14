@@ -898,6 +898,35 @@ Stopped using the shared `Badge` component for these two groups (it's also used 
 
 ---
 
+## Hero Rotating Roles Expanded to Six + New Frames ✔
+
+**Objective:** replace the 3-role rotation with an explicit 6-item list provided directly by the user — Power BI Data Analyst, Power BI Developer, SQL & DAX Expert, ETL & ELT Specialist, AI Automation Builder, Microsoft Fabric Engineer — and give each a corresponding icon frame.
+
+### Implementation notes
+
+- Previously `ROLES` was *derived* from `PROFILE.title` specifically to avoid hardcoding new copy. This request is different in kind: the site owner directly specified the exact list to display, which is authoritative content she supplied, not something inferred or invented independently. `ROLES` is now a literal array in `Hero.tsx`; `shared/data/profile.ts` (`PROFILE.title`, used for the page `<title>`, meta description, etc.) was **not** changed, since the request was scoped to "the pop ups under name" specifically.
+- Minor wording normalization for consistency with the rest of the site's style (which uses "&" rather than "and" elsewhere, e.g. "SQL & ETL Specialist," "AI & Emerging Technologies"): "SQL and DAX Expert" → "SQL & DAX Expert." "Ms Fabric Engineer" → "Microsoft Fabric Engineer" (spelled out to avoid "Ms" reading as a courtesy title).
+- Accessibility: the `sr-only` full-list text and the `prefers-reduced-motion` static fallback both switched from `PROFILE.title` to a new `ROLES_FULL_TEXT` (`ROLES.join(" | ")`), so screen-reader and reduced-motion users get all six roles, not just the original three.
+- `RoleFrameIcon` extended from 3 to 6 cases (`index % 6`). Four new icons added, matching visual language already established elsewhere in the codebase for the same concepts: pipeline/workflow arrows for ETL & ELT (reused from About's "ETL Pipeline Design" strength icon), sparkles for AI Automation Builder (reused from About/Skills' AI icon), and a layered-cube glyph for Microsoft Fabric Engineer (reused from Skills' "Microsoft BI Stack" layers icon — fitting, since Fabric is a unified/layered analytics platform). SQL & DAX Expert reuses the existing database icon; Power BI Data Analyst/Developer icons unchanged.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/profile.ts`.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright over a full 20s sampling window: all six roles observed cycling in the exact order specified, looping back to the first correctly; text and frame label matched on every single sample (`synced=true` throughout)
+- `sr-only` text confirmed to read all six roles joined by " | "
+- Screenshots confirm each of the four new icons renders distinctly and legibly in both the frame card and against the Hero background
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

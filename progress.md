@@ -927,6 +927,37 @@ Stopped using the shared `Badge` component for these two groups (it's also used 
 
 ---
 
+## Hero Role Frame Icons Redesigned ✔
+
+**Objective:** the user shared six reference images (one per role) and asked for the frame icons to visually echo them.
+
+### Scope decision made before touching anything
+
+The six reference images couldn't be used directly: images pasted inline in chat aren't accessible as files (same limitation encountered with the earlier profile-photo request — only paths on disk are readable), and one of the six (the SQL Data Model image) carried a visible "ai" watermark, indicating it was a stock/AI-marketplace preview image, not something with confirmed usage rights. Separately, the Hero illustration was built CSS-only by explicit requirement in Version 3.0 (no raster images, no external libraries, for performance and licensing safety). Presented the user a choice — redesign the CSS icons to evoke the references, or supply real image files with confirmed rights — and they chose the CSS redesign.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — `RoleFrameIcon` redesigned:
+  - **Power BI Data Analyst:** ascending bars + a trend ring, echoing the multi-panel dashboard reference
+  - **Power BI Developer:** a hub-and-spoke node diagram, echoing the "connected data sources → data model" reference
+  - **SQL & DAX Expert:** kept the database cylinder (already an accurate, clear match)
+  - **ETL & ELT Specialist:** three connected nodes in a row, echoing the Extract → Transform → Load reference more literally than the previous single pipeline glyph
+  - **AI Automation Builder:** a simple robot face (rounded head, two eyes, antenna), echoing the bot-workflow reference
+  - **Microsoft Fabric Engineer:** kept the layered/stacked glyph (already evokes a unified, layered platform)
+- `progress.md` — this entry
+
+**Not modified:** the role list/text itself, `shared/data/profile.ts`.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Re-ran the full 20-second rotation/sync check: all six roles still cycle in order, loop correctly, and stay perfectly synced with their frame (`synced=true` on every sample)
+- Captured a clean close-up screenshot of each of the six frames individually (waiting for each role to become active before capturing) to confirm every icon renders legibly and is visually distinct from the others
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

@@ -52,22 +52,26 @@ function useRotatingRoleIndex(length: number, reducedMotion: boolean): number {
 function RoleFrameIcon({ index }: { index: number }) {
   switch (index % 6) {
     case 0:
-      // bar chart / Power BI Data Analyst
+      // dashboard: bars + trend ring / Power BI Data Analyst
       return (
         <>
-          <line x1="4" y1="20" x2="4" y2="10" />
-          <line x1="12" y1="20" x2="12" y2="4" />
-          <line x1="20" y1="20" x2="20" y2="14" />
+          <line x1="4" y1="20" x2="4" y2="13" />
+          <line x1="9" y1="20" x2="9" y2="8" />
+          <line x1="14" y1="20" x2="14" y2="11" />
+          <circle cx="19" cy="7" r="3.2" />
         </>
       );
     case 1:
-      // layout / Power BI Developer
+      // hub & spoke data model / Power BI Developer
       return (
         <>
-          <rect x="3" y="3" width="7" height="9" rx="1" />
-          <rect x="14" y="3" width="7" height="5" rx="1" />
-          <rect x="14" y="12" width="7" height="9" rx="1" />
-          <rect x="3" y="16" width="7" height="5" rx="1" />
+          <circle cx="12" cy="12" r="2.5" />
+          <circle cx="12" cy="4" r="1.6" />
+          <circle cx="4" cy="16" r="1.6" />
+          <circle cx="20" cy="16" r="1.6" />
+          <line x1="12" y1="9.5" x2="12" y2="5.6" />
+          <line x1="10" y1="13.8" x2="5.3" y2="15.3" />
+          <line x1="14" y1="13.8" x2="18.7" y2="15.3" />
         </>
       );
     case 2:
@@ -80,18 +84,27 @@ function RoleFrameIcon({ index }: { index: number }) {
         </>
       );
     case 3:
-      // pipeline / ETL & ELT Specialist
+      // extract-transform-load pipeline / ETL & ELT Specialist
       return (
         <>
-          <rect x="3" y="3" width="6" height="6" rx="1" />
-          <rect x="15" y="15" width="6" height="6" rx="1" />
-          <path d="M9 6h6a3 3 0 0 1 3 3v6" />
+          <circle cx="4" cy="12" r="2.3" />
+          <circle cx="12" cy="12" r="2.3" />
+          <circle cx="20" cy="12" r="2.3" />
+          <line x1="6.3" y1="12" x2="9.7" y2="12" />
+          <line x1="14.3" y1="12" x2="17.7" y2="12" />
         </>
       );
     case 4:
-      // sparkles / AI Automation Builder
+      // robot / AI Automation Builder
       return (
-        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
+        <>
+          <rect x="5" y="9" width="14" height="11" rx="3" />
+          <circle cx="9.5" cy="14.5" r="1.3" />
+          <circle cx="14.5" cy="14.5" r="1.3" />
+          <path d="M9 18h6" />
+          <line x1="12" y1="9" x2="12" y2="5" />
+          <circle cx="12" cy="3.5" r="1.3" />
+        </>
       );
     default:
       // layers / Microsoft Fabric Engineer

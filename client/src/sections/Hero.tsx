@@ -13,7 +13,7 @@ const ROLES = [
   "SQL & DAX Expert",
   "ETL & ELT Specialist",
   "AI Automation Builder",
-  "Microsoft Fabric Engineer",
+  "Microsoft Fabric Data Engineer",
 ];
 
 /** Full role list joined for screen readers and the reduced-motion fallback. */
@@ -107,7 +107,7 @@ function RoleFrameIcon({ index }: { index: number }) {
         </>
       );
     default:
-      // layers / Microsoft Fabric Engineer
+      // layers / Microsoft Fabric Data Engineer
       return (
         <>
           <polygon points="12 2 2 7 12 12 22 7 12 2" />

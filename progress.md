@@ -1007,6 +1007,24 @@ The six reference images couldn't be used directly: images pasted inline in chat
 
 ---
 
+## Hero Rotating Role Renamed ✔
+
+**Objective:** rename "Microsoft Fabric Engineer" to "Microsoft Fabric Data Engineer" in the Hero rotating role list, on request.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — updated the `ROLES` array entry and its matching code comment
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright over a full rotation cycle: "Microsoft Fabric Data Engineer" renders correctly, stays synced with its frame, and the `sr-only` accessibility text reflects the updated name
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

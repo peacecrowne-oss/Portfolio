@@ -979,6 +979,34 @@ The six reference images couldn't be used directly: images pasted inline in chat
 
 ---
 
+## Experience Content Update ✔
+
+**Objective:** replace the responsibility bullets (and, for two entries, the company name / role title) for three Experience entries with exact text supplied directly by the user.
+
+### What changed, precisely
+
+- **Power BI Developer, Colaberry Inc** (dates unchanged: July 2025 – Present): 8 bullets → 4 bullets. Kept the two bullets carrying quantified metrics (25% operational efficiency, 40% reduced manual processing) and the stakeholder-collaboration bullet (shortened); added a new bullet about advanced DAX calculations; dropped four other bullets that were previously present (predictive modeling, cross-team data integrity, Power BI Service administration, the 15%-adoption figure, general "optimize solutions" line).
+- **Data Analyst:** company name changed from "Joisen Institute and Analytics" → **"Joisen Inc."** Responsibilities fully replaced: 10 detailed, DAX/ETL-heavy bullets → 5 simpler bullets with no quantified metrics. Dates unchanged (August 2022 – June 2025).
+- **RCCG entry:** role title changed from "Database Administrator" → **"Data Administrator."** Responsibilities fully replaced: 7 bullets (including a 20%-improvement figure) → 4 bullets with no quantified metrics. Dates unchanged (January 2020 – July 2022).
+- Added a trailing period to the last new bullet ("...Company Policies") for consistency with every other bullet in the file, which ends in a period — a punctuation normalization only, wording otherwise verbatim as supplied.
+- Preserved the supplied text's tense exactly as given, including an inconsistency worth noting: the new RCCG bullets mix past tense ("Managed and optimized...") with present tense ("Perform...," "Monitor...," "Manage..."). Not corrected, since the exact wording was provided directly and this project's standing rule is to never alter supplied resume text without being asked.
+- **Not touched:** the other two Experience entries (Cloud Support Specialist, Manager) and all dates across all entries — only the fields explicitly covered by the supplied text were changed.
+
+### Files Modified
+
+- `shared/data/experience.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` (client) — passes
+- `npm run build` (server) — passes (confirms the `shared/` change doesn't break the API, which also reads this data)
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright against the Dockerized build: "Joisen Inc" and "Data Administrator" both render exactly once; screenshot confirms all three updated entries display the new bullets correctly, with bold styling still correctly applied only to the two remaining quantified bullets (25%, 40%) in the Colaberry Inc entry
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

@@ -1,15 +1,6 @@
 import { Section } from "@/components/Section";
 import { EXPERIENCE } from "@shared/data/experience";
 
-function isQuantifiedAchievement(text: string): boolean {
-  return /\d+%/.test(text);
-}
-
-function getStartYear(startDate: string): string {
-  const match = startDate.match(/\d{4}/);
-  return match ? match[0] : startDate;
-}
-
 function getInitials(company: string): string {
   const words = company.replace(/[.,]/g, "").split(/\s+/).filter(Boolean);
   const initials = words
@@ -37,32 +28,18 @@ export function Experience() {
             </span>
 
             <div className="hover-lift -m-3 rounded-xl p-3 transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.03]">
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                  {entry.role}
-                </h3>
-                <span className="inline-flex w-fit items-center rounded-full bg-gradient-to-r from-brand-primary/10 to-brand-secondary/10 px-3 py-1 text-xs font-bold text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary">
-                  {getStartYear(entry.startDate)}
-                </span>
-              </div>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                {entry.role}
+              </h3>
 
               <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-400">
-                {entry.company} · {entry.startDate} – {entry.endDate}
+                {entry.company}
               </p>
 
               {entry.responsibilities.length > 0 && (
                 <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {entry.responsibilities.map((responsibility) => (
-                    <li
-                      key={responsibility}
-                      className={
-                        isQuantifiedAchievement(responsibility)
-                          ? "font-semibold text-slate-900 dark:text-white"
-                          : undefined
-                      }
-                    >
-                      {responsibility}
-                    </li>
+                    <li key={responsibility}>{responsibility}</li>
                   ))}
                 </ul>
               )}

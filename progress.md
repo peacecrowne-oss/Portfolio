@@ -1046,6 +1046,33 @@ The six reference images couldn't be used directly: images pasted inline in chat
 
 ---
 
+## Experience: Dates Removed, Company-Only Subtitle, Unbolded ✔
+
+**Objective:** remove all dates from the Experience UI (retain only company name in the subtitle), and unbold the 1st and 3rd bullets in the Power BI Developer entry, on request.
+
+### Implementation notes
+
+- Removed the year badge (top-right pill) and the "Company · Start – End" subtitle, replacing it with just the company name.
+- The bold-on-quantified-bullet behavior (`isQuantifiedAchievement`, auto-bolding any bullet containing a `%` figure) was removed entirely rather than special-cased by index. Currently the Power BI Developer entry is the *only* entry with `%`-bearing bullets (bullets 1 and 3 — the two the request specifically named), so removing the auto-bold behavior achieves exactly what was asked with no side effects elsewhere, and avoids fragile bullet-index-specific styling that would break if the bullets are ever reordered or edited.
+- Dates (`startDate`/`endDate`) remain in `shared/data/experience.ts` — only removed from what's *displayed*. They're still used internally as part of each list item's React `key` for stable list rendering.
+
+### Files Modified
+
+- `client/src/sections/Experience.tsx` — removed `getStartYear()`, `isQuantifiedAchievement()`, the year badge, and the date portion of the subtitle
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/experience.ts` (dates still present in the data, just not rendered).
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: no 4-digit year appears anywhere in the rendered Experience section; the first four Power BI Developer bullets all compute to `font-weight: 400` (normal), confirming bullets 1 and 3 are no longer bold
+- Screenshot confirms clean layout: company-only subtitles, no year badges, no leftover spacing gaps
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

@@ -808,6 +808,30 @@ The shortened name was still wrapping to two lines ("Omolola" / "Makinde") at la
 
 ---
 
+## About Me Technical Focus — Two-Column Layout ✔
+
+**Objective:** under Technical Focus, place Technical Interests on the left and Working Style on the right in small pill "tabs," per a reference screenshot, on request.
+
+### Implementation notes
+
+The reference image showed a Skills-style card grid (icon + name + proficiency level badge + progress bar). That level of detail doesn't apply here — Technical Interests and Working Style are categorical tags, not skills with proficiency percentages, and this project's standing rule is to never invent data that isn't in the source (`shared/data/profile.ts`). Read the request as being about the reference's *pill/tab visual style* and the *side-by-side arrangement*, not a literal skill-card rebuild — the existing `Badge` component was already a small rounded pill/tab, so no new component was needed there. Wrapped each group in its own card (`featureCardClasses`, consistent with the rest of the page) and placed them in a two-column grid (`sm:grid-cols-2`) so Technical Interests sits left and Working Style sits right on larger screens, stacking vertically on mobile.
+
+### Files Modified
+
+- `client/src/sections/About.tsx`
+- `progress.md` — this entry
+
+**Not modified:** `Badge.tsx`, `shared/data/profile.ts` — same tags, same data, only the layout changed.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Visually confirmed via screenshots: desktop shows Technical Interests and Working Style side by side in matching cards; mobile stacks them vertically with no overflow; both dark and light mode render correctly
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

@@ -104,8 +104,8 @@ export function About() {
         <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
           Technical Focus
         </h3>
-        <div className="mt-4 space-y-6">
-          <div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className={featureCardClasses}>
             <p className={groupLabelClasses}>Technical Interests</p>
             <ul className="mt-3 flex flex-wrap gap-2">
               {about.technicalInterests.map((interest) => (
@@ -116,7 +116,7 @@ export function About() {
             </ul>
           </div>
 
-          <div>
+          <div className={featureCardClasses}>
             <p className={groupLabelClasses}>Working Style</p>
             <ul className="mt-3 flex flex-wrap gap-2">
               {about.workingStyle.map((trait) => (

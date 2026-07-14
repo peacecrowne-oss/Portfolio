@@ -2,7 +2,6 @@ import { Section } from "@/components/Section";
 import { Badge } from "@/components/Badge";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
-import { EDUCATION } from "@shared/data/education";
 
 const groupLabelClasses =
   "text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
@@ -101,33 +100,7 @@ export function About() {
         </div>
       </div>
 
-      <div className={`mt-10 ${featureCardClasses}`}>
-        <div className="flex items-center gap-3">
-          <span className={iconWrapperClasses} aria-hidden="true">
-            <svg {...iconProps}>
-              <path d="M12 20V10M18 20V4M6 20v-6" />
-            </svg>
-          </span>
-          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-            Career Journey
-          </h3>
-        </div>
-        <div className="mt-4 space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
-          <p>{about.background.journey}</p>
-          <p>{about.background.currentFocus}</p>
-          {EDUCATION.map((entry) => (
-            <p key={entry.institution}>
-              <span className="font-semibold text-slate-900 dark:text-white">
-                Education:
-              </span>{" "}
-              {entry.degree}, {entry.institution}, {entry.location} (
-              {entry.year})
-            </p>
-          ))}
-        </div>
-      </div>
-
-      <div className="mt-12">
+      <div className="mt-10">
         <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
           Technical Focus
         </h3>

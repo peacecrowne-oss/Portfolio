@@ -2,12 +2,6 @@ import { Section } from "@/components/Section";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 
-const groupLabelClasses =
-  "text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400";
-
-const tabClasses =
-  "inline-flex items-center rounded-full border border-slate-300 px-3 py-1 text-xs font-bold text-slate-900 dark:border-white/25 dark:text-white";
-
 const featureCardClasses =
   "hover-lift rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl";
 
@@ -102,31 +96,7 @@ export function About() {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-8 sm:grid-cols-2">
-        <div>
-          <p className={groupLabelClasses}>Technical Interests</p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {about.technicalInterests.map((interest) => (
-              <li key={interest}>
-                <span className={tabClasses}>{interest}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <p className={groupLabelClasses}>Working Style</p>
-          <ul className="mt-3 flex flex-wrap gap-2">
-            {about.workingStyle.map((trait) => (
-              <li key={trait}>
-                <span className={tabClasses}>{trait}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-
-      <div className="mt-12">
+      <div className="mt-10">
         <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
           Core Strengths
         </h3>

@@ -958,6 +958,27 @@ The six reference images couldn't be used directly: images pasted inline in chat
 
 ---
 
+## About Me Technical Interests / Working Style Removed ✔
+
+**Objective:** remove the Technical Interests / Working Style tabs from About Me entirely, on request.
+
+### Files Modified
+
+- `client/src/sections/About.tsx` — removed the Technical Interests / Working Style block and its now-unused `groupLabelClasses` and `tabClasses` constants
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/profile.ts` (`about.technicalInterests`/`about.workingStyle` still exist, simply no longer rendered anywhere on the site).
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: zero "Technical Interests" or "Working Style" text remains on the page
+- Visually confirmed via screenshot: About Me now flows directly from the photo/intro row into Core Strengths, no gap or leftover spacing
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

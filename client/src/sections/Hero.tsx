@@ -1,9 +1,73 @@
+import { useEffect, useState } from "react";
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
+
+const ROLE_ROTATE_MS = 2800;
+
+/** Short display labels, derived from PROFILE.title (not new copy). */
+const ROLES = PROFILE.title
+  .split("|")
+  .map((role) => role.trim().replace(/^Microsoft Certified\s+/, ""));
+
+function usePrefersReducedMotion(): boolean {
+  const [reduced] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  return reduced;
+}
+
+function useRotatingRoleIndex(length: number, reducedMotion: boolean): number {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (reducedMotion || length <= 1) return;
+    const id = setInterval(() => {
+      setIndex((prev) => (prev + 1) % length);
+    }, ROLE_ROTATE_MS);
+    return () => clearInterval(id);
+  }, [length, reducedMotion]);
+
+  return index;
+}
+
+function RoleFrameIcon({ index }: { index: number }) {
+  switch (index % 3) {
+    case 0:
+      // bar chart / data analyst
+      return (
+        <>
+          <line x1="4" y1="20" x2="4" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="20" y1="20" x2="20" y2="14" />
+        </>
+      );
+    case 1:
+      // layout / developer
+      return (
+        <>
+          <rect x="3" y="3" width="7" height="9" rx="1" />
+          <rect x="14" y="3" width="7" height="5" rx="1" />
+          <rect x="14" y="12" width="7" height="9" rx="1" />
+          <rect x="3" y="16" width="7" height="5" rx="1" />
+        </>
+      );
+    default:
+      // database / SQL & ETL
+      return (
+        <>
+          <ellipse cx="12" cy="5" rx="8" ry="3" />
+          <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
+          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
+        </>
+      );
+  }
+}
 
 function parseHighlight(highlight: string): { value: string; label: string } {
   const match = highlight.match(/\d+%/);
@@ -53,6 +117,10 @@ const iconProps = {
 };
 
 export function Hero() {
+  const reducedMotion = usePrefersReducedMotion();
+  const roleIndex = useRotatingRoleIndex(ROLES.length, reducedMotion);
+  const displayedRole = reducedMotion ? PROFILE.title : ROLES[roleIndex];
+
   return (
     <Section
       id="home"
@@ -80,9 +148,16 @@ export function Hero() {
             {PROFILE.name}
           </h1>
 
-          <p className="text-2xl font-semibold text-slate-700 sm:text-3xl dark:text-slate-300">
-            {PROFILE.title}
-          </p>
+          <div className="relative">
+            <span className="sr-only">{PROFILE.title}</span>
+            <p
+              key={reducedMotion ? "static" : roleIndex}
+              aria-hidden="true"
+              className="animate-fade-slide-up text-2xl font-semibold text-slate-700 sm:text-3xl dark:text-slate-300"
+            >
+              {displayedRole}
+            </p>
+          </div>
 
           <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
             {PROFILE.valueProposition}
@@ -144,7 +219,22 @@ export function Hero() {
           />
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-8">
+          <div
+            key={reducedMotion ? "static-frame" : roleIndex}
+            aria-hidden="true"
+            className="animate-fade-slide-up flex w-60 flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-lg shadow-slate-900/10 dark:glass-card dark:shadow-black/30 dark:backdrop-blur-xl"
+          >
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-lg shadow-brand-primary/30">
+              <svg {...iconProps} className="h-7 w-7">
+                <RoleFrameIcon index={reducedMotion ? 0 : roleIndex} />
+              </svg>
+            </span>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              {reducedMotion ? ROLES[0] : ROLES[roleIndex]}
+            </p>
+          </div>
+
           <HeroIllustration />
         </div>
       </div>

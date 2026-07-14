@@ -724,6 +724,37 @@ Initial version centered the photo above the "About Me" heading. Per follow-up r
 
 ---
 
+## Hero Rotating Role + Synced Frame ✔
+
+**Objective:** make the role line under the name ("Power BI Data Analyst | Power BI Developer | SQL & ETL Specialist") cycle through each role one at a time, and add a matching visual "frame" on the right that pops up in sync, on request.
+
+### Implementation notes
+
+- Display labels are derived from the real `PROFILE.title` string at render time (`.split("|")`, trimming, and stripping a leading "Microsoft Certified " from the first segment only for the *rotating display* — not from the underlying data) — not hardcoded/fabricated text. If `PROFILE.title` changes in the future, the rotation adapts automatically.
+- Rotates every 2.8s, re-triggering the existing `animate-fade-slide-up` entrance animation (from Version 3.0) via a `key` change — no new CSS animation needed.
+- The frame (icon + role label, styled consistently with existing cards) sits above `HeroIllustration` in the right column, `hidden lg:flex` like the rest of that column, and re-animates in lockstep with the text via the same index-driven `key`.
+- **Accessibility:** the rotating text is `aria-hidden="true"`; a `sr-only` element always carries the complete, unabridged original title so screen readers get the full real information, never the abbreviated rotating fragment.
+- **`prefers-reduced-motion: reduce`:** rotation is disabled entirely — both the text and the frame freeze to a single static state (the full original title, first role's icon) for the whole session, rather than just muting the CSS transition. Confirmed via a reduced-motion browser context: identical content at t=0 and t=4s.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — added the rotation hook, role-derivation logic, the frame markup, and the `sr-only` accessible title
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/profile.ts` (the source `title` string is unchanged; only how it's split/displayed).
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright against the Dockerized build, sampling every second over 10s: text and frame label matched on every single sample (`synced=true` throughout); all 3 roles observed cycling in order
+- `sr-only` element confirmed to contain the full original title string at all times
+- `prefers-reduced-motion: reduce` context confirmed no rotation occurs (identical content after 4s)
+- Visually confirmed in both dark and light mode via screenshots — frame styling matches the existing design system in both themes
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

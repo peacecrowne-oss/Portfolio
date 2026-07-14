@@ -13,6 +13,13 @@ const ROLES = PROFILE.title
   .split("|")
   .map((role) => role.trim().replace(/^Microsoft Certified\s+/, ""));
 
+/** Hero-only display name: first + last, middle name(s) dropped. */
+const HERO_NAME_PARTS = PROFILE.name.trim().split(/\s+/);
+const HERO_DISPLAY_NAME =
+  HERO_NAME_PARTS.length > 2
+    ? `${HERO_NAME_PARTS[0]} ${HERO_NAME_PARTS[HERO_NAME_PARTS.length - 1]}`
+    : PROFILE.name;
+
 function usePrefersReducedMotion(): boolean {
   const [reduced] = useState(
     () =>
@@ -145,7 +152,7 @@ export function Hero() {
           </p>
 
           <h1 className="text-4xl font-bold leading-[1.05] tracking-tight text-slate-900 sm:text-5xl lg:text-[64px] xl:text-[80px] dark:text-white">
-            {PROFILE.name}
+            {HERO_DISPLAY_NAME}
           </h1>
 
           <div className="relative">

@@ -755,6 +755,31 @@ Initial version centered the photo above the "About Me" heading. Per follow-up r
 
 ---
 
+## Hero Display Name Shortened ✔
+
+**Objective:** on the Hero section only, drop the middle name so the heading reads "Omolola Makinde" instead of "Omolola Peace Makinde," on request.
+
+### Implementation notes
+
+- Derived (`HERO_DISPLAY_NAME` in `Hero.tsx`) from the real `PROFILE.name` by taking the first and last words — not a hardcoded string — so it stays correct if the underlying name data ever changes.
+- Scoped strictly to the Hero `<h1>`, per "1st page alone." Confirmed no other usage of `PROFILE.name` was touched — `About.tsx`'s photo `alt` text (the only other place it's used) still renders the full "Omolola Peace Makinde".
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/profile.ts`, `About.tsx`, or any other reference to the full name.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: Hero `<h1>` renders "Omolola Makinde" at both desktop and mobile widths; About section photo `alt` attribute confirmed unchanged ("Omolola Peace Makinde")
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

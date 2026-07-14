@@ -857,6 +857,27 @@ Stopped using the shared `Badge` component for these two groups (it's also used 
 
 ---
 
+## Hero Stat Cards Removed ✔
+
+**Objective:** remove the three highlight stat cards ("25% Improved operational efficiency," "40% Reduced manual reporting," "15% Increased dashboard adoption") from the Hero section, on request.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — removed the stat-card grid and its two now-unused helpers, `parseHighlight()` and `HighlightIcon`, since removing the grid left them with no remaining call sites
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/profile.ts` (`PROFILE.highlights` data still exists, just no longer rendered — confirmed via a repo-wide search that no other component reads it).
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: the Hero section no longer renders any highlight card. (An initial text-based check flagged a false positive — an unrelated Experience-section resume bullet, "...leading to improved operational efficiency by 25%," matched case-insensitively; located and confirmed via `outerHTML` inspection that it was a legitimate, unchanged `<li>` in Experience, not a Hero leftover.)
+- Visually confirmed via screenshot: Hero now flows directly from the description paragraph to the CTA buttons with no gap or leftover spacing
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

@@ -76,42 +76,6 @@ function RoleFrameIcon({ index }: { index: number }) {
   }
 }
 
-function parseHighlight(highlight: string): { value: string; label: string } {
-  const match = highlight.match(/\d+%/);
-  const value = match ? match[0] : highlight;
-  const label = highlight
-    .replace(/\d+%/, "")
-    .replace(/\bby\b/i, "")
-    .replace(/\s+/g, " ")
-    .trim();
-  return { value, label };
-}
-
-function HighlightIcon({ index }: { index: number }) {
-  if (index === 0) {
-    // gauge / efficiency
-    return (
-      <path d="M12 20a8 8 0 1 0-8-8M12 12l3-3M4.93 4.93l1.41 1.41M2 12h2M12 2v2M19.07 4.93l-1.41 1.41" />
-    );
-  }
-  if (index === 1) {
-    // clock / automation
-    return (
-      <>
-        <circle cx="12" cy="12" r="9" />
-        <path d="M12 7v5l3 2" />
-      </>
-    );
-  }
-  // trending up / adoption
-  return (
-    <>
-      <polyline points="3 17 9 11 13 15 21 7" />
-      <polyline points="14 7 21 7 21 14" />
-    </>
-  );
-}
-
 const iconProps = {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
@@ -169,30 +133,6 @@ export function Hero() {
           <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
             {PROFILE.valueProposition}
           </p>
-
-          <div className="grid w-full max-w-xl grid-cols-3 gap-3 sm:gap-4">
-            {PROFILE.highlights.map((highlight, index) => {
-              const { value, label } = parseHighlight(highlight);
-              return (
-                <div
-                  key={highlight}
-                  className="hover-lift group rounded-xl border border-slate-200 bg-slate-50 p-3 text-center shadow-sm sm:p-4 dark:border-white/[0.08] dark:bg-white/[0.04] dark:backdrop-blur-[12px] dark:hover:shadow-lg dark:hover:shadow-brand-primary/10"
-                >
-                  <span className="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-brand-primary/10 to-brand-secondary/10 text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary">
-                    <svg {...iconProps}>
-                      <HighlightIcon index={index} />
-                    </svg>
-                  </span>
-                  <p className="mt-2 text-xl font-bold text-slate-900 sm:text-2xl dark:text-white">
-                    {value}
-                  </p>
-                  <p className="mt-1 text-[11px] font-medium leading-snug text-slate-600 sm:text-xs dark:text-slate-400">
-                    {label}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
 
           <div className="flex flex-wrap items-center gap-4 pt-2">
             <Button href="#projects" variant="primary">

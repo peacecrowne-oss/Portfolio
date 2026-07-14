@@ -3,7 +3,6 @@ import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
-import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 
 const ROLE_ROTATE_MS = 2800;
@@ -141,21 +140,6 @@ export function Hero() {
             <Button href="#contact" variant="secondary">
               Contact Me
             </Button>
-            {PROFILE.resumeUrl ? (
-              <Button href={withBasePath(PROFILE.resumeUrl)} variant="secondary">
-                Download Resume
-              </Button>
-            ) : (
-              <button
-                type="button"
-                disabled
-                aria-disabled="true"
-                title="Resume available upon request"
-                className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-900 opacity-50 dark:border-slate-700 dark:text-white"
-              >
-                Resume Available Upon Request
-              </button>
-            )}
           </div>
 
           <SocialLinks

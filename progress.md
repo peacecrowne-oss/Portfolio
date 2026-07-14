@@ -674,6 +674,32 @@ The first working version of every layer above rendered nothing at all in dark m
 
 ---
 
+## About Me Profile Photo ✔
+
+**Objective:** add a real profile photo to the About Me section, on request.
+
+A real photo was provided directly by the user (not generated or sourced elsewhere) and copied into the project unmodified.
+
+### Files Created
+
+- `client/public/profile-photo.jpeg` — the provided photo, copied as-is
+
+### Files Modified
+
+- `client/src/sections/About.tsx` — added a circular, gradient-ringed photo centered at the top of the section, above the existing Professional Summary / Career Journey grid. Uses `withBasePath()` (added in Version 3.1) so it resolves correctly under both root-path deployments (Vercel, Docker) and the GitHub Pages `/Portfolio/` subpath.
+- `progress.md` — this entry
+
+**Not modified:** any other section, `shared/data`, layout/spacing of existing About Me content.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy; `profile-photo.jpeg` returns `200`
+- Verified via Playwright against the Dockerized build: image `complete: true` with real natural dimensions (confirmed actually loaded, not just present in the DOM) in both dark and light mode, and on mobile (375px) — no layout regressions to the rest of the section
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

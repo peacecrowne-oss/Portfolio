@@ -1,5 +1,6 @@
 import { Section } from "@/components/Section";
 import { Badge } from "@/components/Badge";
+import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 import { EDUCATION } from "@shared/data/education";
 
@@ -84,6 +85,16 @@ export function About() {
       <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
         About Me
       </h2>
+
+      <div className="mt-8 flex justify-center">
+        <div className="rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary p-1 shadow-lg shadow-brand-primary/20 dark:shadow-brand-primary/30">
+          <img
+            src={withBasePath("/profile-photo.jpeg")}
+            alt={PROFILE.name}
+            className="h-36 w-36 rounded-full border-4 border-white object-cover sm:h-40 sm:w-40 dark:border-[#08111F]"
+          />
+        </div>
+      </div>
 
       <div className="mt-10 grid gap-6 lg:grid-cols-2">
         <div className={featureCardClasses}>

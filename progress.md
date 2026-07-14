@@ -1025,6 +1025,27 @@ The six reference images couldn't be used directly: images pasted inline in chat
 
 ---
 
+## Experience Trimmed Further ✔
+
+**Objective:** shorten one Colaberry Inc bullet to exact text supplied, and drop the Cloud Support Specialist and Manager entries entirely, on request.
+
+### Files Modified
+
+- `shared/data/experience.ts` — replaced "Created and maintained interactive Power BI dashboards and reports to visualize and monitor key performance indicators (KPIs), leading to improved operational efficiency by 25%." with "Created interactive Power BI dashboards and reports that improved operational efficiency by 25%." (kept the 25% figure, shortened the phrasing exactly as supplied); removed the "Cloud Support Specialist" (RCCG, Jan 2006 – Dec 2019) and "Manager" (Nestlé Nigeria Plc, Jul 2005 – Dec 2006) entries entirely
+- `progress.md` — this entry
+
+**Not modified:** Power BI Developer/Data Analyst/Data Administrator entries otherwise unchanged. Confirmed via repo-wide search that neither removed entry ("Cloud Support Specialist," "Nestlé") is referenced anywhere else in the codebase.
+
+### Validation Results
+
+- `npm run build` (client) — passes
+- `npm run build` (server) — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: "Cloud Support Specialist" and "Nestlé" both return zero matches on the page; the new shortened bullet text renders exactly once. Screenshot confirms Experience now shows exactly three entries (Power BI Developer, Data Analyst, Data Administrator), timeline styling and bold-highlighted quantified bullets unaffected
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

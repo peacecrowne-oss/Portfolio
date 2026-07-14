@@ -1073,6 +1073,48 @@ The six reference images couldn't be used directly: images pasted inline in chat
 
 ---
 
+## Nav Order Swapped (Experience/Skills) + Hero Tools List ✔
+
+**Objective:** swap "Experience" and "Skills" in the navbar, and add a "tools" list (Power BI, SQL, DAX, Python, and more) to the bottom of the Home/Hero section, on request.
+
+### Nav swap
+
+- `client/src/constants/navigation.ts` — swapped the two `NAV_LINKS` entries: order is now Home, About, **Skills**, Projects, **Experience**, Certifications, Contact. Page section render order (`client/src/pages/Home.tsx`) was **not** changed — the request was specifically about the navbar (a screenshot of just the nav strip was provided), and reordering the actual page sections would have required also relocating the "Certifications" nav link (nested inside the Skills section, physically below it) to stay consistent, which wasn't asked for and risked expanding scope well beyond the request.
+
+### Bug found and fixed: active-section highlighting broke because of the swap
+
+Swapping only the nav *labels* (not physical page order) exposed a real, previously-hidden bug in `useActiveSection`: its algorithm picked "whichever section was last in the `sectionIds` array to satisfy the condition" as active, silently relying on `sectionIds` (derived from `NAV_LINKS` order) always matching the page's actual top-to-bottom order — true before this change, no longer true after. Confirmed via Playwright: clicking "Skills" was highlighting "Experience" as active instead.
+
+Fixed by making the algorithm order-independent: it now compares each candidate section's own `top` position directly and keeps the one closest to (but still above) the activation line, rather than trusting array-iteration order. This is strictly more robust than the previous approach and doesn't depend on nav/page order agreement at all.
+
+- `client/src/hooks/useActiveSection.ts` — updated `updateActive()`'s selection logic and docstring accordingly.
+
+### Hero tools list
+
+- Added a "Tools & Technologies" block at the bottom of the Hero section, below the two-column grid. Rather than curating a subset matching just the four examples given ("Power BI, SQL, DAX, Python"), it renders **every** skill from **every** category in `shared/data/skills.ts` (deduplicated) — matching "all my tools ... and more" literally, and staying data-driven so it never drifts out of sync with the real Skills section.
+- `client/src/sections/Hero.tsx` — added `ALL_TOOLS` (flattened, deduplicated `SKILLS`) and the new block, reusing the existing `Badge` component for visual consistency with the rest of the site.
+
+### Files Modified
+
+- `client/src/constants/navigation.ts`
+- `client/src/hooks/useActiveSection.ts`
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+**Not modified:** `client/src/pages/Home.tsx` (page section order), `shared/data/skills.ts` (only read from, not changed), `Badge.tsx`.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Nav order confirmed via Playwright on both desktop and mobile: Home, About, Skills, Projects, Experience, Certifications, Contact
+- Active-section highlighting re-verified for all 7 nav links after the fix — each click now correctly activates its own link (confirmed with a settle-detection wait covering both scroll position and active-state stabilization, after an initial naive-timeout test produced a false failure on the About→Skills transition specifically, since that jump is a long scroll and needed more time to settle than shorter transitions)
+- Manual scroll-through re-verified: active section still progresses in the page's actual visual order (Home → About → Experience → Projects → Skills → Certifications → Contact), independent of the now-different nav order
+- Tools list confirmed rendering all 28 real skill entries; visually verified in dark mode, light mode, and mobile (375px, wraps cleanly)
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

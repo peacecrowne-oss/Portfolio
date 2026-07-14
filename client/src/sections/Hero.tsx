@@ -1,9 +1,14 @@
 import { useEffect, useState } from "react";
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
+import { Badge } from "@/components/Badge";
 import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import { PROFILE } from "@shared/data/profile";
+import { SKILLS } from "@shared/data/skills";
+
+/** Every tool/technology across all Skills categories, deduplicated. */
+const ALL_TOOLS = Array.from(new Set(SKILLS.flatMap((category) => category.skills)));
 
 const ROLE_ROTATE_MS = 2800;
 
@@ -211,6 +216,19 @@ export function Hero() {
 
           <HeroIllustration />
         </div>
+      </div>
+
+      <div className="mt-16 border-t border-slate-200 pt-10 dark:border-white/10">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          Tools & Technologies
+        </p>
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {ALL_TOOLS.map((tool) => (
+            <li key={tool}>
+              <Badge>{tool}</Badge>
+            </li>
+          ))}
+        </ul>
       </div>
     </Section>
   );

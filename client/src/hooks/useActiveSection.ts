@@ -8,9 +8,15 @@ function getNavbarHeight(): number {
 }
 
 /**
- * Tracks which of the given section ids is currently active — the last one
- * (in document order) whose top edge has scrolled up past the activation
- * line just below the (sticky) navbar.
+ * Tracks which of the given section ids is currently active — whichever has
+ * scrolled furthest past the activation line just below the (sticky) navbar,
+ * without going past it entirely.
+ *
+ * This is intentionally independent of the order `sectionIds` is passed in
+ * (the nav's order need not match the page's actual top-to-bottom section
+ * order) — it compares each candidate's own `top` directly and keeps the
+ * one closest to (but still above) the activation line, rather than trusting
+ * "last one seen while iterating the array" to mean "last one on the page."
  *
  * The navbar's height is read live rather than hardcoded, because opening
  * the mobile menu inserts it into the sticky header's document flow,
@@ -38,9 +44,12 @@ export function useActiveSection(sectionIds: string[]): string {
     function updateActive() {
       const activationLine = getNavbarHeight() + BAND_HEIGHT;
       let current = elements[0].id;
+      let bestTop = -Infinity;
       for (const el of elements) {
-        if (el.getBoundingClientRect().top <= activationLine) {
+        const top = el.getBoundingClientRect().top;
+        if (top <= activationLine && top > bestTop) {
           current = el.id;
+          bestTop = top;
         }
       }
       setActiveId(current);

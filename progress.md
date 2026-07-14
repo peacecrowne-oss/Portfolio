@@ -1115,6 +1115,34 @@ Fixed by making the algorithm order-independent: it now compares each candidate 
 
 ---
 
+## Nav Order Reverted, Data Analyst Bullet Dropped, Hero Tools Simplified ✔
+
+**Objective:** three follow-up changes on request: revert the nav swap from the previous milestone back to the original order, drop the 5th Data Analyst bullet, and replace the "all 28 skills" tools block with a curated 7-item list and no heading.
+
+### What changed
+
+- `client/src/constants/navigation.ts` — reverted to Home, About, **Experience**, Projects, **Skills**, Certifications, Contact (undoing the previous milestone's swap; a screenshot of this exact original order was provided as the target). The order-independent fix to `useActiveSection` from that milestone was **kept** — it's strictly more robust regardless of whether nav order matches page order, so there's no reason to revert it.
+- `shared/data/experience.ts` — removed the Data Analyst entry's 5th bullet ("Worked with cross-functional teams to understand data needs and deliver meaningful insights."), leaving 4.
+- `client/src/sections/Hero.tsx` — removed the "Tools & Technologies" heading entirely; replaced the data-driven "every skill in `SKILLS`" list (28 items) with a hardcoded, curated 7-item list — Power BI, SQL, DAX, Power Query, SSIS, Python, Claude — ordered to read as a natural progression (core BI tool → data language → BI formula language → ETL → enterprise ETL → scripting → AI), per "rearrange as deem fit."
+
+### Files Modified
+
+- `client/src/constants/navigation.ts`
+- `shared/data/experience.ts`
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` (client) — passes
+- `npm run build` (server) — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: nav order matches the target screenshot exactly (Home, About, Experience, Projects, Skills, Certifications, Contact); "Worked with cross-functional teams" returns zero matches; "Tools & Technologies" heading returns zero matches; the tools block renders exactly the 7 requested items in the chosen order
+- Visually confirmed via screenshot: navbar matches target, Hero tools block reads cleanly with no heading gap
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

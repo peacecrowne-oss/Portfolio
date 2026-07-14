@@ -23,7 +23,6 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Analyzed data to identify trends, patterns, and insights that supported business decisions.",
       "Created Power BI dashboards and visual reports to present key metrics and performance trends.",
       "Prepared reports and shared findings with stakeholders to support planning and decision-making.",
-      "Worked with cross-functional teams to understand data needs and deliver meaningful insights.",
     ],
   },
   {

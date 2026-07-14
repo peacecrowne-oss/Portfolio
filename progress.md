@@ -832,6 +832,31 @@ The reference image showed a Skills-style card grid (icon + name + proficiency l
 
 ---
 
+## About Me Technical Focus — Simplified Tabs ✔
+
+**Objective:** further declutter Technical Interests / Working Style, on request: drop the "Technical Focus" heading, remove the card backgrounds added in the prior milestone, and make each tag bold.
+
+### Implementation notes
+
+Stopped using the shared `Badge` component for these two groups (it's also used in Projects and Skills, and its filled-background pill style is exactly what was being asked to remove — changing `Badge` itself would have cascaded there too). Instead added a small local `tabClasses` constant in `About.tsx`: a bold, bordered, background-free pill, used only here. `Badge.tsx` itself is untouched.
+
+### Files Modified
+
+- `client/src/sections/About.tsx` — removed the "Technical Focus" `<h3>`, removed the `featureCardClasses` card wrapper around each group, replaced `Badge` usage with plain bold-bordered tags
+- `progress.md` — this entry
+
+**Not modified:** `client/src/components/Badge.tsx`, `shared/data/profile.ts` — same tags, same data, only this instance's presentation changed.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: zero "Technical Focus" text remains on the page
+- Visually confirmed via screenshots in both dark and light mode: tags render as bold, background-free, bordered pills; Technical Interests (left) and Working Style (right) retain the side-by-side layout from the prior milestone
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

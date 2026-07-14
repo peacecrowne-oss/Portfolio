@@ -82,61 +82,48 @@ export function About() {
 
   return (
     <Section id="about" className="dark:bg-[#08111F]">
-      <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
-        About Me
-      </h2>
-
-      <div className="mt-8 flex justify-center">
-        <div className="rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary p-1 shadow-lg shadow-brand-primary/20 dark:shadow-brand-primary/30">
+      <div className="flex flex-col items-center gap-8 text-center lg:flex-row lg:items-center lg:text-left">
+        <div className="flex-none rounded-full bg-gradient-to-br from-brand-primary to-brand-secondary p-1 shadow-lg shadow-brand-primary/20 dark:shadow-brand-primary/30">
           <img
             src={withBasePath("/profile-photo.jpeg")}
             alt={PROFILE.name}
             className="h-36 w-36 rounded-full border-4 border-white object-cover sm:h-40 sm:w-40 dark:border-[#08111F]"
           />
         </div>
-      </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        <div className={featureCardClasses}>
-          <div className="flex items-center gap-3">
-            <span className={iconWrapperClasses} aria-hidden="true">
-              <svg {...iconProps}>
-                <path d="M4 19.5V4.5A2.5 2.5 0 0 1 6.5 2H20v16H6.5a2.5 2.5 0 0 0 0 5H20" />
-              </svg>
-            </span>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-              Professional Summary
-            </h3>
-          </div>
-          <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+            About Me
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
             {about.intro}
           </p>
         </div>
+      </div>
 
-        <div className={featureCardClasses}>
-          <div className="flex items-center gap-3">
-            <span className={iconWrapperClasses} aria-hidden="true">
-              <svg {...iconProps}>
-                <path d="M12 20V10M18 20V4M6 20v-6" />
-              </svg>
-            </span>
-            <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-              Career Journey
-            </h3>
-          </div>
-          <div className="mt-4 space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
-            <p>{about.background.journey}</p>
-            <p>{about.background.currentFocus}</p>
-            {EDUCATION.map((entry) => (
-              <p key={entry.institution}>
-                <span className="font-semibold text-slate-900 dark:text-white">
-                  Education:
-                </span>{" "}
-                {entry.degree}, {entry.institution}, {entry.location} (
-                {entry.year})
-              </p>
-            ))}
-          </div>
+      <div className={`mt-10 ${featureCardClasses}`}>
+        <div className="flex items-center gap-3">
+          <span className={iconWrapperClasses} aria-hidden="true">
+            <svg {...iconProps}>
+              <path d="M12 20V10M18 20V4M6 20v-6" />
+            </svg>
+          </span>
+          <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
+            Career Journey
+          </h3>
+        </div>
+        <div className="mt-4 space-y-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+          <p>{about.background.journey}</p>
+          <p>{about.background.currentFocus}</p>
+          {EDUCATION.map((entry) => (
+            <p key={entry.institution}>
+              <span className="font-semibold text-slate-900 dark:text-white">
+                Education:
+              </span>{" "}
+              {entry.degree}, {entry.institution}, {entry.location} (
+              {entry.year})
+            </p>
+          ))}
         </div>
       </div>
 

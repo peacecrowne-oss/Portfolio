@@ -686,17 +686,21 @@ A real photo was provided directly by the user (not generated or sourced elsewhe
 
 ### Files Modified
 
-- `client/src/sections/About.tsx` — added a circular, gradient-ringed photo centered at the top of the section, above the existing Professional Summary / Career Journey grid. Uses `withBasePath()` (added in Version 3.1) so it resolves correctly under both root-path deployments (Vercel, Docker) and the GitHub Pages `/Portfolio/` subpath.
+- `client/src/sections/About.tsx` — added a circular, gradient-ringed photo. Uses `withBasePath()` (added in Version 3.1) so it resolves correctly under both root-path deployments (Vercel, Docker) and the GitHub Pages `/Portfolio/` subpath.
 - `progress.md` — this entry
 
-**Not modified:** any other section, `shared/data`, layout/spacing of existing About Me content.
+**Not modified:** any other section, `shared/data`, Career Journey/Technical Focus/Core Strengths content.
+
+### Layout follow-up
+
+Initial version centered the photo above the "About Me" heading. Per follow-up request, restructured into a bio-header row: photo on the left, "About Me" heading and the Professional Summary intro (`about.intro`) directly beside it on the right (the separate "Professional Summary" card/icon heading was folded into this row rather than duplicated). Career Journey, previously paired with Professional Summary in a two-column grid, now stands alone as a full-width card below. On mobile the row collapses to a centered column (photo above heading/text), verified via screenshot.
 
 ### Validation Results
 
 - `npm run build` — passes
 - `npm run lint` — passes, no errors
 - `docker compose up --build` — all containers healthy; `profile-photo.jpeg` returns `200`
-- Verified via Playwright against the Dockerized build: image `complete: true` with real natural dimensions (confirmed actually loaded, not just present in the DOM) in both dark and light mode, and on mobile (375px) — no layout regressions to the rest of the section
+- Verified via Playwright against the Dockerized build: image `complete: true` with real natural dimensions (confirmed actually loaded, not just present in the DOM) in both dark and light mode, and on mobile (375px) — no layout regressions to the rest of the section, including after the layout follow-up
 
 ---
 

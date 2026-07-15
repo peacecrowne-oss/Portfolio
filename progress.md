@@ -1574,6 +1574,38 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## BigMart Sales Dashboard: Real Screenshot Added ✔
+
+**Objective:** on request, replace the generic bar-chart placeholder on the "BigMart Sales Dashboard" project card with an actual screenshot of the dashboard.
+
+### Asset Sourcing
+
+- The user first shared the screenshot inline in chat, but a pasted/inline image isn't file-backed — there's no path to copy it from into the repo. Asked for a file path; the user provided a **screen-recording GIF** of the same dashboard (`Dashboard.gif`, 1415×774px, 456 frames, ~100s, 1.5MB) rather than a static image.
+- Since the card is a small below-the-fold grid thumbnail (not a hero/interactive showcase), and the original request was clearly for a static screenshot (matching exactly what was first shown in chat), extracted the GIF's first frame as a static image rather than embedding the full 100-second animated recording — a static frame is lighter, more conventional for a project thumbnail, and matches what was actually asked for. (A first attempt at compressing the *entire* animation to WebP produced a *larger* file than the source GIF — 1.7MB vs 1.5MB, since fine on-screen text/UI detail compresses poorly under lossy WebP at this frame count — reinforcing that a static frame was the better call here.)
+- Final asset: `client/public/bigmart-dashboard.webp`, 1200×656px, quality 85, **58.7KB**.
+
+### Code Changes
+
+- `shared/data/projects.ts` — set `imageUrl: "/bigmart-dashboard.webp"` on the BigMart Sales Dashboard entry.
+- `client/src/sections/Projects.tsx` — the `<img src={project.imageUrl}>` wasn't passing `imageUrl` through `withBasePath()`, unlike every other image on the site — a latent bug that would have broken project images specifically under the GitHub Pages `/Portfolio/` subpath deployment. Fixed alongside this change.
+
+### Files Modified
+
+- `client/public/bigmart-dashboard.webp` (new)
+- `shared/data/projects.ts`
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms the image loads (`complete: true`, 1200×656 natural size), served from the correct base-path-resolved URL, zero failed requests
+- Screenshots confirm a clean result in both dark and light mode; LeadForge AI System (no `imageUrl` set) correctly still shows the generic placeholder, confirming the conditional logic wasn't broken
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

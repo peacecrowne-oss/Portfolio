@@ -1,6 +1,7 @@
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
 import type { Project } from "@shared/types/projects";
 
@@ -55,7 +56,7 @@ function ProjectCard({ project }: { project: Project }) {
     <div className="hover-lift flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl">
       {project.imageUrl ? (
         <img
-          src={project.imageUrl}
+          src={withBasePath(project.imageUrl)}
           alt={`${project.title} preview`}
           className="aspect-video w-full rounded-lg object-cover"
         />

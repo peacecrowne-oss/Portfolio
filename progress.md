@@ -1379,6 +1379,31 @@ Rather than removing the grid overlay from the whole Hero (it's an intentional, 
 
 ---
 
+## About Me: Two Core Strength Cards Removed ✔
+
+**Objective:** on request, drop the "Cross-Industry Experience" and "Microsoft Certified Expertise" cards from the Core Strengths grid.
+
+### Changes
+
+- `shared/data/profile.ts` — removed both entries from `about.coreStrengths`, leaving Advanced SQL, ETL Pipeline Design, Power BI & DAX, and AI-Powered Solutions (4 cards, now 1×3 + 1 instead of 2×3).
+- `client/src/sections/Hero.tsx` — the Hero stats bar's "4 industries served" figure was originally derived from the now-removed "Cross-Industry Experience" card's text; the number is unchanged (still accurate — Customer Service, Accounting, Data Analytics, Consulting) but the code comment was reworded so it no longer references a Core Strength card that no longer exists.
+
+### Files Modified
+
+- `shared/data/profile.ts`
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms exactly 4 Core Strength card titles remain (Advanced SQL, ETL Pipeline Design, Power BI & DAX, AI-Powered Solutions), no leftover empty grid cells
+- Zero failed requests
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

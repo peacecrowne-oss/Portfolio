@@ -11,8 +11,7 @@ const HERO_TOOLS = ["Power BI", "SQL", "DAX", "Power Query", "SSIS", "Python", "
 const HERO_STATS = [
   { value: "6+", label: "years in Data" },
   { value: String(PROJECTS.length), label: "projects delivered" },
-  // Derived from About's "Cross-Industry Experience" strength: Customer
-  // Service, Accounting, Data Analytics, and Consulting.
+  // Customer Service, Accounting, Data Analytics, and Consulting.
   { value: "4", label: "industries served" },
   { value: String(HERO_TOOLS.length), label: "tools mastered" },
 ];

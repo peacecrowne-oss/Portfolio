@@ -61,16 +61,6 @@ export const PROFILE: Profile = {
         description:
           "Building AI systems such as automated lead search, filtering, scoring, and campaign generation.",
       },
-      {
-        title: "Cross-Industry Experience",
-        description:
-          "Applying data analytics across Customer Service, Accounting, Data Analytics, and Consulting.",
-      },
-      {
-        title: "Microsoft Certified Expertise",
-        description:
-          "Certified Power BI Data Analyst, Azure Database Fundamentals, and AI Architect.",
-      },
     ],
   },
 };

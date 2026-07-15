@@ -1550,6 +1550,30 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## Projects Trimmed to Two ✔
+
+**Objective:** on request, keep only "BigMart Sales Dashboard" and "LeadForge AI System" in the Projects section; drop "Sales Reporting Dashboard", "Revolution Mortgage Group (RMG)", and "LeadInbox".
+
+### Changes
+
+- `shared/data/projects.ts` — removed the three entries; `PROJECTS` now holds only the two requested projects, unchanged otherwise.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms exactly two project cards render ("BigMart Sales Dashboard", "LeadForge AI System"), and the Hero's "projects delivered" stat — which reads `PROJECTS.length` dynamically — correctly updated from 5 to 2 with no code change needed there
+- Zero failed requests
+- Screenshot confirms a clean two-card grid with no leftover layout gaps
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

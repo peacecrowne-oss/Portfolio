@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
-import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import { PROFILE } from "@shared/data/profile";
 import { PROJECTS } from "@shared/data/projects";
@@ -205,12 +204,6 @@ export function Hero() {
               </li>
             ))}
           </ul>
-
-          <SocialLinks
-            github={PROFILE.social.github}
-            linkedin={PROFILE.social.linkedin}
-            email={PROFILE.social.email}
-          />
         </div>
 
         <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-8">

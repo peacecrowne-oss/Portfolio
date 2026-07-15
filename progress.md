@@ -1205,6 +1205,25 @@ Three numbers are computed at runtime from real, already-displayed site data, so
 
 ---
 
+## Hero Social Icons Removed ✔
+
+**Objective:** remove the GitHub/LinkedIn/email icon row from the Hero section, on request.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — removed the `<SocialLinks>` instance and its now-unused import. `SocialLinks.tsx` itself was not used anywhere else in the codebase (confirmed via repo-wide search), so it's now an orphaned component — left in place rather than deleted, since removing a whole component file wasn't requested and it may be reused later.
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: zero GitHub/social links remain within `#home`
+- Screenshot confirms Hero now flows cleanly from the tools row straight into the stats bar with no leftover gap
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

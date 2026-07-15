@@ -11,7 +11,7 @@ export const PROJECTS: Project[] = [
     outcome: null,
     githubUrl: null,
     liveDemoUrl: null,
-    imageUrl: "/bigmart-dashboard.webp",
+    imageUrl: "/bigmart-dashboard.gif",
   },
   {
     title: "LeadForge AI System",

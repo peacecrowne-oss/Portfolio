@@ -1606,6 +1606,41 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## BigMart Sales Dashboard: Switched to the Animated GIF ✔
+
+**Objective:** on request, use the actual animated recording instead of the static frame from the prior milestone.
+
+### Compression Attempts (Both Failed)
+
+- **Attempt 1 — animated WebP** (all 456 frames sampled to 228, resized to 900px, quality 75): produced **1.7MB**, larger than the 1.5MB source GIF. Screen-recording content (fine on-screen text, mostly-static UI with small cursor movements) doesn't compress well under lossy WebP at this frame density.
+- **Attempt 2 — re-encoded GIF via Pillow** (same sampling, quantized to 128 colors): first pass forced `disposal=2` (clear-before-draw), which defeats inter-frame delta encoding entirely and produced **22.5MB**. Removing the forced disposal and enabling Pillow's `optimize=True` got it down to **6.2MB** — still 4x worse than the source, because Pillow's GIF encoder doesn't do the dirty-rectangle / frame-diffing optimization as well as whatever tool produced the original recording.
+- **Resolution:** stopped fighting it and used the **original source GIF unmodified** — 1415×774px, 456 frames, ~100s, already a well-optimized **1.5MB**, smaller than either re-encoding attempt.
+
+### Code Changes
+
+- `client/public/bigmart-dashboard.gif` — new asset (the untouched original file). The static `bigmart-dashboard.webp` from the prior milestone was deleted.
+- `shared/data/projects.ts` — `imageUrl` updated to `/bigmart-dashboard.gif`.
+- `client/src/sections/Projects.tsx` — added `loading="lazy"` to the project card `<img>`, since this is now a 1.5MB below-the-fold asset.
+
+### Files Modified
+
+- `client/public/bigmart-dashboard.gif` (new)
+- `client/public/bigmart-dashboard.webp` (deleted)
+- `shared/data/projects.ts`
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms the GIF loads (`complete: true`, 1415×774 natural size), zero failed requests; two screenshots ~3s apart show the cursor position and dashboard filter state both change, confirming the animation genuinely plays
+- Screenshots confirm a clean result in both dark and light mode
+- Mobile (390px): lazy-loading defers the fetch's priority as expected, though given the page's total height it may still load promptly once near the browser's lookahead threshold — unlike the Hero cube case, this image is meant to be visible on mobile (not permanently hidden), so "eventually loads" rather than "never loads" is the correct behavior here
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

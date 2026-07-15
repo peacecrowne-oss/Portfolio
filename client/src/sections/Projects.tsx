@@ -59,6 +59,7 @@ function ProjectCard({ project }: { project: Project }) {
           src={withBasePath(project.imageUrl)}
           alt={`${project.title} preview`}
           className="aspect-video w-full rounded-lg object-cover"
+          loading="lazy"
         />
       ) : (
         <ProjectPreviewPlaceholder />

@@ -10,7 +10,8 @@ export const PROJECTS: Project[] = [
     solution: null,
     outcome: null,
     githubUrl: null,
-    liveDemoUrl: null,
+    liveDemoUrl:
+      "https://app.powerbi.com/view?r=eyJrIjoiZTJiNWIzMGYtNTY0MC00ODM4LWFkZGYtMzcyMjA3MDg3ODZhIiwidCI6ImYxYWQ2ODFmLTZmNjItNDNhOS04MjQxLTA3MDMxNjBlMTM0OCIsImMiOjN9",
     imageUrl: "/bigmart-dashboard.gif",
   },
   {

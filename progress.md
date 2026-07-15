@@ -1641,6 +1641,30 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## BigMart Sales Dashboard: Live Demo Link Activated ✔
+
+**Objective:** on request, wire up the "Live Demo" button on the BigMart Sales Dashboard card with the actual published Power BI report URL.
+
+### Changes
+
+- `shared/data/projects.ts` — set `liveDemoUrl` on the BigMart entry to the provided `app.powerbi.com/view?r=...` link. No component changes needed — `Projects.tsx`'s `ProjectLinkButton` already renders a real link (`target="_blank" rel="noreferrer noopener"`) when a URL is present, versus the disabled dashed "Coming Soon" state when it's `null`.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms the BigMart card's "Live Demo" renders as a real `<a>` with the correct `href`, `target="_blank"`, and `rel="noreferrer noopener"`; LeadForge's Live Demo (still `null`) correctly remains the disabled "Coming Soon" span
+- Zero failed requests
+- Screenshot confirms the button now renders as a solid active blue button instead of the dashed disabled style
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

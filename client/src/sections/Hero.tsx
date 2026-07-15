@@ -127,11 +127,19 @@ export function Hero() {
         </div>
 
         <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-8">
-          <div className="w-full max-w-[420px]">
+          <div className="relative w-full max-w-[420px]">
+            <div
+              aria-hidden="true"
+              className="absolute inset-[-20%] hidden rounded-full dark:block"
+              style={{
+                background:
+                  "radial-gradient(closest-side, #050816 0%, #050816 55%, transparent 100%)",
+              }}
+            />
             <img
               src={withBasePath("/rolling-cube.webp")}
               alt="Rotating 3D cube animation representing AI-powered automation, connecting data in to AI to output"
-              className="block w-full"
+              className="relative block w-full"
               loading="lazy"
             />
           </div>

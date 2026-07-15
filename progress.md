@@ -1307,6 +1307,31 @@ An intermediate run of the corrected flood-fill script appeared to produce a val
 
 ---
 
+## Hero: Grid Overlay Cleared Behind the Cube ✔
+
+**Objective:** on request, remove a faint grid/dot pattern visible directly behind the cube — the site's existing decorative `hero-grid-overlay` (a subtle low-opacity grid texture spanning the whole dark-mode Hero background) was barely noticeable at full-page zoom but became visibly distracting once the cube's own black background was removed and the page's texture showed through it up close.
+
+### Fix
+
+Rather than removing the grid overlay from the whole Hero (it's an intentional, unrelated design element used across the section), added a soft radial-gradient "clearing" layer scoped to just the illustration column: a `dark:block`-only div sized generously around the cube (`inset-[-20%]`), filled with a radial gradient from the exact `brand-bg` color (`#050816`, solid through ~55% of its radius) fading to fully transparent at the edges. It sits between the global decorative overlay layer and the cube `<img>` in the DOM, so it visually washes out the grid/noise/streak texture immediately around the cube while leaving it untouched everywhere else on the page. Light mode was already unaffected — the whole decorative overlay wrapper is dark-mode-only, so light mode never showed the grid pattern to begin with.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx` — added the radial-gradient clearing div inside the illustration column, wrapping `<img>` in a `relative` container so it stacks above the new patch.
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright close-up screenshots (2x device scale, cropped tightly to the cube) confirm the grid pattern no longer appears directly behind the cube in dark mode, fading smoothly into the surrounding texture at the edges
+- Light mode screenshot confirms no regression — identical to before this change
+- Mobile (375px): `rolling-cube.webp` still correctly never requested
+- Zero failed requests
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

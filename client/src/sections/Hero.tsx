@@ -61,86 +61,6 @@ function useRotatingRoleIndex(length: number, reducedMotion: boolean): number {
   return index;
 }
 
-function RoleFrameIcon({ index }: { index: number }) {
-  switch (index % 6) {
-    case 0:
-      // dashboard: bars + trend ring / Power BI Data Analyst
-      return (
-        <>
-          <line x1="4" y1="20" x2="4" y2="13" />
-          <line x1="9" y1="20" x2="9" y2="8" />
-          <line x1="14" y1="20" x2="14" y2="11" />
-          <circle cx="19" cy="7" r="3.2" />
-        </>
-      );
-    case 1:
-      // hub & spoke data model / Power BI Developer
-      return (
-        <>
-          <circle cx="12" cy="12" r="2.5" />
-          <circle cx="12" cy="4" r="1.6" />
-          <circle cx="4" cy="16" r="1.6" />
-          <circle cx="20" cy="16" r="1.6" />
-          <line x1="12" y1="9.5" x2="12" y2="5.6" />
-          <line x1="10" y1="13.8" x2="5.3" y2="15.3" />
-          <line x1="14" y1="13.8" x2="18.7" y2="15.3" />
-        </>
-      );
-    case 2:
-      // database / SQL & DAX Expert
-      return (
-        <>
-          <ellipse cx="12" cy="5" rx="8" ry="3" />
-          <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
-          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
-        </>
-      );
-    case 3:
-      // extract-transform-load pipeline / ETL & ELT Specialist
-      return (
-        <>
-          <circle cx="4" cy="12" r="2.3" />
-          <circle cx="12" cy="12" r="2.3" />
-          <circle cx="20" cy="12" r="2.3" />
-          <line x1="6.3" y1="12" x2="9.7" y2="12" />
-          <line x1="14.3" y1="12" x2="17.7" y2="12" />
-        </>
-      );
-    case 4:
-      // robot / AI Automation Builder
-      return (
-        <>
-          <rect x="5" y="9" width="14" height="11" rx="3" />
-          <circle cx="9.5" cy="14.5" r="1.3" />
-          <circle cx="14.5" cy="14.5" r="1.3" />
-          <path d="M9 18h6" />
-          <line x1="12" y1="9" x2="12" y2="5" />
-          <circle cx="12" cy="3.5" r="1.3" />
-        </>
-      );
-    default:
-      // layers / Microsoft Fabric Data Engineer
-      return (
-        <>
-          <polygon points="12 2 2 7 12 12 22 7 12 2" />
-          <polyline points="2 17 12 22 22 17" />
-          <polyline points="2 12 12 17 22 12" />
-        </>
-      );
-  }
-}
-
-const iconProps = {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-  className: "h-5 w-5",
-};
-
 export function Hero() {
   const reducedMotion = usePrefersReducedMotion();
   const roleIndex = useRotatingRoleIndex(ROLES.length, reducedMotion);
@@ -207,22 +127,7 @@ export function Hero() {
         </div>
 
         <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-8">
-          <div
-            key={reducedMotion ? "static-frame" : roleIndex}
-            aria-hidden="true"
-            className="animate-fade-slide-up flex w-60 flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-lg shadow-slate-900/10 dark:glass-card dark:shadow-black/30 dark:backdrop-blur-xl"
-          >
-            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-lg shadow-brand-primary/30">
-              <svg {...iconProps} className="h-7 w-7">
-                <RoleFrameIcon index={reducedMotion ? 0 : roleIndex} />
-              </svg>
-            </span>
-            <p className="text-sm font-semibold text-slate-900 dark:text-white">
-              {reducedMotion ? ROLES[0] : ROLES[roleIndex]}
-            </p>
-          </div>
-
-          <div className="w-full max-w-[420px] overflow-hidden rounded-2xl border border-slate-200 shadow-xl shadow-slate-900/10 dark:border-white/10 dark:shadow-black/40">
+          <div className="w-full max-w-[420px]">
             <img
               src={withBasePath("/rolling-cube.webp")}
               alt="Rotating 3D cube animation representing AI-powered automation, connecting data in to AI to output"

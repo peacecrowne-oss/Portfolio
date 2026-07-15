@@ -1266,6 +1266,47 @@ The image sits inside a `<div className="hidden lg:flex ...">` wrapper — `disp
 
 ---
 
+## Hero: Role Frame Card Removed, Cube Background Made Transparent ✔
+
+**Objective:** on request, drop the small rotating "role frame" card (icon + role name, e.g. "Power BI Developer") that sat above the cube illustration, and remove the cube's solid black background entirely rather than mask it with a framed card.
+
+### Role Frame Card Removed
+
+- `client/src/sections/Hero.tsx` — removed the role-frame `<div>` (icon badge + role label) and its now-unused `RoleFrameIcon()` component and `iconProps` constant. The rotating role text above the buttons (`ROLES[roleIndex]`) is untouched — only the illustration-side card is gone.
+
+### Cube Background Removed (real transparency, not a mask)
+
+The prior milestone's "framed card" wrapper hid the source GIF's solid black background behind a border/shadow. This time the background was actually removed from the asset itself:
+
+- Inspected the source frames: background is a uniform near-black `rgb(10,10,15)`, distinct from the cube's own darkest face color `rgb(15,19,44)`.
+- **First approach (naive global chroma-key):** classify every pixel by color-distance to the background color, feathering near the threshold. This corrupted the cube's face — soft internal glow/blur decorations on the front face are colored close to the background, so they got partially punched with transparency, producing a blotchy result.
+- **Working approach (border-connected flood fill):** used `scipy.ndimage.label` to find connected regions of near-background-colored pixels, then only treated the region(s) touching the image border as true background. Internal glow decorations, however close in color, are enclosed by the cube's face and never connect to the border, so they stay fully opaque. Alpha is feathered only at the true background boundary for clean edges.
+- Also zeroed alpha on the source GIF's bottom-most pixel row, a 1px light-gray canvas artifact present on every frame (unrelated to actual content).
+- Re-encoded all 169 sampled frames (same sampling as the prior milestone) as an animated WebP with an alpha channel: `client/public/rolling-cube.webp`, 1.48MB (up from the prior opaque version's 800KB — alpha channel plus genuinely distinct per-frame content costs more than flat RGB, but still reasonable for a lazy-loaded desktop-only asset).
+- `client/src/sections/Hero.tsx` — removed the now-unnecessary frame wrapper (`rounded-2xl border ... shadow-xl`) around the `<img>`, since there's no black box left to disguise. `loading="lazy"` is retained from the prior milestone.
+
+### Debugging Note
+
+An intermediate run of the corrected flood-fill script appeared to produce a valid file but `Image.open(...).n_frames` came back as `1`. Root cause: `list(ImageSequence.Iterator(im))` doesn't copy — every entry in the list is the *same* underlying `Image` object left seeked at whatever frame the loop last visited, so all "distinct" frames collapsed to one. Fixed by copying immediately during iteration (`[f.copy() for f in ImageSequence.Iterator(im)]`).
+
+### Files Modified
+
+- `client/public/rolling-cube.webp` — replaced with the transparent-background version.
+- `client/src/sections/Hero.tsx` — role frame card and its icon component removed; image wrapper simplified (no border/frame).
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright, desktop (1440px): cube loads (`complete: true`, 440×414), zero failed requests; two screenshots ~2.5s apart show both the cube's rotation and its displayed face content change, confirming the animation genuinely plays
+- Playwright, mobile (375px): `rolling-cube.webp` still correctly never requested (lazy-load fix from the prior milestone still holds)
+- Screenshots confirm the cube now floats directly on the page background with no visible box/frame, in both dark mode and light mode
+- Confirmed via `grep` that the role frame card and its Hero-local icon component no longer exist anywhere in `Hero.tsx`
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

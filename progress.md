@@ -1356,6 +1356,29 @@ Rather than removing the grid overlay from the whole Hero (it's an intentional, 
 
 ---
 
+## About Me: Bigger Photo, Centered Heading ✔
+
+**Objective:** on request, make the profile photo in the About section larger, and center the "About Me" heading above the intro writeup instead of left-aligning it on desktop.
+
+### Changes
+
+- `client/src/sections/About.tsx` — profile photo sized up from `h-36 w-36 sm:h-40 sm:w-40` (144px/160px) to `h-48 w-48 sm:h-56 sm:w-56 lg:h-64 lg:w-64` (192px/224px/256px). The "About Me" `<h2>` now has an explicit `text-center` class, overriding the parent row's `lg:text-left` (which still applies to the intro paragraph beneath it, unchanged).
+
+### Files Modified
+
+- `client/src/sections/About.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Screenshots confirm the larger photo and centered heading at desktop (1440px) and mobile (390px), in both dark and light mode
+- Zero failed requests
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

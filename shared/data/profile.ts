@@ -41,26 +41,14 @@ export const PROFILE: Profile = {
       "Continuous Learning & Certification-Driven Growth",
     ],
     coreStrengths: [
-      {
-        title: "Advanced SQL",
-        description:
-          "Data extraction, analysis, and optimization using joins, temp tables, CTEs, system functions, stored procedures, and views.",
-      },
-      {
-        title: "ETL Pipeline Design",
-        description:
-          "Designing SSIS pipelines for data transformation, validation, and performance tuning.",
-      },
-      {
-        title: "Power BI & DAX",
-        description:
-          "Data modeling, DAX, and Power Query to build intuitive dashboards that turn complex data into actionable insights.",
-      },
-      {
-        title: "AI-Powered Solutions",
-        description:
-          "Building AI systems such as automated lead search, filtering, scoring, and campaign generation.",
-      },
+      { name: "SQL", level: "Advanced", percent: 90 },
+      { name: "Power BI", level: "Advanced", percent: 90 },
+      { name: "DAX", level: "Advanced", percent: 85 },
+      { name: "Excel", level: "Advanced", percent: 88 },
+      { name: "ETL", level: "Advanced", percent: 90 },
+      { name: "Python", level: "Intermediate", percent: 65 },
+      { name: "Microsoft Fabric", level: "Intermediate", percent: 62 },
+      { name: "Azure", level: "Intermediate", percent: 65 },
     ],
   },
 };

@@ -1404,6 +1404,36 @@ Rather than removing the grid overlay from the whole Hero (it's an intentional, 
 
 ---
 
+## About Me: Core Strengths Redesigned as Skill-Level Cards ✔
+
+**Objective:** on request, replace the Core Strengths title/description cards with a skill-level card design (icon, name, proficiency badge, percentage progress bar) matching two reference screenshots, and add an "ETL" card at 90%.
+
+### Data & Type Change
+
+- `shared/types/profile.ts` — `CoreStrength` interface changed from `{ title, description }` to `{ name, level: "Advanced" | "Intermediate", percent: number }`.
+- `shared/data/profile.ts` — `about.coreStrengths` replaced with 8 entries, values taken directly from the two reference screenshots: SQL (Advanced, 90%), Power BI (Advanced, 90%), DAX (Advanced, 85%), Excel (Advanced, 88%), Python (Intermediate, 65%), Microsoft Fabric (Intermediate, 62%), Azure (Intermediate, 65%) — plus ETL (Advanced, 90%) as requested, categorized "Advanced" since 90% falls squarely in the same band as the other three 85–90% Advanced entries from the screenshots.
+
+### UI
+
+- `client/src/sections/About.tsx` — rewrote the Core Strengths block. Each card now shows a brand-colored icon (custom stylized SVGs, not literal trademarked logos — consistent with the rest of the site's icon system), the skill name, an "ADVANCED"/"INTERMEDIATE" pill badge (emerald for Advanced, blue for Intermediate), and a gradient (brand-primary → brand-secondary) progress bar with the percentage printed beneath it. Grid changed from `lg:grid-cols-3` to `lg:grid-cols-4` (8 cards lay out as two even rows of 4). The old `StrengthIcon`/`iconWrapperClasses`/title-description layout was removed entirely.
+
+### Files Modified
+
+- `shared/types/profile.ts`
+- `shared/data/profile.ts`
+- `client/src/sections/About.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms all 8 skill card titles render in order, zero failed requests
+- Screenshots confirm correct icons/colors, badges, and progress-bar widths in both dark and light mode, and a clean single-column stack on mobile (390px)
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

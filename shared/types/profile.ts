@@ -1,6 +1,7 @@
 export interface CoreStrength {
-  title: string;
-  description: string;
+  name: string;
+  level: "Advanced" | "Intermediate";
+  percent: number;
 }
 
 export interface AboutContent {

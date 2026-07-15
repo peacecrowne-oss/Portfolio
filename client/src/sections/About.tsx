@@ -1,75 +1,150 @@
 import { Section } from "@/components/Section";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
+import type { CoreStrength } from "@shared/types/profile";
 
 const featureCardClasses =
   "hover-lift rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl";
 
-const iconWrapperClasses =
-  "flex h-10 w-10 flex-none items-center justify-center rounded-xl bg-gradient-to-br from-brand-primary/10 to-brand-secondary/10 text-brand-primary dark:from-brand-primary/20 dark:to-brand-secondary/20 dark:text-brand-secondary";
-
-const iconProps = {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 2,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-  className: "h-5 w-5",
-};
-
-function StrengthIcon({ index }: { index: number }) {
-  switch (index % 6) {
-    case 0:
-      // database
+function SkillLevelIcon({ name }: { name: string }) {
+  switch (name) {
+    case "SQL":
       return (
-        <>
-          <ellipse cx="12" cy="5" rx="8" ry="3" />
-          <path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5" />
-          <path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3" />
-        </>
+        <svg viewBox="0 0 24 24" className="h-8 w-8">
+          <ellipse cx="12" cy="5" rx="8" ry="3" fill="#EF4444" fillOpacity="0.2" />
+          <path
+            d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3M4 5c0 1.66 3.58 3 8 3s8-1.34 8-3"
+            fill="none"
+            stroke="#EF4444"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       );
-    case 1:
-      // workflow / pipeline
+    case "Power BI":
       return (
-        <>
-          <rect x="3" y="3" width="6" height="6" rx="1" />
-          <rect x="15" y="15" width="6" height="6" rx="1" />
-          <path d="M9 6h6a3 3 0 0 1 3 3v6" />
-        </>
+        <svg viewBox="0 0 24 24" className="h-8 w-8" fill="#F2C811">
+          <rect x="3" y="12" width="4.5" height="9" rx="1" />
+          <rect x="10" y="7" width="4.5" height="14" rx="1" />
+          <rect x="17" y="3" width="4.5" height="18" rx="1" />
+        </svg>
       );
-    case 2:
-      // bar chart
+    case "DAX":
       return (
-        <>
-          <line x1="4" y1="20" x2="4" y2="10" />
-          <line x1="12" y1="20" x2="12" y2="4" />
-          <line x1="20" y1="20" x2="20" y2="14" />
-        </>
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 items-center justify-center text-2xl font-black italic leading-none text-[#2563EB]"
+        >
+          ƒx
+        </span>
       );
-    case 3:
-      // sparkles / AI
+    case "Excel":
       return (
-        <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
+        <svg
+          viewBox="0 0 24 24"
+          className="h-8 w-8"
+          fill="none"
+          stroke="#21A366"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="3" width="18" height="18" rx="2" fill="#21A366" fillOpacity="0.15" />
+          <line x1="3" y1="9" x2="21" y2="9" />
+          <line x1="3" y1="15" x2="21" y2="15" />
+          <line x1="9" y1="3" x2="9" y2="21" />
+          <line x1="15" y1="3" x2="15" y2="21" />
+        </svg>
       );
-    case 4:
-      // globe
+    case "ETL":
       return (
-        <>
-          <circle cx="12" cy="12" r="9" />
-          <path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18Z" />
-        </>
+        <svg
+          viewBox="0 0 24 24"
+          className="h-8 w-8"
+          fill="none"
+          stroke="#06B6D4"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <circle cx="4" cy="12" r="2.3" fill="#06B6D4" fillOpacity="0.2" />
+          <circle cx="12" cy="12" r="2.3" fill="#06B6D4" fillOpacity="0.2" />
+          <circle cx="20" cy="12" r="2.3" fill="#06B6D4" fillOpacity="0.2" />
+          <line x1="6.3" y1="12" x2="9.7" y2="12" />
+          <line x1="14.3" y1="12" x2="17.7" y2="12" />
+        </svg>
+      );
+    case "Python":
+      return (
+        <svg viewBox="0 0 24 24" className="h-8 w-8">
+          <path
+            d="M12 2c-3 0-5 1-5 4v2h5v1H5c-2 0-3 1.5-3 4s1 4 3 4h2v-3c0-2 1-3 3-3h4c2 0 3-1 3-3V6c0-3-2-4-5-4Z"
+            fill="#3776AB"
+          />
+          <path
+            d="M12 22c3 0 5-1 5-4v-2h-5v-1h7c2 0 3-1.5 3-4s-1-4-3-4h-2v3c0 2-1 3-3 3H9c-2 0-3 1-3 3v2c0 3 2 4 5 4Z"
+            fill="#FFD43B"
+          />
+        </svg>
+      );
+    case "Microsoft Fabric":
+      return (
+        <svg viewBox="0 0 24 24" className="h-8 w-8">
+          <polygon points="12 2 21 8 12 14 3 8" fill="#0F6CBD" />
+          <polygon points="12 10 21 16 12 22 3 16" fill="#50D9FF" fillOpacity="0.85" />
+        </svg>
+      );
+    case "Azure":
+      return (
+        <svg viewBox="0 0 24 24" className="h-8 w-8" fill="#0078D4">
+          <path d="M9.5 3h4.2l-6 15.2L2 21l7.5-18Z" />
+          <path d="M14.6 3.5 20 15h-9.8l3-6.2L14.6 3.5Z" opacity="0.85" />
+        </svg>
       );
     default:
-      // award / certified
-      return (
-        <>
-          <circle cx="12" cy="8" r="5" />
-          <path d="M8.5 13.5 7 21l5-2.5L17 21l-1.5-7.5" />
-        </>
-      );
+      return null;
   }
+}
+
+function LevelBadge({ level }: { level: CoreStrength["level"] }) {
+  const isAdvanced = level === "Advanced";
+  return (
+    <span
+      className={`flex-none rounded-full border px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide ${
+        isAdvanced
+          ? "border-emerald-500/40 text-emerald-600 dark:border-emerald-400/50 dark:text-emerald-400"
+          : "border-blue-500/40 text-blue-600 dark:border-blue-400/50 dark:text-blue-400"
+      }`}
+    >
+      {level}
+    </span>
+  );
+}
+
+function SkillLevelCard({ skill }: { skill: CoreStrength }) {
+  return (
+    <div className={featureCardClasses}>
+      <SkillLevelIcon name={skill.name} />
+      <div className="mt-4 flex items-center justify-between gap-2">
+        <h4 className="text-base font-semibold text-slate-900 dark:text-white">
+          {skill.name}
+        </h4>
+        <LevelBadge level={skill.level} />
+      </div>
+      <div className="mt-3">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-white/10">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary"
+            style={{ width: `${skill.percent}%` }}
+          />
+        </div>
+        <p className="mt-1.5 text-right text-xs text-slate-500 dark:text-slate-400">
+          {skill.percent}%
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export function About() {
@@ -100,21 +175,9 @@ export function About() {
         <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
           Core Strengths
         </h3>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {about.coreStrengths.map((strength, index) => (
-            <div key={strength.title} className={featureCardClasses}>
-              <span className={iconWrapperClasses} aria-hidden="true">
-                <svg {...iconProps}>
-                  <StrengthIcon index={index} />
-                </svg>
-              </span>
-              <h4 className="mt-4 text-base font-semibold text-slate-900 dark:text-white">
-                {strength.title}
-              </h4>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                {strength.description}
-              </p>
-            </div>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {about.coreStrengths.map((skill) => (
+            <SkillLevelCard key={skill.name} skill={skill} />
           ))}
         </div>
       </div>

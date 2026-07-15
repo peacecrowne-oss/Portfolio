@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Section } from "@/components/Section";
 import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
-import { HeroIllustration } from "@/components/HeroIllustration";
+import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 import { PROJECTS } from "@shared/data/projects";
 
@@ -222,7 +222,14 @@ export function Hero() {
             </p>
           </div>
 
-          <HeroIllustration />
+          <div className="w-full max-w-[420px] overflow-hidden rounded-2xl border border-slate-200 shadow-xl shadow-slate-900/10 dark:border-white/10 dark:shadow-black/40">
+            <img
+              src={withBasePath("/rolling-cube.webp")}
+              alt="Rotating 3D cube animation representing AI-powered automation, connecting data in to AI to output"
+              className="block w-full"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
 

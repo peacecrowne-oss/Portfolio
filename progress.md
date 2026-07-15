@@ -1224,6 +1224,48 @@ Three numbers are computed at runtime from real, already-displayed site data, so
 
 ---
 
+## Hero Illustration Replaced with Rolling Cube Animation ✔
+
+**Objective:** replace the entire right-side Hero illustration (previously a set of CSS-only decorative panels via `HeroIllustration.tsx`) with a real animated 3D cube illustration supplied by the user, representing AI-powered automation ("Data → AI → Out").
+
+### Source Asset & Compression
+
+- Source file: `C:\JOB APPLICATION\Rolling Cube.gif` — 631×594px, 507 frames, ~34.5s duration, 18.3MB (18,328,555 bytes). Too large for the Read tool and for direct upload (both hit the 5MB API limit); inspected and processed via a local Python + Pillow script instead.
+- Compressed to an animated WebP: every 3rd frame kept (169 frames), resized to 440×414px, quality=72, method=6.
+- Result: `client/public/rolling-cube.webp` — 800,096 bytes (~0.76MB), roughly a **23x size reduction**, with no perceptible quality loss at display size.
+
+### Scope Clarification
+
+Asked the user whether to replace only the small rotating-role icon accent or the entire illustration; the user confirmed **"Replace the whole illustration."** `HeroIllustration.tsx` is now unused anywhere in the codebase (confirmed via repo-wide search) but left in place rather than deleted, consistent with how `SocialLinks.tsx` was previously handled.
+
+### Design Fix: Light-Mode Background Mismatch
+
+The source asset has a solid opaque black background, which read fine in dark mode but looked like a broken/mismatched box in light mode.
+
+- **First attempt (failed):** `mix-blend-mode: screen` (Tailwind's `mix-blend-screen`), tested locally via `vite preview` + Playwright screenshots in both themes. The black rectangle remained fully visible and unchanged in light mode — the blend mode did not visibly take effect, most likely due to a stacking-context/compositing interaction with the nested `<img>`'s positioned/flex ancestors. Not root-caused further; abandoned.
+- **Second attempt (worked):** wrapped the image in a framed card (`rounded-2xl border shadow-xl overflow-hidden`) matching the site's existing glass-card design language, turning the black background into an intentional-looking "screen" rather than a mismatch. Verified clean in both dark and light mode via screenshots.
+
+### Performance Fix: Mobile Lazy-Loading
+
+The image sits inside a `<div className="hidden lg:flex ...">` wrapper — `display:none` is applied to an *ancestor*, not the `<img>` itself, so browsers still issue the HTTP request for it on page load regardless of visibility. Confirmed via Playwright network interception on a 375px mobile viewport: the 800KB asset was being fetched even though it's never shown on mobile. Added `loading="lazy"` to the `<img>` — since the image is inside a permanently-hidden (never-scrolled-into-view) ancestor on mobile, this defers the fetch indefinitely and it is never requested. Re-verified after the fix: mobile viewport now shows **zero** requests for `rolling-cube.webp`, while desktop continues to load and display it normally.
+
+### Files Modified
+
+- `client/public/rolling-cube.webp` — new binary asset (see above).
+- `client/src/sections/Hero.tsx` — removed `HeroIllustration` import/usage, added `withBasePath`-resolved `<img>` in a framed card wrapper, with `loading="lazy"`.
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client `tsc --noEmit` + `vite build`, server `tsc`)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright, desktop (1440px): image `complete: true`, natural size 440×414, zero failed requests, animation confirmed genuinely playing (rotation angle visibly shifts across two screenshots 2s apart)
+- Playwright, mobile (375px): `rolling-cube.webp` is correctly never requested after the `loading="lazy"` fix
+- Screenshots confirm a clean result in both dark mode and light mode
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

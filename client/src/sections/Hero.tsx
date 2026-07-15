@@ -126,7 +126,7 @@ export function Hero() {
           </ul>
         </div>
 
-        <div className="hidden lg:flex lg:flex-col lg:items-center lg:gap-8">
+        <div className="hidden lg:flex lg:flex-col lg:items-end lg:gap-8">
           <div className="relative w-full max-w-[420px]">
             <div
               aria-hidden="true"

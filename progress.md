@@ -1332,6 +1332,30 @@ Rather than removing the grid overlay from the whole Hero (it's an intentional, 
 
 ---
 
+## Hero: Cube Shifted Right to Clear the Name ✔
+
+**Objective:** on request, fix the cube overlapping the "Omolola Makinde" heading — at `lg` breakpoints the name (rendered `whitespace-nowrap`) ran right up against the cube's left edge.
+
+### Fix
+
+- `client/src/sections/Hero.tsx` — the illustration column was `lg:items-center`, horizontally centering the cube within its grid cell (and thus pulling it toward the boundary with the text column). Changed to `lg:items-end`, aligning the cube to the right edge of its own column instead, which pushes it away from the name with no other layout changes.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright measured the gap between the heading's right edge and the cube's left edge: ~27px clear at both 1440px and 1024px (the `lg` breakpoint's lower bound) — no overlap at either width, where it previously touched/overlapped
+- Mobile (375px): `rolling-cube.webp` still correctly never requested
+- Zero failed requests
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

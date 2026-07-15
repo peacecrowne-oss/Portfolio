@@ -1527,6 +1527,29 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## Skills Percentages Updated ✔
+
+**Objective:** on request, update four proficiency percentages on the Skills page: Excel to 90% (from 88%), Python to 70% (from 65%), Azure to 70% (from 65%), Microsoft Fabric to 65% (from 62%). Levels (Advanced/Intermediate) unchanged — all four new values still fall within their existing band.
+
+### Changes
+
+- `shared/data/profile.ts` — updated `percent` values for Excel, Python, Microsoft Fabric, and Azure in `about.coreStrengths`.
+
+### Files Modified
+
+- `shared/data/profile.ts`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms all 8 card percentages, in order: SQL 90%, Power BI 90%, DAX 85%, Excel 90%, ETL 90%, Python 70%, Microsoft Fabric 65%, Azure 70%
+- Zero failed requests
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

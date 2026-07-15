@@ -1665,6 +1665,30 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## BigMart Sales Dashboard: Two Tools Added ✔
+
+**Objective:** on request, add "Python" and "Google Colab" to the technologies list for the BigMart Sales Dashboard project card.
+
+### Changes
+
+- `shared/data/projects.ts` — `technologies` for the BigMart entry now reads `["Power BI", "DAX", "SQL", "Python", "Google Colab"]` (previously `["Power BI", "DAX", "SQL"]`).
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms all 5 technology badges render in order: Power BI, DAX, SQL, Python, Google Colab
+- Zero failed requests
+- Screenshot confirms the badges wrap cleanly with no layout issues
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

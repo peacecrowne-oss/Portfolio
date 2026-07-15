@@ -5,7 +5,7 @@ export const PROJECTS: Project[] = [
     title: "BigMart Sales Dashboard",
     description:
       "Developed a comprehensive Power BI dashboard providing sales performance insights and trend analysis.",
-    technologies: ["Power BI", "DAX", "SQL"],
+    technologies: ["Power BI", "DAX", "SQL", "Python", "Google Colab"],
     businessProblem: null,
     solution: null,
     outcome: null,

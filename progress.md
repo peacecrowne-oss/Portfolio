@@ -1440,6 +1440,46 @@ Rather than removing the grid overlay from the whole Hero (it's an intentional, 
 
 ---
 
+## Skills Page Replaced with "Skill" Card Grid, Certifications Dropped ✔
+
+**Objective:** on request, replace the entire Skills page content with the same skill-level card design just added to About's Core Strengths, retitle it "Skill", and (per explicit clarification) drop the Certifications section entirely rather than keep it alongside.
+
+### Scope Clarification
+
+Asked whether to keep the existing Certifications section (with just the Skills list replaced) or replace the whole page. User chose **"Replace the whole page, drop Certifications."**
+
+### Changes
+
+- `client/src/components/SkillLevelCard.tsx` — **new file.** Extracted the icon/badge/progress-bar card (`SkillLevelIcon`, `LevelBadge`, `SkillLevelCard`) out of `About.tsx` into a shared component, since the exact same design is now used in two places (About's Core Strengths and the Skills page) and duplicating ~150 lines of SVG icon markup across two files wasn't warranted.
+- `client/src/sections/About.tsx` — now imports `SkillLevelCard` from the shared component instead of defining it locally; no visual change.
+- `client/src/sections/Skills.tsx` — rewritten. Dropped the old grouped skill-badge list (`SKILLS` data, `SkillCard`, `CategoryIcon`), the `Certifications` list (`CERTIFICATIONS` data, `CertificationCard`), and the "Professional Qualifications" heading. The section is now a single `<h2>Skill</h2>` followed by the same 8-card grid as About's Core Strengths, both reading from `PROFILE.about.coreStrengths`.
+- `client/src/constants/navigation.ts` — removed the "Certifications" nav entry (`#certifications`), since that section no longer exists and would otherwise be a dead link with no matching element for `useActiveSection` to track.
+
+### Note
+
+The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the corresponding `client/src/services/api.ts` `getSkills`/`getCertifications` calls are now unused by any rendered page (the site renders from `shared/data/profile.ts` directly, not via these API calls, consistent with the project's existing architecture) — left in place rather than deleted, matching how other now-unused files (`HeroIllustration.tsx`, `SocialLinks.tsx`) were handled previously.
+
+**Flagging for awareness:** the same 8 skill cards (SQL, Power BI, DAX, Excel, ETL, Python, Microsoft Fabric, Azure) now appear twice on the page — once under About's "Core Strengths" and once under the new "Skill" page. This wasn't explicitly addressed in the request; happy to de-duplicate (e.g., remove Core Strengths from About, or differentiate the two) if that's not the intended look.
+
+### Files Modified
+
+- `client/src/components/SkillLevelCard.tsx` (new)
+- `client/src/sections/About.tsx`
+- `client/src/sections/Skills.tsx`
+- `client/src/constants/navigation.ts`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright: nav no longer shows "Certifications"; clicking through every remaining nav link (Home, About, Skills, Projects, Experience, Contact) throws no errors; the Skill page's `<h2>` reads "Skill" and all 8 skill card titles render correctly in order
+- Zero failed requests
+- Screenshot confirms the Skill page matches the reference design exactly (icons, badges, progress bars, layout)
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

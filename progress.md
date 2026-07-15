@@ -1689,6 +1689,30 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## Projects: GitHub "Coming Soon" Button Removed ✔
+
+**Objective:** on request, remove the disabled "GitHub · Coming Soon" placeholder button from project cards. Neither project has a `githubUrl` set, so this affected both cards.
+
+### Changes
+
+- `client/src/sections/Projects.tsx` — the GitHub `ProjectLinkButton` is now only rendered when `project.githubUrl` is set (`{project.githubUrl && <ProjectLinkButton ... />}`), matching the pattern already used elsewhere for optional fields (`businessProblem`, `solution`, `outcome`). Live Demo's button is untouched — it still shows its own "Coming Soon" placeholder when no URL is set (LeadForge), and the active button when one is (BigMart).
+
+### Files Modified
+
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms no "GitHub · Coming Soon" text remains anywhere in the Projects section
+- Zero failed requests
+- Screenshot confirms each card now shows exactly one button: BigMart shows its active "Live Demo" alone; LeadForge shows only its disabled "Live Demo · Coming Soon"
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

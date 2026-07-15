@@ -118,7 +118,9 @@ function ProjectCard({ project }: { project: Project }) {
       )}
 
       <div className="mt-auto flex flex-wrap gap-3 pt-2">
-        <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" />
+        {project.githubUrl && (
+          <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" />
+        )}
         <ProjectLinkButton label="Live Demo" href={project.liveDemoUrl} variant="primary" />
       </div>
     </div>

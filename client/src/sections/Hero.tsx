@@ -5,8 +5,18 @@ import { Badge } from "@/components/Badge";
 import { SocialLinks } from "@/components/SocialLinks";
 import { HeroIllustration } from "@/components/HeroIllustration";
 import { PROFILE } from "@shared/data/profile";
+import { PROJECTS } from "@shared/data/projects";
 
 const HERO_TOOLS = ["Power BI", "SQL", "DAX", "Power Query", "SSIS", "Python", "Claude"];
+
+const HERO_STATS = [
+  { value: "6+", label: "years in Data" },
+  { value: String(PROJECTS.length), label: "projects delivered" },
+  // Derived from About's "Cross-Industry Experience" strength: Customer
+  // Service, Accounting, Data Analytics, and Consulting.
+  { value: "4", label: "industries served" },
+  { value: String(HERO_TOOLS.length), label: "tools mastered" },
+];
 
 const ROLE_ROTATE_MS = 2800;
 
@@ -188,11 +198,18 @@ export function Hero() {
             </Button>
           </div>
 
+          <ul className="flex flex-wrap gap-2">
+            {HERO_TOOLS.map((tool) => (
+              <li key={tool}>
+                <Badge>{tool}</Badge>
+              </li>
+            ))}
+          </ul>
+
           <SocialLinks
             github={PROFILE.social.github}
             linkedin={PROFILE.social.linkedin}
             email={PROFILE.social.email}
-            className="pt-2"
           />
         </div>
 
@@ -216,14 +233,17 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="mt-16 border-t border-slate-200 pt-10 dark:border-white/10">
-        <ul className="flex flex-wrap gap-2">
-          {HERO_TOOLS.map((tool) => (
-            <li key={tool}>
-              <Badge>{tool}</Badge>
-            </li>
-          ))}
-        </ul>
+      <div className="mt-16 grid grid-cols-2 gap-6 border-t border-slate-200 pt-10 dark:border-white/10 sm:grid-cols-4">
+        {HERO_STATS.map((stat) => (
+          <div key={stat.label} className="text-center">
+            <p className="bg-gradient-to-r from-brand-primary to-brand-secondary bg-clip-text text-3xl font-bold text-transparent sm:text-4xl">
+              {stat.value}
+            </p>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
+              {stat.label}
+            </p>
+          </div>
+        ))}
       </div>
     </Section>
   );

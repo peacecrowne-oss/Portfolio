@@ -1171,6 +1171,40 @@ Fixed by making the algorithm order-independent: it now compares each candidate 
 
 ---
 
+## Hero Restructure: Tools Moved Up, Stats Bar Added ✔
+
+**Objective:** restructure the Hero section to match a reference layout — tools row moved directly under the CTA buttons, and a 4-stat bar ("years in Data," "projects delivered," "industries served," "tools mastered") added at the bottom of the Hero.
+
+### Where each number came from
+
+Three numbers are computed at runtime from real, already-displayed site data, so they can't silently drift out of date:
+- **Projects delivered → 5**: `PROJECTS.length` (the actual Projects array).
+- **Tools mastered → 7**: `HERO_TOOLS.length` (the curated tools list from the previous milestone).
+- **Industries served → 4**: hardcoded with a sourcing comment, since there's no structured "industries" array to count at runtime — derived by counting the comma-separated list in About's existing "Cross-Industry Experience" strength description ("Customer Service, Accounting, Data Analytics, and Consulting").
+- **Years in Data → "6+"**: this one could not be safely derived. The Experience section currently only shows entries back to January 2020 (earlier roles were removed from display two milestones ago), so computing from what's on-page would understate the real figure. Asked the user directly rather than guess; they confirmed "6+."
+
+### Layout changes
+
+- Tools row (`HERO_TOOLS`, unchanged from the previous milestone) moved from a bottom divider to directly below the CTA buttons, matching the reference.
+- New full-width stats bar added at the very bottom of the Hero section (inside `<Section id="home">`, not the site's global `Footer.tsx`) — a `border-t` divider, then a responsive 2-column (mobile) / 4-column (sm+) grid, each stat showing a large gradient-text number over a smaller label, matching the reference's visual style.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+**Not modified:** `shared/data/*` (all four numbers are either computed from existing data or, for the one exception, supplied directly by the user — no data files changed), `client/src/components/Footer.tsx`.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: all four stat values render exactly as expected (6+, 5, 4, 7) with their correct labels
+- Visually confirmed via screenshots in dark mode, light mode, and mobile (375px) — tools row sits directly under the buttons in all three, stats bar wraps to a clean 2×2 grid on mobile with no overflow
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

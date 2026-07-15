@@ -1480,6 +1480,30 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 
 ---
 
+## About Me: Core Strengths Removed (De-duplicated with Skill Page) ✔
+
+**Objective:** on request, remove the Core Strengths block from About, since the same 8 skill cards were now duplicated between there and the new Skill page — flagged as a follow-up in the prior milestone, and the user confirmed dropping it from About specifically.
+
+### Changes
+
+- `client/src/sections/About.tsx` — removed the "Core Strengths" heading and card grid entirely. The section is now just the profile photo and the "About Me" intro paragraph.
+
+### Files Modified
+
+- `client/src/sections/About.tsx`
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright confirms no "Core Strengths" heading remains under `#about`, while the Skill page's 8 cards are untouched and still render correctly
+- Zero failed requests
+- Screenshot confirms a clean, focused About section (photo + intro only)
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

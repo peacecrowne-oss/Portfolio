@@ -1,5 +1,4 @@
 import { Section } from "@/components/Section";
-import { SkillLevelCard } from "@/components/SkillLevelCard";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 
@@ -24,17 +23,6 @@ export function About() {
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
             {about.intro}
           </p>
-        </div>
-      </div>
-
-      <div className="mt-10">
-        <h3 className="text-xl font-semibold text-slate-900 dark:text-white">
-          Core Strengths
-        </h3>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {about.coreStrengths.map((skill) => (
-            <SkillLevelCard key={skill.name} skill={skill} />
-          ))}
         </div>
       </div>
     </Section>

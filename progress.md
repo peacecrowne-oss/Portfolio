@@ -1143,6 +1143,34 @@ Fixed by making the algorithm order-independent: it now compares each candidate 
 
 ---
 
+## Page Section Order Changed: Skills and Projects Moved Before Experience ✔
+
+**Objective:** reorder the actual page flow — Skills right after About, then Projects, then Experience — on request (a genuine section reorder this time, not just the navbar).
+
+### Implementation
+
+- `client/src/pages/Home.tsx` — reordered the section components: Hero, About, **Skills, Projects, Experience**, Contact (previously About, Experience, Projects, Skills).
+- `client/src/constants/navigation.ts` — reordered `NAV_LINKS` to match the new page flow: Home, About, **Skills, Certifications, Projects, Experience**, Contact.
+- **Certifications' nav position:** not explicitly requested, but Certifications is nested inside the Skills section (not a separate top-level component), so it now scrolls into view immediately after Skills. Placed its nav link right after Skills' for the same reason flagged two milestones ago when this was nav-only: a nav order that doesn't match the page's actual scroll order reads as broken (clicking a later nav item to scroll backward up the page). This keeps nav-to-scroll order fully consistent end to end.
+- No section content, spacing, or internal layout was touched — only the order components render in, and the order of nav links.
+
+### Files Modified
+
+- `client/src/pages/Home.tsx`
+- `client/src/constants/navigation.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build` — all containers healthy
+- Verified via Playwright: actual DOM/page section order (by comparing live `getBoundingClientRect().top` for each section) is exactly `home, about, skills, projects, experience, contact`, matching the request
+- All 7 nav links (including Certifications) re-verified to correctly activate their own section after the reorder — the order-independent `useActiveSection` fix from two milestones ago meant no further hook changes were needed here
+- Full-page screenshot confirms clean visual flow with no layout regressions in any section
+
+---
+
 ## Pending Approval
 
 *Awaiting explicit approval before enabling GitHub Pages in the repository (Settings → Pages), and before AWS deployment of the Version 3.0/3.1 redesign, before restoring `docker-compose.yml`'s `nginx` port mapping to `"80:80"` and deploying to AWS. Also still awaiting explicit approval before any Kubernetes or cloud container deployment work (Version 2.2). Also still awaiting direction on whether/when to deploy the Node.js backend (per the Version 2.0 migration's Stop Condition) — the Docker setup doesn't change that decision, it just makes deployment easier whenever it's approved. No production infrastructure has been touched by either migration — the live client is unaffected either way.*

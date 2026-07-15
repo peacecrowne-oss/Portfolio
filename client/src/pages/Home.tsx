@@ -10,9 +10,9 @@ export function Home() {
     <>
       <Hero />
       <About />
-      <Experience />
-      <Projects />
       <Skills />
+      <Projects />
+      <Experience />
       <Contact />
     </>
   );

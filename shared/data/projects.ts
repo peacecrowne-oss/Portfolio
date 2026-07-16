@@ -50,6 +50,7 @@ export const PROJECTS: Project[] = [
     outcome: [
       "Delivered a working private beta with automated lead acquisition, enrichment, lead scoring, and campaign management. Established a CI pipeline with 14 automated backend tests and completed 26 database migrations with no breaking schema changes. Initial pilot testing achieved a 6.6% decision-maker discovery rate, with a redesigned matching strategy expected to improve performance in future releases. The platform provides a solid foundation for continued development toward a scalable production solution.",
     ],
+    caseStudySections: null,
     screenshots: null,
     githubUrl: "https://github.com/peacecrowne-oss/Leadforge-AI-System",
     liveDemoUrl: null,
@@ -62,8 +63,7 @@ export const PROJECTS: Project[] = [
     title: "BigMart Sales Dashboard",
     description:
       "Developed a comprehensive Power BI dashboard providing sales performance insights and trend analysis.",
-    caseStudyOverview:
-      "The BigMart Sales Optimization Dashboard is a Power BI solution designed to analyze retail performance across multiple outlets. It focuses on understanding how product visibility, pricing, and assortment influence customer purchasing behavior and overall revenue. The dashboard transforms complex retail data into a centralized, insight-driven platform that supports data-driven decision-making and revenue optimization.",
+    caseStudyOverview: null,
     technologies: ["Power BI", "DAX", "SQL", "Python", "Google Colab"],
     techStackGroups: [
       { label: "Data & Analytics", items: ["Power BI", "DAX (Data Analysis Expressions)", "Power Query"] },
@@ -78,18 +78,9 @@ export const PROJECTS: Project[] = [
         ],
       },
     ],
-    businessProblem: [
-      "BigMart operates across multiple outlets and generates large volumes of transactional and product-level data. However, this data is often fragmented and lacks a centralized analytical framework, making it difficult to identify key sales drivers, underperforming outlets, and lost revenue opportunities.",
-      "Despite strong customer demand and high in-store activity, sales conversion remains suboptimal. A major challenge is the gap between demand and actual purchases, largely driven by poor product visibility, ineffective placement strategies, and suboptimal assortment planning. As a result, high-demand products are not consistently reaching customers at the point of decision.",
-    ],
-    solution: [
-      "The BigMart dashboard addresses these challenges by consolidating retail data into a single, interactive Power BI platform. It enables stakeholders to monitor key performance indicators, compare outlet performance, and evaluate how visibility and pricing impact sales outcomes.",
-      "The solution uncovers critical insights—most notably identifying a “visibility gap,” where products with strong demand are not effectively positioned to drive purchases. By highlighting these gaps, the dashboard supports strategic improvements in product placement, pricing optimization, and assortment planning to increase conversion and revenue.",
-    ],
-    architecture: [
-      "The solution is built using Power BI with a structured data modeling approach. Data is prepared and transformed using Power Query, ensuring consistency and quality. A relational data model is developed to connect product, outlet, and sales data, while DAX measures are used to calculate key metrics and enable dynamic analysis.",
-      "This architecture supports scalable, high-performance reporting and allows users to interactively explore data across multiple dimensions.",
-    ],
+    businessProblem: null,
+    solution: null,
+    architecture: null,
     features: [
       "Interactive Power BI dashboard for retail performance analysis",
       "KPI tracking (Total Sales, Product Visibility, Avg Sales per Item, Item MRP)",
@@ -101,9 +92,214 @@ export const PROJECTS: Project[] = [
       "Insight-driven visuals for executive decision-making",
     ],
     challenges: null,
-    outcome: [
-      "The dashboard provides a clear, executive-level view of retail performance and reveals that while demand and pricing strategies are strong, declining product visibility is limiting sales conversion.",
-      "By identifying this gap, the solution enables stakeholders to implement targeted strategies to improve product placement and customer engagement. The dashboard transforms raw data into actionable insights, helping BigMart optimize operations, improve efficiency, and unlock significant revenue growth opportunities.",
+    outcome: null,
+    caseStudySections: [
+      {
+        heading: "Overview",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "BigMart is a multi-outlet retail chain generating large volumes of transactional and product-level data across different locations. This project focuses on building an interactive Power BI dashboard to analyze how product visibility, pricing, and assortment influence sales performance.",
+          },
+          {
+            type: "paragraph",
+            text: "The goal is to transform fragmented retail data into a centralized, insight-driven solution that supports data-driven decision-making and improves overall business performance.",
+          },
+        ],
+      },
+      {
+        heading: "Business Problem",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Despite strong customer demand and high in-store activity, BigMart was not fully converting this demand into revenue.",
+          },
+          { type: "paragraph", text: "The core challenges included:" },
+          {
+            type: "list",
+            items: [
+              "Fragmented and unstructured data limiting actionable insights",
+              "Difficulty identifying key sales drivers and underperforming outlets",
+              "Poor product visibility reducing customer engagement and conversion",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "This created a gap between customer intent and actual purchases, leading to significant unrealized revenue.",
+          },
+        ],
+      },
+      {
+        heading: "Key Questions",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Why is revenue underperforming despite strong demand?",
+              "Which outlets and products are driving or limiting sales?",
+              "How do product visibility and pricing impact customer purchasing behavior?",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Data & Preparation",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "The dataset included product-level and outlet-level information such as pricing (MRP), visibility, sales, and outlet characteristics.",
+          },
+          { type: "paragraph", text: "Using Power Query, the data was:" },
+          {
+            type: "list",
+            items: [
+              "Cleaned and standardized",
+              "Missing values handled",
+              "Data types corrected",
+              "Structured for analysis",
+            ],
+          },
+          { type: "paragraph", text: "This ensured a reliable, analysis-ready dataset." },
+        ],
+      },
+      {
+        heading: "Data Modeling & DAX",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "A structured data model was developed to connect product, outlet, and sales data.",
+          },
+          { type: "paragraph", text: "Key DAX measures included:" },
+          {
+            type: "list",
+            items: ["Total Sales", "Average Sales per Item", "Product Visibility", "Average Item MRP"],
+          },
+          {
+            type: "paragraph",
+            text: "These measures enabled dynamic analysis and comparison across outlets and product categories.",
+          },
+        ],
+      },
+      {
+        heading: "Dashboard Design",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "The dashboard was designed to provide clear, interactive insights using:",
+          },
+          {
+            type: "list",
+            items: [
+              "KPI cards for quick performance overview",
+              "Bar charts for outlet-level performance comparison",
+              "Bubble chart to analyze visibility vs sales impact",
+              "Filters for dynamic exploration",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "The focus was on creating intuitive visuals that support quick and informed decision-making.",
+          },
+        ],
+      },
+      {
+        heading: "Key Insights",
+        blocks: [
+          { type: "paragraph", text: "The analysis revealed a critical business insight:" },
+          {
+            type: "paragraph",
+            text: "The problem is not demand—it is product visibility.",
+            emphasis: true,
+          },
+          {
+            type: "list",
+            items: [
+              "Strong demand and pricing performance were observed",
+              "However, declining product visibility limited customer engagement",
+              "High-demand products were not positioned effectively for purchase",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "This “visibility gap” was identified as the primary driver of lost revenue.",
+          },
+        ],
+      },
+      {
+        heading: "Business Impact",
+        blocks: [
+          { type: "paragraph", text: "The dashboard enables stakeholders to:" },
+          {
+            type: "list",
+            items: [
+              "Identify performance gaps across outlets",
+              "Understand the relationship between visibility, pricing, and sales",
+              "Make data-driven decisions to improve conversion",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "By addressing visibility issues, the business can unlock significant revenue opportunities and improve operational efficiency.",
+          },
+        ],
+      },
+      {
+        heading: "Recommendations",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Improve product placement in high-visibility areas",
+              "Align pricing strategies with product positioning",
+              "Optimize product assortment based on demand patterns",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "These strategies help bridge the gap between demand and conversion.",
+          },
+        ],
+      },
+      {
+        heading: "Challenges & Learnings",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Data fragmentation required careful cleaning and structuring",
+              "Initial insights needed refinement to align with business needs",
+              "Learned the importance of translating data into clear, actionable insights",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "This project reinforced that effective storytelling is as important as technical analysis.",
+          },
+        ],
+      },
+      {
+        heading: "Future Enhancements",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Sales forecasting using predictive models",
+              "Real-time dashboard updates",
+              "Integration of AI-driven recommendations",
+              "Deeper analysis at category and shelf levels",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "🎯 Final Summary",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "This project demonstrates how data can be transformed into actionable insights that drive business performance. By identifying the gap between strong demand and low conversion, the BigMart dashboard provides a clear path toward improving visibility, optimizing strategy, and increasing revenue.",
+          },
+        ],
+      },
     ],
     screenshots: null,
     githubUrl: null,

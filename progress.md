@@ -2049,6 +2049,36 @@ The user's Business Problem, Solution, Architecture, and Results content each ha
 
 ---
 
+## BigMart Case Study Restructured with Flexible Sections ✔
+
+**Objective:** on request, replace BigMart's case-study narrative entirely with new, more detailed user-supplied copy (12 sections: Overview, Business Problem, Key Questions, Data & Preparation, Data Modeling & DAX, Dashboard Design, Key Insights, Business Impact, Recommendations, Challenges & Learnings, Future Enhancements, 🎯 Final Summary).
+
+### Why the fixed-field template couldn't hold this
+
+The existing case-study page had a fixed shape — Overview, Business Problem, Solution, Architecture, Tech Stack, Features, Screenshots, Challenges, Results — built for LeadForge's content. The new BigMart copy has section types with no equivalent field (Key Questions, Data & Preparation, Data Modeling & DAX, Dashboard Design, Recommendations, Future Enhancements), several sections mix intro paragraphs, bullet lists, and closing paragraphs in sequence (e.g. Business Problem: paragraph → lead-in line → 3-item list → closing paragraph), and one line is clearly meant to stand out as a pull-quote ("The problem is not demand—it is product visibility.").
+
+### Generalized to a flexible content-block model
+
+Added `CaseStudyBlock` (`{ type: "paragraph", text, emphasis? } | { type: "list", items }`) and `CaseStudySection` (`{ heading, blocks: CaseStudyBlock[] }`) types, plus a `caseStudySections: CaseStudySection[] | null` field on `Project`. When set, `ProjectCaseStudy.tsx` renders these sections — in the exact order and internal structure supplied — via a new `FlexibleCaseStudySection` component that walks each section's blocks in sequence, rendering paragraphs (bold/larger when `emphasis: true`) and bulleted lists inline as they appear in the data, rather than in fixed named slots. LeadForge's `caseStudySections` is `null`, so its page is completely unaffected and continues to use the original fixed-field rendering — confirmed via regression check, not just left alone by assumption.
+
+Tech Stack, Features, and Screenshots keep rendering as their own separate, always-present sections after the flexible content (unaffected either way) — the new copy didn't mention them, and removing already-populated structured content wasn't asked for, so it stayed.
+
+### Files Modified
+
+- `shared/types/projects.ts` — `CaseStudyBlock`, `CaseStudySection` types; `caseStudySections` field added to `Project`
+- `shared/data/projects.ts` — LeadForge given `caseStudySections: null`; BigMart's old `caseStudyOverview`/`businessProblem`/`solution`/`architecture`/`outcome` nulled out and superseded by a 12-entry `caseStudySections` array with the full new copy, verbatim (including the “visibility gap” smart-quote and em dash exactly as supplied)
+- `client/src/pages/ProjectCaseStudy.tsx` — new `FlexibleCaseStudySection` component; middle section now branches on `caseStudySections` presence
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms BigMart's direct-hit route renders all 12 new section headings (in order) followed by Tech Stack/Features/Screenshots, LeadForge's 9 original headings are unchanged, and zero failed requests
+- Screenshots confirm a clean result in dark mode, light mode, and at mobile width (390px), including correct rendering of the emphasized pull-quote line and the emoji in the "🎯 Final Summary" heading
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

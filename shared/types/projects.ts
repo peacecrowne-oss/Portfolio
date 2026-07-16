@@ -3,12 +3,22 @@ export interface TechStackGroup {
   items: string[];
 }
 
+export type CaseStudyBlock =
+  | { type: "paragraph"; text: string; emphasis?: boolean }
+  | { type: "list"; items: string[] };
+
+export interface CaseStudySection {
+  heading: string;
+  blocks: CaseStudyBlock[];
+}
+
 export interface Project {
   slug: string;
   title: string;
   description: string;
   /** Overview text for the dedicated case-study page, if different from the
-   *  grid card's `description`. Falls back to `description` when null. */
+   *  grid card's `description`. Falls back to `description` when null.
+   *  Unused when `caseStudySections` is set (its first section covers this). */
   caseStudyOverview: string | null;
   technologies: string[];
   /** Grouped tech-stack breakdown for the case-study page's Tech Stack
@@ -21,6 +31,13 @@ export interface Project {
   features: string[] | null;
   challenges: string[] | null;
   outcome: string[] | null;
+  /** Free-form, arbitrarily-ordered case-study sections (paragraphs and/or
+   *  bullet lists in any combination) for content that doesn't fit the fixed
+   *  Business Problem / Solution / Architecture / Results shape above. When
+   *  set, the case-study page renders these instead of the fixed fields
+   *  above (Tech Stack, Features, and Screenshots still render separately,
+   *  after these sections). */
+  caseStudySections: CaseStudySection[] | null;
   screenshots: string[] | null;
   githubUrl: string | null;
   liveDemoUrl: string | null;

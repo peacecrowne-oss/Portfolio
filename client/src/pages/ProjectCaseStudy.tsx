@@ -6,6 +6,7 @@ import { ProjectLinkButton } from "@/components/ProjectLinkButton";
 import { ProjectPreviewPlaceholder } from "@/components/ProjectPreviewPlaceholder";
 import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
+import type { CaseStudySection } from "@shared/types/projects";
 import { NotFound } from "@/pages/NotFound";
 
 function CaseStudyBlock({ title, children }: { title: string; children: ReactNode }) {
@@ -43,6 +44,44 @@ function ParagraphBlock({ label, paragraphs }: { label: string; paragraphs: stri
         </p>
       ))}
     </div>
+  );
+}
+
+function FlexibleCaseStudySection({ section }: { section: CaseStudySection }) {
+  return (
+    <CaseStudyBlock title={section.heading}>
+      <div className="max-w-3xl space-y-4">
+        {section.blocks.map((block, index) =>
+          block.type === "list" ? (
+            <ul key={index} className="space-y-2">
+              {block.items.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-start gap-2 text-base leading-relaxed text-slate-600 dark:text-slate-400"
+                >
+                  <span
+                    aria-hidden="true"
+                    className="mt-2.5 h-1.5 w-1.5 flex-none rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary"
+                  />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p
+              key={index}
+              className={
+                block.emphasis
+                  ? "text-lg font-semibold leading-relaxed text-slate-900 dark:text-white"
+                  : "text-base leading-relaxed text-slate-600 dark:text-slate-400"
+              }
+            >
+              {block.text}
+            </p>
+          ),
+        )}
+      </div>
+    </CaseStudyBlock>
   );
 }
 
@@ -109,23 +148,31 @@ export function ProjectCaseStudy() {
       </Section>
 
       <Section className="dark:bg-[#08111F]">
-        <CaseStudyBlock title="Overview">
-          <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-            {project.caseStudyOverview ?? project.description}
-          </p>
-        </CaseStudyBlock>
+        {project.caseStudySections && project.caseStudySections.length > 0 ? (
+          project.caseStudySections.map((section) => (
+            <FlexibleCaseStudySection key={section.heading} section={section} />
+          ))
+        ) : (
+          <>
+            <CaseStudyBlock title="Overview">
+              <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
+                {project.caseStudyOverview ?? project.description}
+              </p>
+            </CaseStudyBlock>
 
-        <CaseStudyBlock title="Business Problem">
-          <ParagraphBlock label="Business Problem" paragraphs={project.businessProblem} />
-        </CaseStudyBlock>
+            <CaseStudyBlock title="Business Problem">
+              <ParagraphBlock label="Business Problem" paragraphs={project.businessProblem} />
+            </CaseStudyBlock>
 
-        <CaseStudyBlock title="Solution">
-          <ParagraphBlock label="Solution" paragraphs={project.solution} />
-        </CaseStudyBlock>
+            <CaseStudyBlock title="Solution">
+              <ParagraphBlock label="Solution" paragraphs={project.solution} />
+            </CaseStudyBlock>
 
-        <CaseStudyBlock title="Architecture">
-          <ParagraphBlock label="Architecture" paragraphs={project.architecture} />
-        </CaseStudyBlock>
+            <CaseStudyBlock title="Architecture">
+              <ParagraphBlock label="Architecture" paragraphs={project.architecture} />
+            </CaseStudyBlock>
+          </>
+        )}
 
         <CaseStudyBlock title="Tech Stack">
           {project.techStackGroups && project.techStackGroups.length > 0 ? (
@@ -200,13 +247,17 @@ export function ProjectCaseStudy() {
           )}
         </CaseStudyBlock>
 
-        <CaseStudyBlock title="Challenges">
-          <ParagraphBlock label="Challenges" paragraphs={project.challenges} />
-        </CaseStudyBlock>
+        {!project.caseStudySections && (
+          <>
+            <CaseStudyBlock title="Challenges">
+              <ParagraphBlock label="Challenges" paragraphs={project.challenges} />
+            </CaseStudyBlock>
 
-        <CaseStudyBlock title="Results">
-          <ParagraphBlock label="Results" paragraphs={project.outcome} />
-        </CaseStudyBlock>
+            <CaseStudyBlock title="Results">
+              <ParagraphBlock label="Results" paragraphs={project.outcome} />
+            </CaseStudyBlock>
+          </>
+        )}
 
         <div className="flex flex-wrap gap-3 border-t border-slate-200 pt-10 dark:border-white/10">
           {project.githubUrl && (

@@ -25,7 +25,7 @@ As of Version 2.0, this is a **monorepo** with three workspaces:
 **Client**
 * [React](https://react.dev/) 19, [Vite](https://vitejs.dev/) 8, [TypeScript](https://www.typescriptlang.org/) (strict mode)
 * [Tailwind CSS](https://tailwindcss.com/) 3
-* No routing library — single page with in-page hash anchors (`#home`, `#about`, etc.)
+* [React Router](https://reactrouter.com/) 7 (`BrowserRouter`) for the one dedicated project case-study route; the rest of the site is still a single page navigated via in-page hash anchors (`#home`, `#about`, etc.)
 
 **Server**
 * [Express](https://expressjs.com/) 5 + TypeScript (CommonJS)
@@ -49,7 +49,7 @@ As of Version 2.0, this is a **monorepo** with three workspaces:
 * Recruiter-focused Hero with contact meta line (location, email, phone) and primary/secondary CTAs
 * About section with background, technical interests, working style, and core strengths
 * Experience timeline rendered from structured work-history data, gracefully handling roles with no listed responsibilities
-* Projects grid with conditional Business Problem / Solution / Outcome fields (only rendered when present in the data)
+* Projects grid with conditional Business Problem / Solution / Outcome fields (only rendered when present in the data); the featured project links to a dedicated case-study page (`/projects/:slug`) with Hero, Overview, Business Problem, Solution, Architecture, Tech Stack, Features, Screenshots, Challenges, and Results sections — narrative sections a project hasn't documented yet render an honest "content coming soon" placeholder rather than invented copy
 * Professional Qualifications: skill categories with recruiter-optimized emphasis on high-value skills (Power BI, SQL, DAX, Azure, etc.), plus certification cards with automatic "Featured" styling for named certifications
 * Contact section with `mailto:`/`tel:` links, LinkedIn/GitHub, and a Resume download button
 * A working Express API (health, profile, experience, projects, skills, certifications, contact) reading from the same data the client uses
@@ -156,7 +156,15 @@ All GET endpoints (except `/health`) return `{ "success": true, "data": ... }`. 
 
 ## Deployment
 
-**Client:** deploys to [Vercel](https://vercel.com/) as a static build, with automatic deploys from the `main` branch. `npm run build --workspace=client` outputs a fully static `client/dist/` directory (HTML, CSS, JS, and everything in `client/public/`) that Vercel serves directly. `client/public/404.html` is picked up automatically for unmatched routes.
+**Client:** deploys to [Vercel](https://vercel.com/) as a static build, with automatic deploys from the `main` branch. `npm run build --workspace=client` outputs a fully static `client/dist/` directory (HTML, CSS, JS, and everything in `client/public/`) that Vercel serves directly.
+
+### Client-side routing across deploy targets
+
+Adding a real route (the project case-study page, `/projects/:slug`) means a direct hit, hard refresh, or shared link to that URL has to resolve correctly on every deploy target — not just in-app navigation via `<Link>`. Each target handles this differently:
+
+- **Docker/nginx:** `nginx/nginx.conf` already does a proper server-side SPA fallback (`try_files $uri $uri/ /index.html;`), so nested routes just work.
+- **Vercel:** `vercel.json` at the repo root adds a rewrite (`"/(.*)" → "/index.html"`) so Vercel serves `index.html` for any path that isn't a real static file, the same way nginx does.
+- **GitHub Pages:** pure static hosting has no server-side rewrite capability, so `client/public/404.html` (the only thing GH Pages will serve for an unrecognized path) encodes the requested path into a query string and redirects to `index.html`, which decodes it back via `history.replaceState` (inline script in `client/index.html`) before the router mounts. This is the standard [`spa-github-pages`](https://github.com/rafgraph/spa-github-pages) pattern. A route that genuinely doesn't exist still renders the app's own `NotFound` page after the redirect — it isn't a static-file 404 anymore on any target.
 
 **Server:** not yet deployed. It has no database and no state, so it can run on any Node host (Render, Railway, Fly.io, a Vercel serverless function, etc.) — this is a deliberate, separate next step, not part of this migration.
 
@@ -181,7 +189,7 @@ To enable: in the repository's **Settings → Pages**, set the source to **GitHu
 /
 ├── client/                     # React + Vite single-page app
 │   ├── public/                   # Static assets copied as-is to the build output
-│   │   ├── 404.html                # Standalone custom 404 page (self-contained styles)
+│   │   ├── 404.html                # GitHub Pages SPA-redirect shim (see Deployment) — not a static 404 page anymore
 │   │   ├── favicon.svg
 │   │   ├── og-image.svg            # Open Graph / social preview image
 │   │   ├── resume.pdf
@@ -189,11 +197,11 @@ To enable: in the repository's **Settings → Pages**, set the source to **GitHu
 │   │   ├── sitemap.xml
 │   │   └── site.webmanifest
 │   ├── src/
-│   │   ├── components/            # Reusable presentation components (Navbar, Footer, Button, Section, Badge, etc.)
+│   │   ├── components/            # Reusable presentation components (Navbar, Footer, Button, Section, Badge, ProjectLinkButton, ProjectPreviewPlaceholder, SkillLevelCard, etc.)
 │   │   ├── sections/               # Page sections (Hero, About, Experience, Projects, Skills, Contact)
-│   │   ├── pages/                   # Thin page wrappers composing sections (Home)
+│   │   ├── pages/                   # Route-level pages (Home, ProjectCaseStudy, NotFound)
 │   │   ├── layouts/                  # RootLayout (Navbar + main + Footer + skip link)
-│   │   ├── hooks/                     # Custom hooks (useTheme, useActiveSection)
+│   │   ├── hooks/                     # Custom hooks (useTheme, useActiveSection, useScrollToHash)
 │   │   ├── services/                   # api.ts — typed API client (not yet wired into components)
 │   │   ├── constants/                   # Static constants (nav links)
 │   │   ├── lib/                          # basePath.ts — resolves root-relative asset URLs against Vite's base
@@ -230,6 +238,7 @@ To enable: in the repository's **Settings → Pages**, set the source to **GitHu
 ├── requirements.md              # Project requirements and Claude Code approval policy
 ├── progress.md                   # Milestone tracking, checklist, and changelog
 ├── package.json                  # Root workspace orchestration (install/dev/build/lint)
+├── vercel.json                    # SPA rewrite so client-side routes resolve on direct hit/refresh
 ├── docker-compose.yml             # Orchestrates client, server, and nginx containers
 ├── .dockerignore
 ├── eslint.config.js               # Shared ESLint config for client + server

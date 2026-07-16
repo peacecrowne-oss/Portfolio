@@ -13,7 +13,7 @@ const linkActiveClasses =
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const sectionIds = useMemo(
-    () => NAV_LINKS.map((link) => link.href.replace("#", "")),
+    () => NAV_LINKS.map((link) => link.href.split("#")[1]),
     [],
   );
   const activeId = useActiveSection(sectionIds);
@@ -23,7 +23,7 @@ export function Navbar() {
       <Container>
         <div className="flex h-16 items-center justify-between">
           <a
-            href="#home"
+            href="/#home"
             className="rounded-sm text-lg font-semibold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-white dark:focus-visible:ring-white"
           >
             Portfolio
@@ -32,7 +32,7 @@ export function Navbar() {
           <nav aria-label="Primary" className="hidden md:block">
             <ul className="flex items-center gap-8">
               {NAV_LINKS.map((link) => {
-                const isActive = link.href.replace("#", "") === activeId;
+                const isActive = link.href.split("#")[1] === activeId;
                 return (
                   <li key={link.href}>
                     <a
@@ -89,7 +89,7 @@ export function Navbar() {
           <Container>
             <ul className="flex flex-col gap-1 py-4">
               {NAV_LINKS.map((link) => {
-                const isActive = link.href.replace("#", "") === activeId;
+                const isActive = link.href.split("#")[1] === activeId;
                 return (
                   <li key={link.href}>
                     <a

@@ -1711,6 +1711,67 @@ The `shared/data/skills.ts`, `shared/data/certifications.ts`, and the correspond
 - Zero failed requests
 - Screenshot confirms each card now shows exactly one button: BigMart shows its active "Live Demo" alone; LeadForge shows only its disabled "Live Demo · Coming Soon"
 
+## Featured Project Case Study: LeadForge AI — Scaffolding Complete, Blocked on Real Content ⚠
+
+**Objective (per formal "Approval Required" ticket):** integrate LeadForge AI into the portfolio as the flagship/featured project with a dedicated case-study page (Hero, Overview, Business Problem, Solution, Architecture, Tech Stack, Features, Screenshots, Challenges, Results, GitHub button, Live Demo button), without deploying LeadForge or moving its source code into this repo. Ticket explicitly authorizes placeholders only for screenshots; specifies exact commit message `feat: add LeadForge AI case study`; asks to push to `origin/main`; and says to stop before adding other case studies.
+
+### Why this isn't committed/pushed yet
+
+This project's absolute rule, held throughout the whole engagement, is to never display fabricated facts — everything shown must be verbatim from real data or explicitly supplied by the user. The only verified LeadForge content that exists anywhere in this repo is one description sentence and a 4-item tech list. Business Problem, Solution, Architecture, Features, Challenges, and Results have no source data at all. Writing plausible-sounding case-study prose for a "flagship" project — the single most scrutinized page on the site — would mean inventing claims a recruiter could catch out in an interview. So: **all the technical/structural work below is done and validated; the narrative sections render an honest "content coming soon" placeholder instead of invented copy; nothing has been committed or pushed pending the real content.**
+
+### Architecture decisions
+
+- **`react-router-dom` v7 added**, but wired as `BrowserRouter`, not `HashRouter`. The site's existing nav (`NAV_LINKS`, `useActiveSection` scroll-spy) already uses the URL *hash* for in-page anchors (`#home`, `#about`, …) — `HashRouter` would have used that same hash for route matching, breaking every existing anchor link site-wide. `BrowserRouter` uses the pathname instead, so it coexists cleanly with the untouched anchor-scroll system.
+- **Nav links updated** (`/#home` instead of `#home`, in `navigation.ts` and the Navbar logo) so they still resolve correctly when clicked from the new case-study page, not just from Home. `Navbar.tsx`'s hash-extraction logic (`.replace("#", "")`) was fixed to `.split("#")[1]` to match the new `/#id` shape.
+- **SPA routing had to be solved across all three deploy targets**, since a direct hit / hard refresh / shared link to `/projects/leadforge-ai-system` needs to resolve on each:
+  - Docker/nginx: already had proper `try_files ... /index.html` — no change needed.
+  - Vercel: **new `vercel.json`** at the repo root adds a rewrite so Vercel serves `index.html` for any non-static path, the same way nginx does. (Discovered via the README that Vercel was, until now, relying on the same static `404.html` GitHub Pages uses — which wasn't a real SPA fallback and would have broken nested routes there too.)
+  - GitHub Pages: `client/public/404.html` rewritten from a static "not found" page into the standard [`spa-github-pages`](https://github.com/rafgraph/spa-github-pages) redirect shim; `client/index.html` gained a matching decode script. A genuinely nonexistent route still ends up rendering the app's own new `NotFound` page (ported from the old 404.html's design) after the redirect, on every target.
+- **`Project` type extended**: added `slug`, `featured`, `architecture`, `features`, `challenges`, `screenshots` (kept `outcome` as the existing field for "Results" rather than adding a duplicate). `shared/data/projects.ts` updated: LeadForge now has `slug: "leadforge-ai-system"`, `featured: true`, and sorts first in the grid (`Projects.tsx` sorts by `featured` defensively rather than relying on data order).
+- **Extracted `ProjectLinkButton` and `ProjectPreviewPlaceholder`** out of `Projects.tsx` into `client/src/components/`, since the new case-study page needed the exact same disabled-state button and placeholder-image treatment — avoids duplicating that logic across two files.
+
+### Bugs found and fixed during validation
+
+- **Tailwind cascade order**: `<Section className="pb-0 ...">` did not override the component's own `py-16 sm:py-20 lg:py-24` — computed styles showed `pb-0` losing the cascade (this Tailwind build orders `py-*` after `pb-*`), leaving a doubled ~192px gap between the Hero and Overview blocks. Fixed with `!pb-0` (Tailwind's important-modifier), verified via computed-style inspection before and after.
+- **Hash-anchor navigation from other routes silently failed**: clicking "Back to Projects" (`/#projects`) from the case-study page updated the URL correctly but never scrolled — the browser's native hash-scroll-on-load only works if the target element already exists at load time, and on a client-rendered SPA the `#projects` section doesn't exist until React mounts, well after the browser gives up trying to scroll. Fixed with a new `useScrollToHash` hook (runs on `Home` mount, manually scrolls to `location.hash`'s target). Verified via Playwright: before the fix, `#projects`'s bounding rect stayed off-screen after clicking Back; after, it landed correctly.
+
+### Files Added
+
+- `client/src/pages/ProjectCaseStudy.tsx`, `client/src/pages/NotFound.tsx`
+- `client/src/components/ProjectLinkButton.tsx`, `client/src/components/ProjectPreviewPlaceholder.tsx`
+- `client/src/hooks/useScrollToHash.ts`
+- `vercel.json`
+
+### Files Modified
+
+- `client/src/App.tsx` (BrowserRouter + routes), `client/src/pages/Home.tsx` (useScrollToHash)
+- `client/src/constants/navigation.ts`, `client/src/components/Navbar.tsx` (hash-link fixes)
+- `client/src/sections/Projects.tsx` (featured sort, case-study link, shared component imports)
+- `client/public/404.html` (rewritten as SPA redirect shim), `client/index.html` (decode script)
+- `shared/types/projects.ts`, `shared/data/projects.ts`
+- `README.md`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client `tsc --noEmit && vite build`, server `tsc`)
+- `npm run lint` — passes, no errors
+- **GitHub Pages build validated**: built with `VITE_BASE_PATH=/Portfolio/`, served through a local static-file server that reproduces GH Pages' exact behavior (serves only `/Portfolio/*`, falls back to `404.html` for everything else — including a bare `/`). Confirmed via Playwright:
+  - Direct navigation to `/Portfolio/projects/leadforge-ai-system` (simulating a hard refresh or shared link) redirects through `404.html` and resolves to the correct page with a clean URL and zero failed requests.
+  - Direct navigation to a genuinely nonexistent path renders the app's own `NotFound` component (not a dead static page).
+  - Asset URLs in the built `index.html` correctly resolve under `/Portfolio/`.
+- Heading hierarchy on the case-study page: single `H1`, all ten required sections as sibling `H2`s, no skipped levels.
+- No images missing `alt` text; the disabled "Live Demo"/"GitHub" states render as non-focusable `<span>`s rather than misleading disabled links, matching the site's existing convention.
+- Screenshots confirm the page in dark mode, light mode, and at 390px mobile (single-column stack, badges wrap correctly).
+- Full navigation loop verified on a normal (non-subpath) build: Projects grid shows LeadForge first with a "Featured Project" badge → "View Case Study" → case-study page renders → "Back to Projects" → lands back on Home scrolled to `#projects`.
+- Docker rebuild triggered; full container-health + Playwright pass pending (see Next Steps).
+
+### Next Steps (blocked)
+
+1. **Needs from the user, not fabricable:** Business Problem, Solution, Architecture description, Features list, Challenges, Results/metrics for LeadForge AI, and (if it exists) the GitHub repository URL. Live Demo intentionally stays disabled per the ticket ("Do NOT deploy LeadForge").
+2. Once supplied: fill in the real content, re-validate, then commit exactly as specified (`feat: add LeadForge AI case study`) and push to `origin/main` — noting the existing, unrelated GitHub PAT `workflow`-scope block on pushing may still apply and will be reported separately if so.
+3. Per the ticket: stop after this single case study: no other project (BigMart) gets this treatment without a separate approval.
+
 ---
 
 ## Current Sprint

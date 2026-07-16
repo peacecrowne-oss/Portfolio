@@ -1,59 +1,21 @@
+import { Link } from "react-router-dom";
 import { Section } from "@/components/Section";
-import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
+import { ProjectLinkButton } from "@/components/ProjectLinkButton";
+import { ProjectPreviewPlaceholder } from "@/components/ProjectPreviewPlaceholder";
 import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
 import type { Project } from "@shared/types/projects";
 
-const placeholderBarHeights = [55, 80, 40, 70, 50];
-
-function ProjectPreviewPlaceholder() {
-  return (
-    <div
-      className="flex aspect-video w-full items-end gap-2 rounded-lg border border-slate-200 bg-gradient-to-br from-slate-50 to-slate-100 p-4 dark:border-white/10 dark:from-white/[0.04] dark:to-white/[0.02]"
-      aria-hidden="true"
-    >
-      {placeholderBarHeights.map((height, index) => (
-        <div
-          key={index}
-          className="flex-1 rounded-t-sm bg-gradient-to-t from-brand-primary/40 to-brand-secondary/40 dark:from-brand-primary/50 dark:to-brand-secondary/50"
-          style={{ height: `${height}%` }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function ProjectLinkButton({
-  label,
-  href,
-  variant,
-}: {
-  label: string;
-  href: string | null;
-  variant: "primary" | "secondary";
-}) {
-  if (href) {
-    return (
-      <Button href={href} variant={variant} target="_blank" rel="noreferrer noopener">
-        {label}
-      </Button>
-    );
-  }
-
-  return (
-    <span
-      className="inline-flex cursor-not-allowed items-center justify-center rounded-lg border border-dashed border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-400 dark:border-white/15 dark:text-slate-500"
-      title={`${label} coming soon`}
-    >
-      {label} · Coming Soon
-    </span>
-  );
-}
-
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <div className="hover-lift flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl">
+    <div className="hover-lift relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl">
+      {project.featured && (
+        <span className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm shadow-brand-primary/30">
+          Featured Project
+        </span>
+      )}
+
       {project.imageUrl ? (
         <img
           src={withBasePath(project.imageUrl)}
@@ -117,17 +79,29 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
       )}
 
-      <div className="mt-auto flex flex-wrap gap-3 pt-2">
+      <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">
         {project.githubUrl && (
           <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" />
         )}
         <ProjectLinkButton label="Live Demo" href={project.liveDemoUrl} variant="primary" />
+        {project.featured && (
+          <Link
+            to={`/projects/${project.slug}`}
+            className="rounded-sm text-sm font-semibold text-brand-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-brand-secondary dark:focus-visible:ring-white"
+          >
+            View Case Study →
+          </Link>
+        )}
       </div>
     </div>
   );
 }
 
 export function Projects() {
+  const orderedProjects = [...PROJECTS].sort(
+    (a, b) => Number(b.featured) - Number(a.featured),
+  );
+
   return (
     <Section id="projects" className="dark:bg-[#08111F]">
       <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
@@ -135,8 +109,8 @@ export function Projects() {
       </h2>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2">
-        {PROJECTS.map((project) => (
-          <ProjectCard key={project.title} project={project} />
+        {orderedProjects.map((project) => (
+          <ProjectCard key={project.slug} project={project} />
         ))}
       </div>
     </Section>

@@ -3,109 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Page Not Found | Peace Makinde</title>
+    <title>Peace Makinde | Portfolio</title>
     <meta name="robots" content="noindex" />
-    <style>
-      :root {
-        color-scheme: light dark;
-        --bg: #ffffff;
-        --fg: #0f172a;
-        --muted: #475569;
-        --border: #e2e8f0;
-        --accent-bg: #0f172a;
-        --accent-fg: #ffffff;
-        --accent-hover: #334155;
-      }
+    <script>
+      // GitHub Pages serves this static file for any path it doesn't
+      // recognize (e.g. a direct link or refresh on a client-side route
+      // like /projects/leadforge-ai-system). There's no server-side
+      // rewrite available on GH Pages, so this encodes the requested
+      // path into the query string and redirects to index.html, which
+      // decodes it back (see the inline script in index.html) before the
+      // router mounts and renders the real route.
+      //
+      // Other deploy targets (Vercel, the Docker/nginx image) handle SPA
+      // routing via a normal server-side rewrite and never serve this
+      // file, so this only runs on GitHub Pages.
+      //
+      // Standard, well-tested pattern: https://github.com/rafgraph/spa-github-pages
+      (function (l) {
+        // number of path segments to keep for a GH Pages *project* site
+        // (the repo name segment, e.g. /Portfolio/) before the app route
+        var pathSegmentsToKeep = 1;
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0f172a;
-          --fg: #ffffff;
-          --muted: #94a3b8;
-          --border: #1e293b;
-          --accent-bg: #ffffff;
-          --accent-fg: #0f172a;
-          --accent-hover: #e2e8f0;
-        }
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1.5rem;
-        background: var(--bg);
-        color: var(--fg);
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-          Arial, sans-serif;
-        text-align: center;
-      }
-
-      main {
-        max-width: 32rem;
-      }
-
-      .code {
-        font-size: 4rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        margin: 0 0 0.5rem;
-      }
-
-      h1 {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin: 0 0 0.75rem;
-      }
-
-      p {
-        font-size: 1rem;
-        line-height: 1.6;
-        color: var(--muted);
-        margin: 0 0 2rem;
-      }
-
-      .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.375rem;
-        padding: 0.625rem 1.5rem;
-        font-size: 0.875rem;
-        font-weight: 600;
-        text-decoration: none;
-        background: var(--accent-bg);
-        color: var(--accent-fg);
-        border: 1px solid var(--border);
-        transition: background-color 0.15s ease;
-      }
-
-      .button:hover {
-        background: var(--accent-hover);
-      }
-
-      .button:focus-visible {
-        outline: 2px solid var(--fg);
-        outline-offset: 2px;
-      }
-    </style>
+        l.replace(
+          l.protocol +
+            "//" +
+            l.hostname +
+            (l.port ? ":" + l.port : "") +
+            l.pathname.split("/").slice(0, 1 + pathSegmentsToKeep).join("/") +
+            "/?/" +
+            l.pathname.slice(1).split("/").slice(pathSegmentsToKeep).join("/").replace(/&/g, "~and~") +
+            (l.search ? "&" + l.search.slice(1).replace(/&/g, "~and~") : "") +
+            l.hash,
+        );
+      })(window.location);
+    </script>
   </head>
-  <body>
-    <main>
-      <p class="code" aria-hidden="true">404</p>
-      <h1>Page Not Found</h1>
-      <p>
-        The page you're looking for doesn't exist or may have been moved.
-        Let's get you back on track.
-      </p>
-      <a class="button" href="./">Return Home</a>
-    </main>
-  </body>
+  <body></body>
 </html>

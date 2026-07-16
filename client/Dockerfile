@@ -6,11 +6,15 @@
 # ---- Stage 1: install dependencies and build production assets ----
 FROM node:22-alpine AS build
 
-WORKDIR /app/client
-COPY client/package.json client/package-lock.json ./
-RUN npm ci
-
 WORKDIR /app
+# npm workspaces resolve into the root lockfile, not a per-workspace one —
+# `npm ci` needs the root manifest plus every workspace's package.json to
+# validate against it correctly.
+COPY package.json package-lock.json ./
+COPY client/package.json ./client/package.json
+COPY server/package.json ./server/package.json
+RUN npm ci --workspace=client
+
 COPY shared ./shared
 COPY client ./client
 

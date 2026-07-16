@@ -6,11 +6,15 @@
 # ---- Stage 1: install dependencies and compile TypeScript ----
 FROM node:22-alpine AS build
 
-WORKDIR /app/server
-COPY server/package.json server/package-lock.json ./
-RUN npm ci
-
 WORKDIR /app
+# npm workspaces resolve into the root lockfile, not a per-workspace one —
+# `npm ci` needs the root manifest plus every workspace's package.json to
+# validate against it correctly.
+COPY package.json package-lock.json ./
+COPY client/package.json ./client/package.json
+COPY server/package.json ./server/package.json
+RUN npm ci --workspace=server
+
 COPY shared ./shared
 COPY server ./server
 
@@ -21,12 +25,15 @@ RUN npm run build
 FROM node:22-alpine AS production
 
 ENV NODE_ENV=production
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+COPY client/package.json ./client/package.json
+COPY server/package.json ./server/package.json
+RUN npm ci --workspace=server --omit=dev
+
+COPY --from=build /app/server/dist ./server/dist
 WORKDIR /app/server
-
-COPY server/package.json server/package-lock.json ./
-RUN npm ci --omit=dev
-
-COPY --from=build /app/server/dist ./dist
 
 EXPOSE 5000
 

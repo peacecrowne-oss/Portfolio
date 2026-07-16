@@ -30,12 +30,6 @@ function ProjectPreview({ project }: { project: Project }) {
 function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="hover-lift relative flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:glass-card dark:shadow-black/20 dark:backdrop-blur-xl">
-      {project.featured && (
-        <span className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-brand-primary to-brand-secondary px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-white shadow-sm shadow-brand-primary/30">
-          Featured Project
-        </span>
-      )}
-
       <ProjectPreview project={project} />
 
       <div>
@@ -83,7 +77,7 @@ export function Projects() {
   return (
     <Section id="projects" className="dark:bg-[#08111F]">
       <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
-        Projects
+        Featured Projects
       </h2>
 
       <div className="mt-10 grid gap-6 sm:grid-cols-2">

@@ -1907,6 +1907,30 @@ The user's Technology Stack content was categorized (Backend / Frontend / Core T
 
 ---
 
+## Hero Stat Corrected, Featured Badge Replaced with Section Heading ✔
+
+**Objective:** on request, change the Hero's "projects delivered" stat from the dynamic project count (2) to "10+" (user-supplied real figure), and remove the floating "Featured Project" badge from the Projects grid card in favor of labeling the section itself.
+
+### Changes
+
+- `client/src/sections/Hero.tsx` — `HERO_STATS`'s "projects delivered" value changed from `String(PROJECTS.length)` to the explicit `"10+"` supplied by the user (this stat is no longer derived from the `PROJECTS` array, so a portfolio site legitimately showing more delivered projects than are individually written up doesn't understate the number); removed the now-unused `PROJECTS` import.
+- `client/src/sections/Projects.tsx` — removed the absolutely-positioned "Featured Project" pill badge from `ProjectCard` entirely; renamed the section heading from "Projects" to "Featured Projects" so the concept is conveyed at the section level instead of per-card. The case-study page's own "Featured Project" badge (a different page, not referenced in this request) is untouched.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms the Hero stat reads "10+", the Projects section heading reads "Featured Projects", and no "Featured Project" text remains anywhere in that section
+- Screenshots confirm a clean result — cards now sit flush at the top with no badge overlap
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

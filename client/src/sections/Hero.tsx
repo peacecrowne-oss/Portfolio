@@ -4,13 +4,12 @@ import { Button } from "@/components/Button";
 import { Badge } from "@/components/Badge";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
-import { PROJECTS } from "@shared/data/projects";
 
 const HERO_TOOLS = ["Power BI", "SQL", "DAX", "Power Query", "SSIS", "Python", "Claude"];
 
 const HERO_STATS = [
   { value: "6+", label: "years in Data" },
-  { value: String(PROJECTS.length), label: "projects delivered" },
+  { value: "10+", label: "projects delivered" },
   // Customer Service, Accounting, Data Analytics, and Consulting.
   { value: "4", label: "industries served" },
   { value: String(HERO_TOOLS.length), label: "tools mastered" },

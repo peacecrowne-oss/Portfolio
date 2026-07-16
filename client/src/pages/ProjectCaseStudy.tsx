@@ -226,26 +226,28 @@ export function ProjectCaseStudy() {
           )}
         </CaseStudyBlock>
 
-        <CaseStudyBlock title="Screenshots">
-          {project.screenshots && project.screenshots.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2">
-              {project.screenshots.map((screenshot) => (
-                <img
-                  key={screenshot}
-                  src={withBasePath(screenshot)}
-                  alt={`${project.title} screenshot`}
-                  className="aspect-video w-full rounded-lg object-cover"
-                  loading="lazy"
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
-              <ProjectPreviewPlaceholder />
-              <ProjectPreviewPlaceholder />
-            </div>
-          )}
-        </CaseStudyBlock>
+        {project.showScreenshotsSection && (
+          <CaseStudyBlock title="Screenshots">
+            {project.screenshots && project.screenshots.length > 0 ? (
+              <div className="grid gap-4 sm:grid-cols-2">
+                {project.screenshots.map((screenshot) => (
+                  <img
+                    key={screenshot}
+                    src={withBasePath(screenshot)}
+                    alt={`${project.title} screenshot`}
+                    className="aspect-video w-full rounded-lg object-cover"
+                    loading="lazy"
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2">
+                <ProjectPreviewPlaceholder />
+                <ProjectPreviewPlaceholder />
+              </div>
+            )}
+          </CaseStudyBlock>
+        )}
 
         {!project.caseStudySections && (
           <>

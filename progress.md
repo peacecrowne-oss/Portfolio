@@ -2079,6 +2079,32 @@ Tech Stack, Features, and Screenshots keep rendering as their own separate, alwa
 
 ---
 
+## BigMart Case Study: Screenshots Section Removed ✔
+
+**Objective:** on request, drop the Screenshots section from BigMart's case-study page specifically, leaving LeadForge's untouched.
+
+### Changes
+
+- `shared/types/projects.ts` — added `showScreenshotsSection: boolean` to `Project`, controlling whether the case-study page renders a Screenshots block at all (previously it always rendered, falling back to placeholder tiles when `screenshots` was `null`).
+- `shared/data/projects.ts` — LeadForge set to `true` (unchanged behavior, still shows placeholder tiles); BigMart set to `false`.
+- `client/src/pages/ProjectCaseStudy.tsx` — the Screenshots `CaseStudyBlock` is now wrapped in `{project.showScreenshotsSection && (...)}`.
+
+### Files Modified
+
+- `shared/types/projects.ts`
+- `shared/data/projects.ts`
+- `client/src/pages/ProjectCaseStudy.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms BigMart's headings no longer include "Screenshots" (page now flows directly from Features to the closing buttons) while LeadForge's "Screenshots" heading is unchanged
+- Screenshot confirms a clean transition with no leftover gap where the section used to be
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

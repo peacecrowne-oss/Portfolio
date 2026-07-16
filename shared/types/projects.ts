@@ -38,6 +38,9 @@ export interface Project {
    *  above (Tech Stack, Features, and Screenshots still render separately,
    *  after these sections). */
   caseStudySections: CaseStudySection[] | null;
+  /** Whether the case-study page shows a Screenshots section at all (with
+   *  either real `screenshots` or a placeholder when none are set yet). */
+  showScreenshotsSection: boolean;
   screenshots: string[] | null;
   githubUrl: string | null;
   liveDemoUrl: string | null;

@@ -51,6 +51,7 @@ export const PROJECTS: Project[] = [
       "Delivered a working private beta with automated lead acquisition, enrichment, lead scoring, and campaign management. Established a CI pipeline with 14 automated backend tests and completed 26 database migrations with no breaking schema changes. Initial pilot testing achieved a 6.6% decision-maker discovery rate, with a redesigned matching strategy expected to improve performance in future releases. The platform provides a solid foundation for continued development toward a scalable production solution.",
     ],
     caseStudySections: null,
+    showScreenshotsSection: true,
     screenshots: null,
     githubUrl: "https://github.com/peacecrowne-oss/Leadforge-AI-System",
     liveDemoUrl: null,
@@ -301,6 +302,7 @@ export const PROJECTS: Project[] = [
         ],
       },
     ],
+    showScreenshotsSection: false,
     screenshots: null,
     githubUrl: null,
     liveDemoUrl:

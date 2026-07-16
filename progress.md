@@ -1772,6 +1772,26 @@ This project's absolute rule, held throughout the whole engagement, is to never 
 2. Once supplied: fill in the real content, re-validate, then commit exactly as specified (`feat: add LeadForge AI case study`) and push to `origin/main` — noting the existing, unrelated GitHub PAT `workflow`-scope block on pushing may still apply and will be reported separately if so.
 3. Per the ticket: stop after this single case study: no other project (BigMart) gets this treatment without a separate approval.
 
+**Resolved** — see the next entry.
+
+---
+
+## Featured Project Case Study: LeadForge AI — Shipped ✔
+
+**Resolution of the blocker above.** The user pointed me at the real project source (`c:\COLABERRY\INTERNSHIP\LeadForge-AI-System`, a separate local repo — not moved into this one). An agent read `PROJECT_ALIGNMENT.md`, `SESSION_SUMMARY.md`, `requirements.txt`, `package.json`, and `docker-compose.yml` there and extracted only verified, sourced facts — no invention. That became the real Business Problem, Solution, Architecture, Features, Challenges, and Results content for the case study.
+
+**One correction surfaced and applied:** the pre-existing `technologies` tag list (visible on the Projects grid card since before this task) read `["AI", "Python", "Claude", "OpenAI"]`, but the research found no OpenAI/LLM dependency anywhere in the real codebase — the one "AI" route (`/ai/generate-message`) is a hardcoded string template, not a model call. Flagged this to the user and, on confirmation ("go"), corrected the tag list to the verified stack: `["FastAPI", "React", "Python", "PostgreSQL", "SQLite"]`. This is a real, user-confirmed factual correction, not a stylistic change.
+
+Also found the project's GitHub URL (`https://github.com/peacecrowne-oss/Leadforge-AI-System`, confirmed public via an unauthenticated `curl` check) and wired up the case study's GitHub button.
+
+**Committed as `adce47b`** (`feat: add LeadForge AI case study`, exactly as specified) and **pushed to `origin/main`**. The push also cleared 41 previously-blocked local commits accumulated across this entire engagement — whatever was causing the earlier GitHub PAT `workflow`-scope block has resolved since it was last checked.
+
+### Docker/nginx follow-up: found and fixed a real bug
+
+A subsequent "refresh UI" request surfaced a genuine regression on the just-pushed `main`: `docker compose up --build` failed with `npm ci` erroring `Missing: react-router-dom@7.18.1 from lock file`. Root cause: `client/Dockerfile` and `server/Dockerfile` each ran `npm ci` against their own `client/package-lock.json` / `server/package-lock.json` — but this is an npm **workspaces** repo, and `npm install` (however it's invoked, including from inside a workspace subdirectory) resolves into the **root** `package-lock.json` only. Those per-workspace lockfiles were stale, unmaintained fossils that happened to still match by coincidence until `react-router-dom` was added. Fixed both Dockerfiles to install from the root manifest + lockfile (`COPY package.json package-lock.json` + each workspace's `package.json`, `RUN npm ci --workspace=<name>`), restructuring both build stages and the server's production stage accordingly. Verified via a full rebuild (client build 8.5s, server healthy) and a complete Playwright pass against the live containers: card order, case-study sections, GitHub button, "Back to Projects" scroll, a direct-hit on the nested route through nginx's SPA fallback (zero failed requests), and a genuine unmatched route correctly rendering the in-app `NotFound` page. Committed as `ce03ac1` and pushed.
+
+**Also discovered mid-task:** Docker Desktop's engine was genuinely hung (not just a slow build) — `docker version` itself was timing out, with multiple `docker`/`docker-compose` client processes stacking up behind an unresponsive `com.docker.backend`. Asked the user how to proceed; they asked me to restart it. Stopped all Docker-related processes via PowerShell and relaunched `Docker Desktop.exe`; the daemon came back on the first poll.
+
 ---
 
 ## Current Sprint

@@ -5,7 +5,8 @@ export interface CoreStrength {
 }
 
 export interface AboutContent {
-  intro: string;
+  /** One or more paragraphs, rendered as separate <p> blocks. */
+  intro: string[];
   background: {
     journey: string;
     currentFocus: string;

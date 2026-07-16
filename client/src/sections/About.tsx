@@ -17,12 +17,19 @@ export function About() {
         </div>
 
         <div>
-          <h2 className="text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+          <h2 className="text-center text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
             About Me
           </h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-            {about.intro}
-          </p>
+          <div className="mt-4 max-w-2xl space-y-4">
+            {about.intro.map((paragraph) => (
+              <p
+                key={paragraph}
+                className="text-base leading-relaxed text-slate-600 dark:text-slate-400"
+              >
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </Section>

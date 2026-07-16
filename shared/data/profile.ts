@@ -20,8 +20,11 @@ export const PROFILE: Profile = {
     "Increased dashboard adoption by 15%",
   ],
   about: {
-    intro:
-      "I'm a Microsoft Certified Power BI Data Analyst, Azure Database Fundamentals professional, and AI Architect who turns raw data into clear, actionable insights that drive smarter business decisions. My path into data analytics began in an unexpected place — a background in communication — and that perspective still shapes how I turn complex data into stories people can act on.",
+    intro: [
+      "I'm a Business Intelligence Developer and Data Analyst with over 5 years of experience transforming complex data into interactive dashboards, scalable reporting solutions, and actionable insights that drive smarter business decisions.",
+      "My expertise spans Power BI, SQL, DAX, ETL development, and Microsoft Azure, with experience delivering business intelligence solutions across education, technology, nonprofit, and enterprise environments. I'm passionate about building data-driven solutions that help organizations make faster, more informed decisions.",
+      "Beyond business intelligence, I enjoy developing AI-powered applications and exploring how automation and modern analytics can improve business processes and customer experiences.",
+    ],
     background: {
       journey:
         "I transitioned from a communication-focused background into the world of data analytics, discovering a passion for transforming raw data into meaningful stories that drive business decisions and innovation. Along the way, I've built experience across diverse industries — including Customer Service, Accounting, Data Analytics, and Consulting — working extensively with Microsoft data tools such as SQL Server, SSIS, and Power BI, across versions ranging from 2016 to 2022.",

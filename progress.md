@@ -1987,6 +1987,32 @@ Resolved with more conservative, empirically-verified sizing: `max-w-[440px] lg:
 
 ---
 
+## About Me: Bolder Heading, New Writeup ✔
+
+**Objective:** on request, make the "About Me" heading bolder and replace the intro writeup with new user-supplied copy (three paragraphs).
+
+### Changes
+
+- `client/src/sections/About.tsx` — heading weight bumped from `font-bold` to `font-extrabold`. The intro now renders as three separate `<p>` blocks with spacing between them, instead of one paragraph.
+- `shared/types/profile.ts` — `AboutContent.intro` changed from `string` to `string[]` (one or more paragraphs), since the new copy needs real paragraph breaks rather than one run-on block.
+- `shared/data/profile.ts` — `intro` replaced with the three new paragraphs, verbatim.
+
+### Files Modified
+
+- `client/src/sections/About.tsx`
+- `shared/types/profile.ts`
+- `shared/data/profile.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms the heading's computed `font-weight` is `800` (extrabold) and all three paragraphs render with the exact supplied text
+- Screenshots confirm a clean result in dark mode, light mode, and at mobile width (390px)
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

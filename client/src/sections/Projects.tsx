@@ -56,7 +56,7 @@ function ProjectCard({ project }: { project: Project }) {
           <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" />
         )}
         <ProjectLinkButton label="Live Demo" href={project.liveDemoUrl} variant="primary" />
-        {project.featured && (
+        {project.hasCaseStudy && (
           <Link
             to={`/projects/${project.slug}`}
             className="rounded-sm text-sm font-semibold text-brand-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-brand-secondary dark:focus-visible:ring-white"

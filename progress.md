@@ -2013,6 +2013,42 @@ Resolved with more conservative, empirically-verified sizing: `max-w-[440px] lg:
 
 ---
 
+## BigMart Sales Dashboard Case Study Added ✔
+
+**Objective:** on request, build a full case study page for BigMart Sales Dashboard (Overview, Business Problem, Solution, Architecture, Tech Stack, Features, Results), using copy supplied verbatim by the user — BigMart's second real case study alongside LeadForge's.
+
+### Decoupled case-study reachability from "featured"
+
+Previously, the "View Case Study →" link only appeared on `featured` cards — a reasonable shortcut when only one project had a case study. With BigMart now getting one too (without becoming "featured" — that stays LeadForge's badge/first-position distinction), reused that same condition would have been wrong. Added `hasCaseStudy: boolean` to the `Project` type, independent of `featured`, and switched the grid card's link condition to it. Both cards now correctly show "View Case Study →".
+
+### Generalized single-paragraph fields to support multiple paragraphs
+
+The user's Business Problem, Solution, Architecture, and Results content each had two distinct paragraphs — LeadForge's equivalent fields were plain `string`. Rather than squash BigMart's content into single run-on paragraphs, changed `businessProblem` / `solution` / `architecture` / `challenges` / `outcome` from `string | null` to `string[] | null` on the `Project` type (matching the same pattern already used for `About.intro` and `Features`), wrapped LeadForge's existing single-paragraph content in one-element arrays, and added a shared `ParagraphBlock` component to `ProjectCaseStudy.tsx` that renders each array as its own spaced `<p>`, with the existing placeholder behavior preserved when a field is `null` (BigMart's `challenges` — not supplied, correctly shows "Challenges content coming soon").
+
+### Content mapping
+
+- Overview → `caseStudyOverview` (one paragraph)
+- Business Problem, Solution, Architecture, Results → `string[]` (two paragraphs each, verbatim)
+- Key Features → `features` (8 items)
+- Technology Stack → `techStackGroups`: Data & Analytics (Power BI, DAX, Power Query), Data Processing (Data Cleaning & Transformation, Data Modeling), Core Technologies (Interactive Dashboards, KPI Monitoring, Data Visualization, Performance Analytics) — rendered via the same grouped-column layout built for LeadForge. The grid card's flat `technologies` badges (Power BI, DAX, SQL, Python, Google Colab) were left untouched, matching the established card/case-study decoupling pattern.
+
+### Files Modified
+
+- `shared/types/projects.ts` — `hasCaseStudy` added; five fields changed to `string[] | null`
+- `shared/data/projects.ts` — LeadForge's existing content wrapped in arrays; BigMart fully populated
+- `client/src/pages/ProjectCaseStudy.tsx` — new `ParagraphBlock` component; four sections switched to it
+- `client/src/sections/Projects.tsx` — "View Case Study" link now keyed on `hasCaseStudy`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms both cards show "View Case Study →", BigMart's direct-hit route renders all 9 section headings with zero failed requests, and LeadForge's case study shows no regression from the field-type change
+- Screenshots confirm a clean result in dark mode, light mode, and at mobile width (390px)
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

@@ -30,6 +30,22 @@ function ContentPlaceholder({ label }: { label: string }) {
   );
 }
 
+function ParagraphBlock({ label, paragraphs }: { label: string; paragraphs: string[] | null }) {
+  if (!paragraphs || paragraphs.length === 0) {
+    return <ContentPlaceholder label={label} />;
+  }
+
+  return (
+    <div className="max-w-3xl space-y-4">
+      {paragraphs.map((paragraph) => (
+        <p key={paragraph} className="text-base leading-relaxed text-slate-600 dark:text-slate-400">
+          {paragraph}
+        </p>
+      ))}
+    </div>
+  );
+}
+
 export function ProjectCaseStudy() {
   const { slug } = useParams<{ slug: string }>();
   const project = PROJECTS.find((candidate) => candidate.slug === slug);
@@ -100,33 +116,15 @@ export function ProjectCaseStudy() {
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Business Problem">
-          {project.businessProblem ? (
-            <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-              {project.businessProblem}
-            </p>
-          ) : (
-            <ContentPlaceholder label="Business Problem" />
-          )}
+          <ParagraphBlock label="Business Problem" paragraphs={project.businessProblem} />
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Solution">
-          {project.solution ? (
-            <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-              {project.solution}
-            </p>
-          ) : (
-            <ContentPlaceholder label="Solution" />
-          )}
+          <ParagraphBlock label="Solution" paragraphs={project.solution} />
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Architecture">
-          {project.architecture ? (
-            <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-              {project.architecture}
-            </p>
-          ) : (
-            <ContentPlaceholder label="Architecture" />
-          )}
+          <ParagraphBlock label="Architecture" paragraphs={project.architecture} />
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Tech Stack">
@@ -203,23 +201,11 @@ export function ProjectCaseStudy() {
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Challenges">
-          {project.challenges ? (
-            <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-              {project.challenges}
-            </p>
-          ) : (
-            <ContentPlaceholder label="Challenges" />
-          )}
+          <ParagraphBlock label="Challenges" paragraphs={project.challenges} />
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Results">
-          {project.outcome ? (
-            <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-              {project.outcome}
-            </p>
-          ) : (
-            <ContentPlaceholder label="Results" />
-          )}
+          <ParagraphBlock label="Results" paragraphs={project.outcome} />
         </CaseStudyBlock>
 
         <div className="flex flex-wrap gap-3 border-t border-slate-200 pt-10 dark:border-white/10">

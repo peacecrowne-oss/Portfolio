@@ -14,15 +14,20 @@ export interface Project {
   /** Grouped tech-stack breakdown for the case-study page's Tech Stack
    *  section. Falls back to the flat `technologies` badge list when null. */
   techStackGroups: TechStackGroup[] | null;
-  businessProblem: string | null;
-  solution: string | null;
-  architecture: string | null;
+  /** One or more paragraphs, rendered as separate <p> blocks. */
+  businessProblem: string[] | null;
+  solution: string[] | null;
+  architecture: string[] | null;
   features: string[] | null;
-  challenges: string | null;
-  outcome: string | null;
+  challenges: string[] | null;
+  outcome: string[] | null;
   screenshots: string[] | null;
   githubUrl: string | null;
   liveDemoUrl: string | null;
   imageUrl: string | null;
   featured: boolean;
+  /** Whether this project has a dedicated case-study page reachable from the
+   *  grid card, independent of `featured` (which just controls the badge and
+   *  card ordering). */
+  hasCaseStudy: boolean;
 }

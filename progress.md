@@ -1886,6 +1886,27 @@ The user's Technology Stack content was categorized (Backend / Frontend / Core T
 
 ---
 
+## LeadForge Case Study: Challenges and Results Updated ✔
+
+**Objective:** on request, replace the case-study page's Challenges and Results content with new copy supplied verbatim by the user (the two sections left untouched in the prior content-replacement milestone).
+
+### Changes
+
+- `shared/data/projects.ts` — LeadForge's `challenges` and `outcome` fields updated to the new text.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms both sections render the exact new copy
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

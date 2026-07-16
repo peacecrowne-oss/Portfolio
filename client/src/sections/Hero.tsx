@@ -122,7 +122,7 @@ export function Hero() {
         </div>
 
         <div className="hidden lg:flex lg:flex-col lg:items-end lg:gap-8">
-          <div className="relative w-full max-w-[420px]">
+          <div className="relative w-full max-w-[440px] lg:translate-x-4 xl:max-w-[480px] xl:translate-x-14">
             <div
               aria-hidden="true"
               className="absolute inset-[-20%] hidden rounded-full dark:block"

@@ -1958,6 +1958,35 @@ The Hero's decorative background stack included two localized radial glows (`her
 
 ---
 
+## Hero Cube Enlarged and Shifted Right ✔
+
+**Objective:** on request, make the rolling cube illustration bigger and move it further right.
+
+### Two real bugs found and fixed along the way
+
+A first attempt (bumping `max-w-[420px]` → `max-w-[560px]` plus a flat `translate-x-12`) looked fine in isolated screenshots but broke on closer measurement:
+
+1. **Growing the box while right-aligned (`items-end`) extends its *left* edge further left**, not just its right edge — at 1440px this pushed the cube's left edge (784px) past the name's right edge (816.6px), a genuine ~32px overlap with "Omolola Makinde" that wasn't obvious until precisely measuring `getBoundingClientRect()` for both elements (a plain screenshot at a single width didn't make it obvious).
+2. **A fixed-pixel `translate-x` doesn't scale with viewport width** — the same shift that cleared the name comfortably at 1440px pushed the cube's *right* edge past the viewport edge entirely at the narrower end of the `lg` breakpoint range (1024–1150px), clipped by the Section's `overflow-hidden`.
+
+### Fix
+
+Resolved with more conservative, empirically-verified sizing: `max-w-[440px] lg:translate-x-4` at the `lg` tier, `max-w-[480px] xl:translate-x-14` at `xl`. Verified via direct `getBoundingClientRect()` measurement (not just visual screenshots) at five widths spanning the full `lg`+ range (1024, 1150, 1280, 1440, 1920px): a consistent ~23px clearance from the name at every width, zero viewport overflow anywhere.
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright measurement confirms no name overlap and no viewport overflow at 1024/1150/1280/1440/1920px, both dark and light mode
+- Screenshots confirm the cube is visibly larger and shifted further right, with clean separation from the name at every tested width
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

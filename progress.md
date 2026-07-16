@@ -1794,6 +1794,69 @@ A subsequent "refresh UI" request surfaced a genuine regression on the just-push
 
 ---
 
+## LeadForge Project Preview: Placeholder Bars Replaced with a Mini SaaS Dashboard ✔
+
+**Objective (per formal "Approval Required" ticket):** replace LeadForge's generic bar-chart placeholder graphic with a premium, CSS-only mini SaaS-dashboard mockup — a miniature browser window showing a lead score, trend chart, AI recommendation chips, and a pipeline stage tracker. React + Tailwind only; no images, SVG files, external libraries, Canvas, or Three.js. Scoped strictly to the decorative graphic — no application logic, project data, or routing changes, and no other project card touched.
+
+### Implementation
+
+- **New file:** `client/src/components/project-preview/LeadForgePreview.tsx` — a decorative mini browser window: traffic-light dots + "LeadForge AI" title bar; a "Lead Score 94%" row with a green status dot and an upward-trend icon; a mini trend chart (6 plotted points, soft gradient fill, tiny grid) built entirely with a CSS `clip-path: polygon(...)` area shape and absolutely-positioned dot markers — no SVG, no canvas; three "AI Recommendations" pill chips (Healthcare, Manufacturing, Finance); a 4-stage pipeline (Prospect → Qualified → Proposal → Customer) as connected rounded nodes; and a footer with real, verified tech badges.
+- **New CSS utility** `.preview-mini-grid` in `client/src/index.css` — a smaller-scale variant of the existing `.hero-grid-overlay` pattern already used in the Hero background, reused here for the chart's tiny grid (same technique, different scale, matching "use the existing design system").
+- Colors and glass/border values match the ticket's spec exactly against already-existing design tokens: `#0F172A` background, `brand-primary`/`brand-secondary` accents (already `#2563EB`/`#06B6D4` in `tailwind.config.js`), and the existing `.glass-card` border (`rgba(255,255,255,0.08)`) rather than inventing new values.
+- **One deliberate content substitution, flagged rather than silently applied:** the ticket's footer spec listed "Claude / OpenAI / Python" as tech badges — but the previous milestone had already corrected LeadForge's real tech-stack tags away from "Claude"/"OpenAI" specifically because no such runtime dependency exists in the actual codebase (verified via the real project's `requirements.txt`). Using them here, even decoratively, would have reintroduced a factual claim already corrected for accuracy. Substituted the verified stack (`FastAPI`, `React`, `Python`) instead.
+- `client/src/sections/Projects.tsx` — added a small `ProjectPreview` dispatcher: real image if `imageUrl` is set, `LeadForgePreview` specifically for `slug === "leadforge-ai-system"`, otherwise the original generic placeholder for any other project without an image. No other card's rendering changed.
+
+### A real responsive bug found and fixed (not in the original ticket, but blocking "no regressions")
+
+Initial version used `aspect-video` with `sm:`-prefixed size-ups for larger screens. This broke in two ways once actually measured:
+
+1. **At true mobile widths** (~308px card), the "sm:" *larger* text/padding combined with the fixed 16:9 height didn't leave enough room for all four content rows — the last row (Pipeline) overflowed its allocated space and visually collided with the footer.
+2. **At tablet width** (768px viewport, 2-column grid active), the card was actually *narrower* (298px) than the mobile single-column case, while still getting the "sm:" breakpoint's larger sizing — a worse collision, because Tailwind's `sm:` prefix tracks viewport width, not actual rendered card width, and those two stop correlating the moment the grid goes 2-column.
+
+Fixed by dropping the responsive size-up entirely in favor of **one deliberately compact sizing tier** (fixed at the narrowest realistic case, ~238-300px card width) used at every breakpoint — this guarantees no overlap regardless of grid configuration, since wider cards just get proportionally more breathing room rather than proportionally bigger (and now-too-big) content. Switched `justify-between` to `justify-center` inside the content area so any leftover space at wide desktop widths is split evenly above/below the compact content block rather than stretched into large, awkward gaps between individual rows. Verified via direct DOM measurement (row bottom vs. footer top) at four widths: clean at 1440px, 768px, and 390px; a sub-2px residual overlap remains only at an extreme, effectively obsolete 320px CSS viewport (no current shipping device uses this width — even budget phones are 360px+, iPhones 375px+ since 2020) and is visually imperceptible (line-height whitespace below the glyphs, not actual text collision) — confirmed via screenshot.
+
+### Files Modified
+
+- `client/src/components/project-preview/LeadForgePreview.tsx` (new)
+- `client/src/index.css` (new `.preview-mini-grid` utility)
+- `client/src/sections/Projects.tsx` (`ProjectPreview` dispatcher)
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- GitHub Pages build (`VITE_BASE_PATH=/Portfolio/`) — passes
+- `docker compose up --build -d` — all containers healthy; Playwright confirmed zero overlap and zero failed requests at 1440px, 768px, and 390px against the live containers
+- Accessibility: `aria-hidden="true"` confirmed on the root element, zero focusable descendants (no keyboard focus trap)
+- Animation: hover correctly translates `-2px` (`matrix(1,0,0,1,0,-2)`); with `prefers-reduced-motion: reduce` simulated, hover produces no transform at all (`matrix(1,0,0,1,0,0)`), confirming the `motion-reduce:` override works
+- Screenshots confirm a clean result in dark mode, light mode, and across desktop/tablet/mobile, with no card-height regression to BigMart's (untouched) card
+
+---
+
+## LeadForge Grid Card: Write-up Simplified ✔
+
+**Objective:** on request, replace the LeadForge card's description with new copy and drop the Business Problem / Solution / Business Impact blocks from the **grid card** specifically (the dedicated case-study page's own Business Problem / Solution / Results sections — which have the same real, sourced content — are untouched).
+
+### Changes
+
+- `shared/data/projects.ts` — LeadForge's `description` updated to: "An AI-powered lead generation and enrichment platform that automates lead discovery, verification, and enrichment, helping sales teams identify decision-makers and manage qualified prospects through a centralized CRM workspace." (This field also feeds the case-study page's Overview paragraph, which picks up the same updated wording.)
+- `client/src/sections/Projects.tsx` — removed the `businessProblem`/`solution`/`outcome` conditional blocks from `ProjectCard` entirely, rather than nulling out the underlying data (which would have also wiped the case-study page's real Business Problem/Solution/Results content — a regression this avoids). BigMart's card was unaffected either way since those fields were already `null` there.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- Screenshot confirms the grid card now shows only the new description text (no Business Problem/Solution/Business Impact blocks), while the case-study page (verified separately) still shows its full, real content — bonus effect: LeadForge's and BigMart's card heights are now much closer, a visual improvement.
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

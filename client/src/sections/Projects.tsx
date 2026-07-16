@@ -3,9 +3,29 @@ import { Section } from "@/components/Section";
 import { Badge } from "@/components/Badge";
 import { ProjectLinkButton } from "@/components/ProjectLinkButton";
 import { ProjectPreviewPlaceholder } from "@/components/ProjectPreviewPlaceholder";
+import { LeadForgePreview } from "@/components/project-preview/LeadForgePreview";
 import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
 import type { Project } from "@shared/types/projects";
+
+function ProjectPreview({ project }: { project: Project }) {
+  if (project.imageUrl) {
+    return (
+      <img
+        src={withBasePath(project.imageUrl)}
+        alt={`${project.title} preview`}
+        className="aspect-video w-full rounded-lg object-cover"
+        loading="lazy"
+      />
+    );
+  }
+
+  if (project.slug === "leadforge-ai-system") {
+    return <LeadForgePreview />;
+  }
+
+  return <ProjectPreviewPlaceholder />;
+}
 
 function ProjectCard({ project }: { project: Project }) {
   return (
@@ -16,16 +36,7 @@ function ProjectCard({ project }: { project: Project }) {
         </span>
       )}
 
-      {project.imageUrl ? (
-        <img
-          src={withBasePath(project.imageUrl)}
-          alt={`${project.title} preview`}
-          className="aspect-video w-full rounded-lg object-cover"
-          loading="lazy"
-        />
-      ) : (
-        <ProjectPreviewPlaceholder />
-      )}
+      <ProjectPreview project={project} />
 
       <div>
         <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -44,39 +55,6 @@ function ProjectCard({ project }: { project: Project }) {
             </li>
           ))}
         </ul>
-      )}
-
-      {project.businessProblem && (
-        <div>
-          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
-            Business Problem
-          </h4>
-          <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            {project.businessProblem}
-          </p>
-        </div>
-      )}
-
-      {project.solution && (
-        <div>
-          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
-            Solution
-          </h4>
-          <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            {project.solution}
-          </p>
-        </div>
-      )}
-
-      {project.outcome && (
-        <div>
-          <h4 className="text-sm font-semibold text-slate-900 dark:text-white">
-            Business Impact
-          </h4>
-          <p className="mt-1 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-            {project.outcome}
-          </p>
-        </div>
       )}
 
       <div className="mt-auto flex flex-wrap items-center gap-3 pt-2">

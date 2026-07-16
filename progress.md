@@ -1857,6 +1857,35 @@ Fixed by dropping the responsive size-up entirely in favor of **one deliberately
 
 ---
 
+## LeadForge Case Study: Content Replaced with User-Supplied Copy ✔
+
+**Objective:** on request, replace the case-study page's Overview, Business Problem, Solution, Architecture, Features, and Tech Stack content with new copy supplied verbatim by the user. Challenges and Results were not included in the request and stayed as previously sourced from the real project.
+
+### Decoupled from the grid card's blurb
+
+The new "Overview" text was similar to, but distinct from, the grid card's `description` (updated in the prior milestone at the user's explicit, separately-scoped request) — and both previously shared the same field. Rather than assume they should now read identically, added a new `caseStudyOverview: string | null` field to the `Project` type, used only by the case-study page's Overview section (falling back to `description` when null, so other projects like BigMart are unaffected). This keeps the grid card's just-customized blurb untouched while giving the case study its own text.
+
+### Structured Tech Stack
+
+The user's Technology Stack content was categorized (Backend / Frontend / Core Technologies), richer than the existing flat `technologies` badge list used for both the grid card and the case study. Added `techStackGroups: TechStackGroup[] | null` to the `Project` type and a corresponding grouped-column layout to the case study's Tech Stack section (three columns, each with its own sub-heading and badge row), falling back to the flat badge list when a project has no groups defined. The grid card's flat technology badges are untouched.
+
+### Files Modified
+
+- `shared/types/projects.ts` — added `caseStudyOverview` and `techStackGroups`/`TechStackGroup`
+- `shared/data/projects.ts` — LeadForge populated with the new Overview, Business Problem, Solution, Architecture, Features, and grouped Tech Stack content; BigMart given `null` for both new fields
+- `client/src/pages/ProjectCaseStudy.tsx` — Overview section now reads `caseStudyOverview ?? description`; Tech Stack section renders grouped columns when available
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- GitHub Pages build (`VITE_BASE_PATH=/Portfolio/`) — passes
+- `docker compose up --build -d` — all containers healthy; Playwright confirms all 9 section headings render, the three Tech Stack group headings (Backend/Frontend/Core Technologies) render correctly, zero failed requests
+- Confirmed the grid card's own description text is unchanged from the prior milestone — the two pages' content is genuinely decoupled, not accidentally overwritten
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

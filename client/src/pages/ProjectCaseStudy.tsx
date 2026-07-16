@@ -95,7 +95,7 @@ export function ProjectCaseStudy() {
       <Section className="dark:bg-[#08111F]">
         <CaseStudyBlock title="Overview">
           <p className="max-w-3xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
-            {project.description}
+            {project.caseStudyOverview ?? project.description}
           </p>
         </CaseStudyBlock>
 
@@ -130,7 +130,24 @@ export function ProjectCaseStudy() {
         </CaseStudyBlock>
 
         <CaseStudyBlock title="Tech Stack">
-          {project.technologies.length > 0 ? (
+          {project.techStackGroups && project.techStackGroups.length > 0 ? (
+            <div className="grid gap-6 sm:grid-cols-3">
+              {project.techStackGroups.map((group) => (
+                <div key={group.label}>
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                    {group.label}
+                  </h3>
+                  <ul className="mt-3 flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <li key={item}>
+                        <Badge variant="accent">{item}</Badge>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          ) : project.technologies.length > 0 ? (
             <ul className="flex flex-wrap gap-2">
               {project.technologies.map((technology) => (
                 <li key={technology}>

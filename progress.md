@@ -1931,6 +1931,33 @@ The user's Technology Stack content was categorized (Backend / Frontend / Core T
 
 ---
 
+## Hero Background Evened Out ✔
+
+**Objective:** on request, remove the uneven bright glow pooling in the Hero's bottom-right corner so the dark-mode background reads as flat and uniform.
+
+### Root Cause
+
+The Hero's decorative background stack included two localized radial glows (`hero-glow-primary`, top-center; `hero-glow-secondary`, right side) plus an animated blurred `hero-blob` positioned bottom-right (`bottom-[8%] right-[8%]`) — that blob, combined with the secondary glow, created a clearly visible bright blue patch pooling in the bottom-right corner, most noticeable around the stats bar, while the rest of the section stayed dark.
+
+### Fix
+
+- `client/src/sections/Hero.tsx` — removed all three localized glow/blob elements. Kept the three *uniform, tiled* decorative layers (`hero-grid-overlay`, `hero-noise-overlay`, `hero-light-streaks`), which add texture without creating any localized bright spot, since they're repeating patterns rather than radial gradients centered at one point.
+- The now-unused `.hero-glow-primary` / `.hero-glow-secondary` / `.hero-blob` CSS classes were left in `index.css` (matching this project's established precedent of leaving unused-but-harmless code in place rather than deleting on sight).
+
+### Files Modified
+
+- `client/src/sections/Hero.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy, zero failed requests
+- Screenshots confirm a flat, even dark background across the whole Hero section with no bright corner pooling; light mode (where these decorations were already hidden) is unaffected
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

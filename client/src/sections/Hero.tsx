@@ -73,12 +73,9 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 -z-10 hidden dark:block"
         aria-hidden="true"
       >
-        <div className="hero-glow-primary absolute left-1/2 top-[-15%] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full opacity-25 sm:h-[44rem] sm:w-[44rem]" />
-        <div className="hero-glow-secondary absolute right-[-12%] top-[10%] h-[30rem] w-[30rem] rounded-full opacity-[0.18] sm:h-[38rem] sm:w-[38rem]" />
         <div className="hero-grid-overlay absolute inset-0 opacity-[0.035]" />
         <div className="hero-noise-overlay absolute inset-0" />
         <div className="hero-light-streaks absolute inset-0 opacity-60" />
-        <div className="hero-blob absolute bottom-[8%] right-[8%] h-64 w-64 rounded-full sm:h-80 sm:w-80" />
       </div>
 
       <div className="grid w-full items-center gap-12 lg:grid-cols-2 lg:gap-8">

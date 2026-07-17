@@ -2127,6 +2127,32 @@ Tech Stack, Features, and Screenshots keep rendering as their own separate, alwa
 
 ---
 
+## BigMart Card Writeup Updated ✔
+
+**Objective:** on request, replace BigMart Sales Dashboard's grid-card writeup with new copy.
+
+### Scope clarification
+
+The requested text ("Built an interactive Power BI dashboard to analyze sales performance across outlets, uncovering key drivers of revenue and highlighting how product visibility and pricing impact customer purchasing behavior") was submitted as LeadForge's writeup, but its content unmistakably describes BigMart's project (outlet-level Power BI sales analysis), not LeadForge (an AI lead-generation platform) — applying it to LeadForge would have put factually wrong content directly next to LeadForge's own real case study. Flagged this and asked; confirmed it was meant for BigMart.
+
+### Changes
+
+- `shared/data/projects.ts` — BigMart's `description` updated to the new text. LeadForge's `description` (from the prior milestone) is untouched.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms both cards' text — BigMart shows the new copy, LeadForge is unchanged
+- Screenshot confirms a clean result, correctly attributed
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

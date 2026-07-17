@@ -63,7 +63,7 @@ export const PROJECTS: Project[] = [
     slug: "bigmart-sales-dashboard",
     title: "BigMart Sales Dashboard",
     description:
-      "Developed a comprehensive Power BI dashboard providing sales performance insights and trend analysis.",
+      "Built an interactive Power BI dashboard to analyze sales performance across outlets, uncovering key drivers of revenue and highlighting how product visibility and pricing impact customer purchasing behavior.",
     caseStudyOverview: null,
     technologies: ["Power BI", "DAX", "SQL", "Python", "Google Colab"],
     techStackGroups: [

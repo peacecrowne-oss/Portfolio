@@ -2175,6 +2175,33 @@ The requested text ("Built an interactive Power BI dashboard to analyze sales pe
 
 ---
 
+## Section Headings Bolder and Centered ✔
+
+**Objective:** on request, make "About Me", "Skills", "Featured Projects", and "Experience" headings bolder and centered.
+
+### Changes
+
+- `client/src/sections/Skills.tsx` — heading changed from `font-bold` to `text-center font-extrabold`.
+- `client/src/sections/Experience.tsx` — same change. The timeline content below stays left-aligned (only the heading centers), which reads cleanly.
+- `client/src/sections/Projects.tsx` — "Featured Projects" was already centered (from the prior milestone); bumped to `font-extrabold`.
+- `client/src/sections/About.tsx` — "About Me" already met both requirements (centered + extrabold, from an earlier milestone); no change needed.
+
+### Files Modified
+
+- `client/src/sections/Skills.tsx`
+- `client/src/sections/Experience.tsx`
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms all four headings' computed `text-align: center` and `font-weight: 800`
+- Screenshots confirm a clean result for Skills and Experience (Projects and About already validated in prior milestones)
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

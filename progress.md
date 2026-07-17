@@ -2105,6 +2105,28 @@ Tech Stack, Features, and Screenshots keep rendering as their own separate, alwa
 
 ---
 
+## LeadForge Card Writeup: "I architected and built" Added ✔
+
+**Objective:** on request, prepend "I architected and built" to the LeadForge grid card's description.
+
+### Changes
+
+- `shared/data/projects.ts` — LeadForge's `description` now reads "I architected and built an AI-powered lead generation and enrichment platform..." (lowercased the original "An" to flow as one sentence). Scoped to the grid card blurb only — the case study's separate `caseStudyOverview` field is untouched.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms the card text reads exactly as intended
+- Screenshot confirms a clean, natural-reading result
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

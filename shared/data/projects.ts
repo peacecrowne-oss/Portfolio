@@ -5,7 +5,7 @@ export const PROJECTS: Project[] = [
     slug: "leadforge-ai-system",
     title: "LeadForge AI System",
     description:
-      "An AI-powered lead generation and enrichment platform that automates lead discovery, verification, and enrichment, helping sales teams identify decision-makers and manage qualified prospects through a centralized CRM workspace.",
+      "I architected and built an AI-powered lead generation and enrichment platform that automates lead discovery, verification, and enrichment, helping sales teams identify decision-makers and manage qualified prospects through a centralized CRM workspace.",
     caseStudyOverview:
       "LeadForge AI is an AI-powered lead generation and enrichment platform that helps sales teams discover, verify, and manage qualified business leads. It automates lead discovery, identifies key decision-makers, and centralizes outreach in a CRM-style workspace for more efficient sales engagement.",
     technologies: ["FastAPI", "React", "Python", "PostgreSQL", "SQLite"],

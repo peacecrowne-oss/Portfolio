@@ -2153,6 +2153,28 @@ The requested text ("Built an interactive Power BI dashboard to analyze sales pe
 
 ---
 
+## Featured Projects Heading Centered ✔
+
+**Objective:** on request, center the "Featured Projects" heading above the LeadForge and BigMart cards (matching the earlier "About Me" centering precedent).
+
+### Changes
+
+- `client/src/sections/Projects.tsx` — added `text-center` to the section heading.
+
+### Files Modified
+
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms the heading's computed `text-align` is `center`
+- Screenshots confirm a clean, centered result at desktop and mobile widths
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

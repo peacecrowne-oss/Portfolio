@@ -65,7 +65,7 @@ export function Contact() {
 
   return (
     <Section id="contact" className="dark:bg-[#08111F]">
-      <h2 className="text-center text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
+      <h2 className="text-center text-3xl font-black tracking-tight text-slate-900 sm:text-4xl dark:text-white">
         Get In Touch
       </h2>
       <p className="mx-auto mt-4 max-w-xl text-center text-lg text-slate-600 dark:text-slate-400">

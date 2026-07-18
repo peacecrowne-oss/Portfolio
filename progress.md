@@ -2642,6 +2642,28 @@ Two points needed the user's confirmation rather than a guess, per this project'
 
 ---
 
+## "Get In Touch" Heading Made Bolder ✔
+
+**Objective:** on request, make the "Get In Touch" heading a little bolder.
+
+### Changes
+
+- `client/src/sections/Contact.tsx` — heading weight changed from `font-extrabold` (800) to `font-black` (900), the heaviest standard Tailwind weight.
+
+### Files Modified
+
+- `client/src/sections/Contact.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: computed `font-weight` confirmed as `900` (up from `800`); zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

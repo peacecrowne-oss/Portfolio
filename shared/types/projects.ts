@@ -50,4 +50,7 @@ export interface Project {
    *  grid card, independent of `featured` (which just controls the badge and
    *  card ordering). */
   hasCaseStudy: boolean;
+  /** Text for the grid card's case-study link (before the trailing " →").
+   *  Falls back to "View Case Study" when null. */
+  caseStudyLinkLabel: string | null;
 }

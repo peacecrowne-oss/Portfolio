@@ -56,7 +56,7 @@ function ProjectCard({ project }: { project: Project }) {
             to={`/projects/${project.slug}`}
             className="rounded-sm text-sm font-semibold text-brand-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-brand-secondary dark:focus-visible:ring-white"
           >
-            View Case Study →
+            {project.caseStudyLinkLabel ?? "View Case Study"} →
           </Link>
         )}
       </div>

@@ -2396,6 +2396,36 @@ Built a new component (`LeadForgeTechStack.tsx`) rather than restyling the gener
 
 ---
 
+## Per-Project Case Study Link Labels ✔
+
+**Objective:** on request, replace the grid card's "View Case Study →" link text with "Technical Overview →" for LeadForge and "View Project →" for BigMart.
+
+### Approach
+
+The link label is content/copy, not a visual layout override, so — unlike the Architecture diagram and Tech Stack card grid (which needed dedicated components) — this was added as a new data field rather than a slug-based conditional in the component: `caseStudyLinkLabel: string | null` on the `Project` type, falling back to "View Case Study" when null (matching the existing nullable-with-fallback pattern already used by fields like `caseStudyOverview`).
+
+### Changes
+
+- `shared/types/projects.ts` — added `caseStudyLinkLabel: string | null` to the `Project` interface.
+- `shared/data/projects.ts` — LeadForge's `caseStudyLinkLabel` set to `"Technical Overview"`; BigMart's set to `"View Project"`.
+- `client/src/sections/Projects.tsx` — the grid card's case-study link now renders `{project.caseStudyLinkLabel ?? "View Case Study"} →`.
+
+### Files Modified
+
+- `shared/types/projects.ts`
+- `shared/data/projects.ts`
+- `client/src/sections/Projects.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes for both `client` and `server` (since the shared `Project` type gained a required field)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: LeadForge's card shows "Technical Overview →", BigMart's shows "View Project →", no leftover "View Case Study" text anywhere; clicked the LeadForge link and confirmed it still navigates to `/projects/leadforge-ai-system`; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

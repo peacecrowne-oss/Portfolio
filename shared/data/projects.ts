@@ -58,6 +58,7 @@ export const PROJECTS: Project[] = [
     imageUrl: "/leadforge-dashboard.png",
     featured: true,
     hasCaseStudy: true,
+    caseStudyLinkLabel: "Technical Overview",
   },
   {
     slug: "bigmart-sales-dashboard",
@@ -310,5 +311,6 @@ export const PROJECTS: Project[] = [
     imageUrl: "/bigmart-dashboard.gif",
     featured: false,
     hasCaseStudy: true,
+    caseStudyLinkLabel: "View Project",
   },
 ];

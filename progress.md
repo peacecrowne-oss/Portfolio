@@ -2307,6 +2307,31 @@ Content matches the user-supplied spec exactly: the six-layer system flow (Users
 
 ---
 
+## LeadForge Case Study Screenshots Added ✔
+
+**Objective:** on request, populate LeadForge's case-study Screenshots section with two real product screenshots supplied by the user (previously showing two generic placeholders, since `screenshots` was `null`).
+
+### Changes
+
+- Saved the two user-supplied screenshots to `client/public/`: `leadforge-lead-search.png` (the Lead Search page, showing the Natural Language Search field and Recent Searches) and `leadforge-account-settings.png` (the Account Settings page, showing Privacy Controls — View/Export/Delete My Data).
+- `shared/data/projects.ts` — LeadForge's `screenshots` set to `["/leadforge-lead-search.png", "/leadforge-account-settings.png"]` (was `null`).
+
+### Files Modified
+
+- `client/public/leadforge-lead-search.png` — new file
+- `client/public/leadforge-account-settings.png` — new file
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: both screenshots load with a `200` response at their expected paths, render in the existing two-column `aspect-video object-cover` grid, zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

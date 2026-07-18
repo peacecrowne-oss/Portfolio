@@ -52,7 +52,7 @@ export const PROJECTS: Project[] = [
     ],
     caseStudySections: null,
     showScreenshotsSection: true,
-    screenshots: null,
+    screenshots: ["/leadforge-lead-search.png", "/leadforge-account-settings.png"],
     githubUrl: "https://github.com/peacecrowne-oss/Leadforge-AI-System",
     liveDemoUrl: null,
     imageUrl: "/leadforge-dashboard.png",

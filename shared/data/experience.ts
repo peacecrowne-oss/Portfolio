@@ -4,8 +4,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Power BI Developer",
     company: "Colaberry Inc",
-    startDate: "July 2025",
+    startDate: "2025",
     endDate: "Present",
+    location: "Plano, Texas",
     responsibilities: [
       "Created interactive Power BI dashboards and reports that improved operational efficiency by 25%.",
       "Created advanced DAX calculations, including KPIs, time intelligence, and business metrics, to support interactive Power BI reports.",
@@ -16,8 +17,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Data Analyst",
     company: "Joisen Inc",
-    startDate: "August 2022",
-    endDate: "June 2025",
+    startDate: "2022",
+    endDate: "2025",
+    location: "Houston, Texas",
     responsibilities: [
       "Cleaned, transformed, and prepared large datasets by filtering data, handling missing values, and ensuring data accuracy.",
       "Analyzed data to identify trends, patterns, and insights that supported business decisions.",
@@ -28,8 +30,9 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Data Administrator",
     company: "RCCG",
-    startDate: "January 2020",
-    endDate: "July 2022",
+    startDate: "2010",
+    endDate: "2022",
+    location: "Houston, Texas",
     responsibilities: [
       "Managed and optimized SQL Server databases, ensuring high availability, data integrity and security.",
       "Perform regular data backups and execute recovery procedures to prevent data loss.",

@@ -3,5 +3,6 @@ export interface ExperienceEntry {
   company: string;
   startDate: string;
   endDate: string;
+  location: string;
   responsibilities: string[];
 }

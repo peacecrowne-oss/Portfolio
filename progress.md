@@ -2517,6 +2517,39 @@ The existing `POST /api/contact` endpoint only accepted `name`/`email`/`message`
 
 ---
 
+## Experience Date Range & Location Badges Added ✔
+
+**Objective:** on request, add a date-range/location badge to each Experience entry (calendar icon + year range, location pin + city), matching a reference screenshot's pill style. `startDate`/`endDate` existed in the data model already but were never actually rendered anywhere on the site — this is a new UI feature, not a display fix.
+
+### Data clarified with the user before implementing
+
+Two points needed the user's confirmation rather than a guess, per this project's no-fabrication rule:
+
+1. RCCG's stored start date was "January 2020", but the user's new instruction said "2010 to 2022" — a 13-year tenure instead of 2. Confirmed with the user this was an intentional correction, not a slip; updated to 2010.
+2. The user only gave a location for Colaberry ("Plano, Texas") up front. Asked for Joisen's and RCCG's locations rather than guessing or leaving them blank — user provided "Houston, Texas" for both.
+
+### Changes
+
+- `shared/types/experience.ts` — added a required `location: string` field to `ExperienceEntry`.
+- `shared/data/experience.ts` — added `location` to all three entries (Colaberry: Plano, Texas; Joisen: Houston, Texas; RCCG: Houston, Texas); simplified `startDate`/`endDate` to year-only granularity per the reference format (Colaberry: `"2025"`–`"Present"`; Joisen: `"2022"`–`"2025"`, unchanged in substance from the prior "August 2022 – June 2025"; RCCG: `"2010"`–`"2022"`, corrected per the user's confirmation above).
+- `client/src/sections/Experience.tsx` — each entry now renders two pill badges below the company name: a `Calendar` icon with `{startDate} — {endDate}`, and a `MapPin` icon with `{location}`, matching the reference's rounded-pill, muted-border style.
+
+### Files Modified
+
+- `shared/types/experience.ts`
+- `shared/data/experience.ts`
+- `client/src/sections/Experience.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes for `client` and `server` (since the shared `ExperienceEntry` type gained a required field)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: confirmed "2025 — Present" / "Plano, Texas", "2022 — 2025" / "Houston, Texas", and "2010 — 2022" / "Houston, Texas" all render correctly, in both dark mode (default) and light mode (via the real theme toggle); zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

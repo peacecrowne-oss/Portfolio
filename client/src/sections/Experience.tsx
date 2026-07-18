@@ -1,3 +1,4 @@
+import { Calendar, MapPin } from "lucide-react";
 import { Section } from "@/components/Section";
 import { EXPERIENCE } from "@shared/data/experience";
 
@@ -35,6 +36,17 @@ export function Experience() {
               <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-400">
                 {entry.company}
               </p>
+
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
+                  <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+                  {entry.startDate} — {entry.endDate}
+                </span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
+                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                  {entry.location}
+                </span>
+              </div>
 
               {entry.responsibilities.length > 0 && (
                 <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">

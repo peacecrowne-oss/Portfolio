@@ -2278,6 +2278,35 @@ Content matches the user-supplied spec exactly: the six-layer system flow (Users
 
 ---
 
+## LeadForge Preview Image Replaced with a Real Product Screenshot ✔
+
+**Objective:** on request, replace LeadForge's Featured Project card design (a hand-built CSS mockup) with an actual screenshot of the real LeadForge dashboard, supplied by the user.
+
+### Changes
+
+- Saved the user-supplied screenshot to `client/public/leadforge-dashboard.png`.
+- `shared/data/projects.ts` — LeadForge's `imageUrl` set to `/leadforge-dashboard.png` (was `null`).
+- Since `imageUrl` now takes priority in both `Projects.tsx`'s `ProjectPreview` and `ProjectCaseStudy.tsx`'s hero image logic, the old CSS-only mockup component became unreachable dead code. Removed it: deleted `client/src/components/project-preview/LeadForgePreview.tsx` (and the now-empty `project-preview/` directory), its import/slug-check branch in `Projects.tsx`, and its dedicated `.preview-mini-grid` CSS utility from `client/src/index.css`.
+- The real screenshot now also replaces the generic `ProjectPreviewPlaceholder` that was previously shown in the case-study page hero for LeadForge (it never had a mockup wired in there).
+
+### Files Modified
+
+- `client/public/leadforge-dashboard.png` — new file
+- `shared/data/projects.ts`
+- `client/src/sections/Projects.tsx`
+- `client/src/index.css`
+- `progress.md` — this entry
+- Deleted: `client/src/components/project-preview/LeadForgePreview.tsx`
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: the grid card and case-study hero both load `/leadforge-dashboard.png` with a `200` response and render via `aspect-video object-cover`; zero console errors on the home page or the LeadForge case study page
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

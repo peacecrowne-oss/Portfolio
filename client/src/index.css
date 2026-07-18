@@ -145,15 +145,6 @@
       animation: none;
     }
   }
-
-  /* Small-scale version of .hero-grid-overlay, sized for the LeadForge
-     project preview's mini trend chart rather than a full hero background. */
-  .preview-mini-grid {
-    background-image:
-      linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-    background-size: 14px 14px;
-  }
 }
 
 @keyframes hero-blob-float {

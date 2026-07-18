@@ -55,7 +55,7 @@ export const PROJECTS: Project[] = [
     screenshots: null,
     githubUrl: "https://github.com/peacecrowne-oss/Leadforge-AI-System",
     liveDemoUrl: null,
-    imageUrl: null,
+    imageUrl: "/leadforge-dashboard.png",
     featured: true,
     hasCaseStudy: true,
   },

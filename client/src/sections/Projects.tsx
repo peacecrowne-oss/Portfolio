@@ -3,7 +3,6 @@ import { Section } from "@/components/Section";
 import { Badge } from "@/components/Badge";
 import { ProjectLinkButton } from "@/components/ProjectLinkButton";
 import { ProjectPreviewPlaceholder } from "@/components/ProjectPreviewPlaceholder";
-import { LeadForgePreview } from "@/components/project-preview/LeadForgePreview";
 import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
 import type { Project } from "@shared/types/projects";
@@ -18,10 +17,6 @@ function ProjectPreview({ project }: { project: Project }) {
         loading="lazy"
       />
     );
-  }
-
-  if (project.slug === "leadforge-ai-system") {
-    return <LeadForgePreview />;
   }
 
   return <ProjectPreviewPlaceholder />;

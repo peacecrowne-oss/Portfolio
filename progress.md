@@ -2202,6 +2202,32 @@ The requested text ("Built an interactive Power BI dashboard to analyze sales pe
 
 ---
 
+## LeadForge Architecture Expanded from User-Supplied Diagram ✔
+
+**Objective:** on request, add the content from a user-supplied architecture diagram (system flow, external integrations, product roadmap) to LeadForge's case-study Architecture section.
+
+### Accuracy check against prior verified research
+
+The diagram's "External Integrations" row presented OpenStreetMap, Google Maps, Hunter.io, and Better Business Bureau as four equivalent, functioning integrations. An earlier milestone in this engagement had a research agent read the actual LeadForge source code directly, which found: OpenStreetMap is the only one that's a fully working, wired-in data source — Google Maps scraping is structurally blocked, Hunter.io enrichment is implemented but not wired into the pipeline, and BBB enrichment is transport-validated but not integrated at scale (all already documented in this case study's own Challenges section). Presenting all four as equally complete would have both contradicted the Challenges section a few paragraphs below and violated this project's rule against displaying unverified claims as fact. Added the integrations content with that accurate nuance instead of the diagram's flatter framing. The diagram's own "Product Roadmap (Planned Features)" section already distinguished planned-vs-built, so that framing carried over directly.
+
+### Changes
+
+- `shared/data/projects.ts` — LeadForge's `architecture` expanded from one paragraph to three: (1) the system flow — Users → React/Vite frontend → REST API → FastAPI backend → Lead Discovery & Intelligence → Analytics & Reporting → SQLite/PostgreSQL-ready storage; (2) external integrations, accurately scoped per the note above; (3) the planned roadmap (OpenAI-powered outreach, Google OAuth, Stripe billing, notifications, audit logging, public API), explicitly labeled not-yet-built.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms all three Architecture paragraphs render with the exact intended text
+- Screenshot confirms a clean result that reads consistently with the Challenges section below it
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

@@ -30,9 +30,7 @@ export const PROJECTS: Project[] = [
       "LeadForge automates the entire lead qualification process by collecting leads from multiple sources, removing duplicates, verifying business information, enriching contact data, and identifying decision-makers. Qualified leads are scored and organized in a centralized CRM workspace where users can manage outreach, track lead progress, and run targeted email campaigns.",
     ],
     architecture: [
-      "LeadForge follows a layered architecture. SMB owners and sales teams interact with a React + Vite frontend — dashboard, natural-language search, and campaign management — that talks to a FastAPI backend over a REST API. The backend handles authentication, business logic, and workflow orchestration, and coordinates a Lead Discovery & Intelligence layer responsible for natural-language search, multi-provider lead acquisition, contact discovery, lead enrichment, and lead scoring. Results flow into an analytics and reporting layer, backed by SQLite for local development with a PostgreSQL-ready adapter for production deployments.",
-      "OpenStreetMap is the primary, fully working lead-acquisition source. Google Maps, Hunter.io, and Better Business Bureau integrations are built and transport-validated but not yet fully wired into the production pipeline at scale — see Challenges below for the specifics of each.",
-      "Planned roadmap items (not yet built) include OpenAI-powered outreach generation and lead summarization, Google OAuth for secure social login, Stripe-based subscription billing, campaign and system notifications, audit logging for compliance and activity tracking, and a public API for third-party integrations.",
+      "LeadForge is built with a FastAPI backend and a React frontend using a RESTful architecture. The platform integrates external data sources to acquire and enrich business information, performs automated lead processing and verification, and stores data using SQLite for development and PostgreSQL for production-ready deployments.",
     ],
     features: [
       "AI-powered lead discovery and enrichment",

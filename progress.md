@@ -2228,6 +2228,23 @@ The diagram's "External Integrations" row presented OpenStreetMap, Google Maps, 
 
 ---
 
+## LeadForge Architecture Expansion Reverted ✔
+
+**Objective:** on request, undo the previous milestone — LeadForge's `architecture` field is back to its original single paragraph, dropping the diagram-derived system-flow/integrations/roadmap content added a step earlier.
+
+### Files Modified
+
+- `shared/data/projects.ts` — `architecture` restored to the one-paragraph version.
+- `progress.md` — this entry.
+
+### Validation Results
+
+- `npm run build` — passes (client + server, since `shared/` changed)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy; Playwright confirms the Architecture section now renders exactly one paragraph, matching the pre-diagram state
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

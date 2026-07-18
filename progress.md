@@ -2598,6 +2598,28 @@ Two points needed the user's confirmation rather than a guess, per this project'
 
 ---
 
+## Contact Form Topic List Replaced ✔
+
+**Objective:** on request, replace the "Select a topic..." dropdown's options in the Contact form.
+
+### Changes
+
+- `client/src/components/ContactForm.tsx` — `TOPICS` list replaced with: BI / Dashboard Projects, Data Analytics, Full-Time Opportunity, Contract / Freelance Work, Collaboration, Others (previously: Job Opportunity, Freelance / Project Work, Collaboration, General Inquiry, Other).
+
+### Files Modified
+
+- `client/src/components/ContactForm.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: dropdown shows the six new options in the requested order; a full submission selecting "Data Analytics" returns `200` from `/api/contact` and shows the success state; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

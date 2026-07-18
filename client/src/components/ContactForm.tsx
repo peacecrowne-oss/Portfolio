@@ -4,11 +4,12 @@ import { Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { api } from "@/services/api";
 
 const TOPICS = [
-  "Job Opportunity",
-  "Freelance / Project Work",
+  "BI / Dashboard Projects",
+  "Data Analytics",
+  "Full-Time Opportunity",
+  "Contract / Freelance Work",
   "Collaboration",
-  "General Inquiry",
-  "Other",
+  "Others",
 ];
 
 interface FormValues {

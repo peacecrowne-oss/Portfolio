@@ -27,7 +27,7 @@ This document tracks the real-time status of the portfolio project: what phase i
 - [x] **Planning** — Define goals, scope, stack, and structure (`requirements.md` created).
 - [x] **Project Setup** — Initialize repository, tooling, linting, folder structure, and base configuration.
 - [ ] **UI Development** — Establish design tokens, typography, color system, and base layout shell. *(Layout shell and theme system are done; formal named design tokens were never centralized — see Next Tasks.)*
-- [ ] **Components** — Build reusable components (Navbar, Footer, Button, ProjectCard, SkillBadge, ContactForm, etc.). *(All built except SectionHeading, ContactForm, and ScrollToTop — the site uses contact cards instead of a form by design.)*
+- [ ] **Components** — Build reusable components (Navbar, Footer, Button, ProjectCard, SkillBadge, ContactForm, etc.). *(All built except SectionHeading and ContactForm — the site uses contact cards instead of a form by design.)*
 - [ ] **Pages** — Implement Home, About, Projects, Project Detail, Skills, Resume, Contact, and 404 pages. *(All done except a dedicated Project Detail view and an in-app Resume viewer page — the resume is a direct PDF download instead.)*
 - [x] **Integration** — Compose completed sections (Hero, About) into a single rendered page and verify navigation, theming, and accessibility.
 - [x] **Features** — Implement light/dark mode, project filtering, resume download, and contact form submission. *(Light/dark mode and resume download are complete; project filtering and a contact form were not built — the site uses a static grid and contact cards by design.)*
@@ -73,7 +73,7 @@ This document tracks the real-time status of the portfolio project: what phase i
 - [x] SkillBadge
 - [ ] ContactForm
 - [x] ThemeToggle
-- [ ] ScrollToTop
+- [x] ScrollToTop
 
 ### Pages
 - [x] Home / Landing
@@ -2423,6 +2423,37 @@ The link label is content/copy, not a visual layout override, so — unlike the 
 - `npm run lint` — passes, no errors
 - `docker compose up --build -d` — all containers healthy
 - Playwright verification against the Dockerized site: LeadForge's card shows "Technical Overview →", BigMart's shows "View Project →", no leftover "View Case Study" text anywhere; clicked the LeadForge link and confirmed it still navigates to `/projects/leadforge-ai-system`; zero console errors
+
+---
+
+## Bug Fix: Case-Study Navigation Didn't Scroll to Top ✔
+
+**Objective:** the user reported that clicking "Technical Overview" (LeadForge) or "View Project" (BigMart) appeared to just return to the top of the current page instead of visibly opening the case study.
+
+### Root cause
+
+Two compounding issues, both in client-side routing behavior that a full page load would have handled automatically:
+
+1. `ScrollToTop` was never built (already flagged as missing in this file's own Components checklist from early in the project). React Router doesn't reset scroll position on route changes by default, so navigating from a deep-scrolled position on the home page to a new case-study route left the browser at the same scroll offset — the new page rendered, but visually still showed content from deep in the old page's scroll position, making it look like nothing happened.
+2. First attempted fix (`window.scrollTo({ top: 0, left: 0, behavior: "auto" })`) didn't fully solve it: this site sets `scroll-behavior: smooth` globally in `index.css` for its in-page nav links, and per spec, `behavior: "auto"` *defers to* that CSS property rather than overriding it — so the reset became an ~800ms smooth-scroll-up animation instead of an instant jump. Confirmed via temporary diagnostic logging inside the effect, comparing `window.scrollY` immediately before/after the `scrollTo()` call. Corrected to `behavior: "instant"`, which forces an immediate jump regardless of the CSS.
+
+### Changes
+
+- `client/src/components/ScrollToTop.tsx` — new component: on every route `pathname` change, calls `window.scrollTo({ top: 0, left: 0, behavior: "instant" })`.
+- `client/src/App.tsx` — mounted `<ScrollToTop />` inside `<BrowserRouter>` (required for `useLocation`), alongside the existing `<RootLayout>`/`<Routes>` tree.
+
+### Files Modified
+
+- `client/src/components/ScrollToTop.tsx` — new file
+- `client/src/App.tsx`
+- `progress.md` — this entry (also updated the Components checklist — `ScrollToTop` was previously listed as not yet built)
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: scrolled deep into the home page, clicked each project's case-study link, confirmed `window.scrollY` reaches `0` within 50ms for both LeadForge and BigMart (previously took ~800ms via a visible smooth-scroll animation, or never reset at all pre-fix); confirmed in-page navbar anchor links (e.g. `#about`) still smooth-scroll as intended — the fix only forces an instant reset on route changes, not on hash-link clicks; zero console errors
 
 ---
 

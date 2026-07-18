@@ -2620,6 +2620,28 @@ Two points needed the user's confirmation rather than a guess, per this project'
 
 ---
 
+## Contact Section Copy Updated ✔
+
+**Objective:** on request, replace two pieces of Contact section copy: the "Get In Touch" subtitle and the "Let's work together" paragraph.
+
+### Changes
+
+- `client/src/sections/Contact.tsx` — subtitle changed to "Have a data challenge to solve or an application to build? My inbox is open." (was "...or a dashboard to build?..."); the "Let's work together" paragraph changed to "Whether you're creating data-driven solutions, building intelligent software, or exploring new ideas, I'd love to connect." (was the Power-BI-specific wording from the earlier Contact redesign).
+
+### Files Modified
+
+- `client/src/sections/Contact.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: both new strings present, both old strings fully gone, zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

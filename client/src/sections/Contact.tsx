@@ -69,7 +69,7 @@ export function Contact() {
         Get In Touch
       </h2>
       <p className="mx-auto mt-4 max-w-xl text-center text-lg text-slate-600 dark:text-slate-400">
-        Have a data challenge to solve or a dashboard to build? My inbox is open.
+        Have a data challenge to solve or an application to build? My inbox is open.
       </p>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-2 lg:items-start">
@@ -78,9 +78,8 @@ export function Contact() {
             Let's work together
           </h3>
           <p className="mt-4 leading-relaxed text-slate-600 dark:text-slate-400">
-            Whether you need a Power BI dashboard built from scratch, an existing
-            report modernized, or just want to talk through a data problem —
-            I'd love to connect.
+            Whether you're creating data-driven solutions, building intelligent
+            software, or exploring new ideas, I'd love to connect.
           </p>
 
           <div className="mt-4 flex flex-wrap items-center gap-4">

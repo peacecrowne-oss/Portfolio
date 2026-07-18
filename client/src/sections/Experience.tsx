@@ -53,7 +53,7 @@ export function Experience() {
               </div>
 
               {entry.responsibilities.length > 0 && (
-                <ul className="mt-4 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {entry.responsibilities.map((responsibility) => (
                     <li key={responsibility}>{responsibility}</li>
                   ))}

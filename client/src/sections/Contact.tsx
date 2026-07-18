@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { MapPin } from "lucide-react";
 import { Section } from "@/components/Section";
 import { ContactForm } from "@/components/ContactForm";
-import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 
 const iconWrapperClasses =
@@ -89,14 +88,6 @@ export function Contact() {
               <MapPin className="h-4 w-4" aria-hidden="true" />
               {location}
             </span>
-            {PROFILE.resumeUrl && (
-              <a
-                href={withBasePath(PROFILE.resumeUrl)}
-                className="rounded-sm text-sm font-semibold text-brand-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-brand-secondary dark:focus-visible:ring-white"
-              >
-                Download Resume ↓
-              </a>
-            )}
           </div>
 
           <div className="mt-8 grid gap-4">

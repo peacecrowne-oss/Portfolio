@@ -2572,6 +2572,32 @@ Two points needed the user's confirmation rather than a guess, per this project'
 
 ---
 
+## Resume Link Dropped, Experience Spacing Tightened, RCCG Date Corrected ✔
+
+**Objective:** three small requested changes: remove the "Download Resume" link from Contact, close up the gap between each Experience entry's bullet list and its date/location badges, and correct RCCG's date range to 2015–2022 (previously corrected to 2010–2022 in the prior milestone, revised again per this request).
+
+### Changes
+
+- `client/src/sections/Contact.tsx` — removed the "Download Resume ↓" link and its now-unused `withBasePath` import; the location line remains on its own. `PROFILE.resumeUrl` and `resume.pdf` were left in place (unused but harmless) since only the visible download feature was asked to go, not the underlying field/asset.
+- `client/src/sections/Experience.tsx` — reduced the responsibilities list's top margin from `mt-4` to `mt-2`, tightening the gap below the role/company/badge row.
+- `shared/data/experience.ts` — RCCG's `startDate` changed from `"2010"` to `"2015"`.
+
+### Files Modified
+
+- `client/src/sections/Contact.tsx`
+- `client/src/sections/Experience.tsx`
+- `shared/data/experience.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: "Download Resume" text no longer present anywhere on the page; Experience section shows "2015 — 2022" for RCCG (no leftover "2010 — 2022"); tightened spacing confirmed visually; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

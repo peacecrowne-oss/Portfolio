@@ -30,7 +30,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Data Administrator",
     company: "RCCG",
-    startDate: "2010",
+    startDate: "2015",
     endDate: "2022",
     location: "Houston, Texas",
     responsibilities: [

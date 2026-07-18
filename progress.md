@@ -2550,6 +2550,28 @@ Two points needed the user's confirmation rather than a guess, per this project'
 
 ---
 
+## Experience Badges Aligned Right ✔
+
+**Objective:** on request, move the date-range/location badges to align to the right of each Experience entry (opposite the role/company), instead of sitting left-aligned below the company name.
+
+### Changes
+
+- `client/src/sections/Experience.tsx` — wrapped the role/company block and the badge pair in a flex row (`sm:flex-row sm:items-start sm:justify-between`); the badges now stack vertically and right-align (`sm:flex-col sm:items-end`) at `sm` breakpoint and above. Below `sm`, both sides stack vertically full-width (the row collapses to `flex-col`) with the badges left-aligned as a compact wrapped row, since right-aligning them on narrow screens looked cramped next to the role title.
+
+### Files Modified
+
+- `client/src/sections/Experience.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: confirmed badges render right-aligned and stacked at desktop (1280px) and remain a compact left-aligned row at mobile (390px); zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

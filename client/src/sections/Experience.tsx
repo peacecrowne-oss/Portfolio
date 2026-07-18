@@ -29,23 +29,27 @@ export function Experience() {
             </span>
 
             <div className="hover-lift -m-3 rounded-xl p-3 transition-colors hover:bg-slate-50 dark:hover:bg-white/[0.03]">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-                {entry.role}
-              </h3>
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+                    {entry.role}
+                  </h3>
 
-              <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-400">
-                {entry.company}
-              </p>
+                  <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-400">
+                    {entry.company}
+                  </p>
+                </div>
 
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
-                  <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
-                  {entry.startDate} — {entry.endDate}
-                </span>
-                <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
-                  <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-                  {entry.location}
-                </span>
+                <div className="flex flex-wrap items-center gap-2 sm:flex-col sm:items-end">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
+                    <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+                    {entry.startDate} — {entry.endDate}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-500 dark:border-white/10 dark:text-slate-400">
+                    <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+                    {entry.location}
+                  </span>
+                </div>
               </div>
 
               {entry.responsibilities.length > 0 && (

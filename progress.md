@@ -2457,6 +2457,45 @@ Two compounding issues, both in client-side routing behavior that a full page lo
 
 ---
 
+## Contact Section Redesigned with a Working Contact Form ✔
+
+**Objective:** on request, rebuild the Contact section to match a reference screenshot's layout — a centered "Get In Touch" header, a two-column body (contact info + cards on the left, a form on the right with Name/Email/Phone/Topic/Message and a gradient "Send Message" button) — and make the form actually functional, since `POST /api/contact` already existed on the backend but was unused by the frontend by design.
+
+### Adaptation from the reference
+
+The reference screenshot was someone else's portfolio (different name, LinkedIn, GitHub, email). Rebuilt the visual pattern only — layout, card styling, form structure, validation behavior — with entirely different content: the left column's contact cards use `PROFILE.social` (Omolola's real GitHub, LinkedIn, and email from `shared/data/profile.ts`), and the intro copy was rewritten around her actual Power BI/BI-developer positioning rather than the reference's wording. Dropped the reference's Phone/Location display cards (kept only LinkedIn/GitHub/Email, matching the reference's 3-card set) but didn't want to silently delete real profile data that had nowhere else to live on the site — `location` (previously only shown in the old 3-column Contact grid) is now a small inline line next to the form, and the resume download link (also previously only in Contact) was kept as a text link in the same row, since neither exists anywhere else on the site.
+
+### Backend changes
+
+The existing `POST /api/contact` endpoint only accepted `name`/`email`/`message`. Extended it for the new `phone` (optional) and `topic` (required) fields the form needed, matching the reference's field set:
+
+- `server/src/controllers/contact.controller.ts` — zod schema gained `phone: z.string().trim().max(50).optional()` and `topic: z.string().trim().min(1).max(100)`.
+- `server/src/services/emailService.ts` — `ContactPayload` interface extended to match (still a stub that only logs the payload — no email provider configured, so this is a safe, side-effect-free change).
+- `client/src/services/api.ts` — `ContactSubmission` interface extended with the same two fields.
+
+### Frontend changes
+
+- `client/src/components/ContactForm.tsx` — new component: controlled form with client-side validation (required Name/Email/Topic/Message, optional Phone, email format check), inline red-bordered error states matching the reference exactly, a loading state during submission ("Sending..." with a disabled button), a success state (checkmark + confirmation + "Send another message" reset), and an error state (banner with the server's error message) if the request fails. Submits via `api.submitContact`.
+- `client/src/sections/Contact.tsx` — rewritten: centered "Get In Touch" header + subtitle, two-column body (`lg:grid-cols-2`) with the "Let's work together" intro, location line, resume link, and 3 contact cards on the left, `<ContactForm />` on the right. The old 3-column Email/Phone/Location/LinkedIn/GitHub grid and "Open to New Opportunities" badge/heading were removed as part of this redesign.
+
+### Files Modified
+
+- `client/src/sections/Contact.tsx`
+- `client/src/components/ContactForm.tsx` — new file
+- `client/src/services/api.ts`
+- `server/src/controllers/contact.controller.ts`
+- `server/src/services/emailService.ts`
+- `progress.md` — this entry (also marked the long-standing "add a contact form" Next Task as done)
+
+### Validation Results
+
+- `npm run build` — passes for `client` and `server`
+- `npm run lint` — passes for `client` and `server`, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: layout confirmed at desktop (1440px) and mobile (390px), in both dark mode (default) and light mode (via the real theme toggle); submitting the empty form shows all four expected inline validation errors ("Please enter your name.", "Please enter your email.", "Please select a topic.", "Please enter a message."); submitting a complete form returns `200` from `/api/contact` through the nginx reverse proxy and shows the success state; confirmed via `docker compose logs server` that the full payload (name, email, phone, topic, message) reaches the backend correctly; zero console errors in any state
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*
@@ -2468,7 +2507,7 @@ Two compounding issues, both in client-side routing behavior that a full page lo
 - [ ] Decide on and execute deployment — either the Dockerized stack (any Docker-capable host) or the original plan (server on Render/Railway/Fly.io/Vercel serverless, client on Vercel) — then update `CORS_ORIGIN`/`VITE_API_BASE_URL` accordingly.
 - [ ] Once the backend is live, decide whether to switch the client's section components from static `shared/data` imports to `services/api.ts` calls — and if so, add loading/error states.
 - [ ] Refresh `requirements.md`'s Folder Structure and Technology Stack sections to reflect the `client/`/`server/`/`shared/` monorepo and Docker setup (not done this round — wasn't in this milestone's explicit scope).
-- [ ] Decide whether a contact form should be added to the UI to actually use `POST /api/contact` (currently unused by the frontend by design).
+- [x] Decide whether a contact form should be added to the UI to actually use `POST /api/contact` — done; see the "Contact Section Redesigned" milestone.
 - [ ] Version 2.2 (not started, requires separate approval): Kubernetes manifests, Azure Container Apps or similar, GitHub Actions CI/CD, automatic image publishing, further production image optimization, container registry publishing.
 
 Optional Version 1.1 enhancements (not started, listed for future planning only):

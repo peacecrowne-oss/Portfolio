@@ -5,6 +5,8 @@ import { emailService } from "../services/emailService";
 const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(200),
   email: z.string().trim().email("A valid email is required"),
+  phone: z.string().trim().max(50).optional(),
+  topic: z.string().trim().min(1, "Please select a topic").max(100),
   message: z.string().trim().min(1, "Message is required").max(5000),
 });
 

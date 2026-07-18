@@ -43,6 +43,8 @@ export interface HealthStatus {
 export interface ContactSubmission {
   name: string;
   email: string;
+  phone?: string;
+  topic: string;
   message: string;
 }
 

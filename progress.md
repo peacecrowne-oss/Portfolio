@@ -2664,6 +2664,74 @@ Two points needed the user's confirmation rather than a guess, per this project'
 
 ---
 
+## GitHub Pages Deployment Review — Step 1: Workflow Node Version Bumped ✔
+
+**Objective:** the user asked for a full "configure and deploy React frontend to GitHub Pages" task, to be done one step at a time with approval pauses. Review found nearly all of it (`vite.config.ts` env-driven base path, `BrowserRouter` + `404.html` redirect shim, `.github/workflows/deploy.yml`, `withBasePath()` asset handling) was already implemented and committed in an earlier milestone ("Version 3.1 — Dark Theme Default & GitHub Pages Deployment", commit `d0596cb`). Confirmed via a live `curl` that GitHub Pages itself was never enabled (`https://peacecrowne-oss.github.io/Portfolio/` returns `404`). Presented this to the user as a revised, much smaller plan; approved to proceed.
+
+### Step 1: Node version
+
+The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
+
+### Changes
+
+- `.github/workflows/deploy.yml` — `node-version: 20` → `node-version: 22`.
+
+### Files Modified
+
+- `.github/workflows/deploy.yml`
+- `progress.md` — this entry
+
+### Validation Results
+
+- YAML structure visually confirmed intact (single-value change, indentation preserved)
+- Checked for `engines` fields across all three `package.json` files needing a matching bump — none exist, so no other file needed touching
+- Full build/lint validation cycle deferred to the next step per the approved plan
+
+**Paused here for approval before continuing to the next step (full build/lint validation, including a fresh `VITE_BASE_PATH=/Portfolio/` build).**
+
+## GitHub Pages Deployment Review — Step 2: Full Build/Lint Validation ✔
+
+**Objective:** re-confirm the existing GitHub Pages build plumbing still works cleanly after the Node version bump, before touching anything else.
+
+### Validation Results
+
+- `npm run build` (base `"/"`, for Docker/Vercel) — passes, no TypeScript or lint errors
+- `npm run lint` — passes, no errors
+- `VITE_BASE_PATH=/Portfolio/ npm run build` — passes; `dist/index.html` correctly references `/Portfolio/assets/...`, `/Portfolio/favicon.svg`, `/Portfolio/site.webmanifest`. Local testing on Git Bash/Windows hit an MSYS quirk that auto-mangles a leading-slash env value (`/Portfolio/`) into a Windows path — worked around with `MSYS_NO_PATHCONV=1`; irrelevant to the real Linux GitHub Actions runner, noted here only so it isn't mistaken for a real bug later.
+- Staged the `/Portfolio/`-based build under `vite preview`; Playwright confirmed: home page loads clean, first image resolves to `/Portfolio/rolling-cube.webp`, client-side navigation to the LeadForge case study works and lands on the correct page, zero failed (4xx/5xx) requests, zero console errors.
+- Resume-link check intentionally returns nothing now — the "Download Resume" link was removed from Contact earlier this session (unrelated milestone), so it's no longer part of what this deployment needs to preserve.
+- Did not re-run the full GH-Pages-exact-404 harness (a static server with no SPA rewrite, replicating GitHub Pages precisely, used in the original "Version 3.1" milestone) — nothing in this pass touched routing, `404.html`, or the decode script, only the CI workflow's Node version.
+
+### Files Modified
+
+- None (validation-only step)
+- `progress.md` — this entry
+
+**Paused here for approval before continuing to the next step (deployment checklist).**
+
+---
+
+## GitHub Pages Deployment Review — Step 3: Deployment Checklist Delivered ✔
+
+**Objective:** produce the deployment checklist requested (enabling Pages, expected URL, monitoring, troubleshooting), since enabling GitHub Pages itself is an account-level Settings action only the user can perform.
+
+### Checklist delivered to the user (not repeated here in full — see chat)
+
+1. Enable GitHub Pages: repo Settings → Pages → Build and deployment → Source → **GitHub Actions**.
+2. Expected URL: `https://peacecrowne-oss.github.io/Portfolio/`.
+3. How to trigger: push to `main`, or Actions tab → "Deploy to GitHub Pages" → Run workflow (`workflow_dispatch` already enabled).
+4. How to monitor: Actions tab → the `build` and `deploy` jobs must both go green.
+5. Troubleshooting table covering: lockfile/install failures, build failures, blank-page/404'd-assets (base path), broken direct links (404.html/decode script), Pages-not-enabled permissions errors, and stale browser cache.
+
+### Files Modified
+
+- None (documentation/checklist step)
+- `progress.md` — this entry
+
+**Paused here for approval before the final step (summarize all files changed this task, then commit as `"Configure GitHub Pages deployment"`).**
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

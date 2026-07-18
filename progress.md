@@ -2245,6 +2245,39 @@ The diagram's "External Integrations" row presented OpenStreetMap, Google Maps, 
 
 ---
 
+## LeadForge Architecture Redesigned as a Visual Diagram ✔
+
+**Objective:** on request, replace LeadForge's prose-paragraph Architecture section with a polished, portfolio-quality visual infographic — a modern SaaS-style system diagram rather than text, following a detailed design spec (rounded cards with subtle shadows, connecting flow lines, Lucide icons, a blue/teal/purple/green/orange accent palette, generous whitespace, responsive for desktop and tablet).
+
+### Approach
+
+Built a new dedicated component (`LeadForgeArchitectureDiagram.tsx`) rather than expanding the `architecture` text field, since the request called for a graphical layout, not prose. Wired it into `ProjectCaseStudy.tsx`'s existing Architecture block behind a slug check (`project.slug === "leadforge-ai-system"`), mirroring the same slug-based override pattern already used in `Projects.tsx` for LeadForge's grid-card preview — every other project (BigMart included) continues to render through the original `ParagraphBlock` path untouched.
+
+Content matches the user-supplied spec exactly: the six-layer system flow (Users → React + Vite Frontend → REST API → FastAPI Backend → Lead Discovery & Intelligence → Analytics & Reporting → SQLite/PostgreSQL-ready), an External Integrations grid (OpenStreetMap, Google Maps, Hunter.io, Better Business Bureau), and a visually distinct, dashed-border Product Roadmap grid (OpenAI Integration, Google OAuth, Stripe Billing, Notifications, Audit Logging, Public API) clearly separated from the shipped system to avoid implying any of it is built. The External Integrations cards are presented as a clean, neutral grid without inline accuracy caveats this time — diagrams conventionally show structural integration points rather than production-readiness detail, all four integrations are genuinely implemented in the real codebase per the earlier source-code research (not fabricated), and the same page's unedited Challenges section already carries the detailed accuracy nuance in prose form a few paragraphs below.
+
+### Changes
+
+- Installed `lucide-react` as a new client dependency.
+- `client/src/components/case-study/LeadForgeArchitectureDiagram.tsx` — new component: header, six connected flow-layer cards with icons/colors/arrows, an External Integrations card grid, and a Product Roadmap card grid.
+- `client/src/pages/ProjectCaseStudy.tsx` — Architecture block now renders `LeadForgeArchitectureDiagram` for LeadForge specifically, falling back to `ParagraphBlock` for all other projects.
+
+### Files Modified
+
+- `client/package.json`, `client/package-lock.json`, `package-lock.json` (root, npm workspaces)
+- `client/src/components/case-study/LeadForgeArchitectureDiagram.tsx` — new file
+- `client/src/pages/ProjectCaseStudy.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes (`tsc --noEmit && vite build`)
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site (`localhost:8080/projects/leadforge-ai-system`): zero console errors across desktop (1440px), tablet (834px), and mobile (390px) widths; confirmed in both dark mode (default) and light mode (via the site's actual theme toggle, not just `prefers-color-scheme` emulation) — cards, icons, connectors, and both grids render correctly and responsively in every combination
+- Confirmed BigMart's case study page is completely unaffected (still has no "Architecture" heading, uses its own `caseStudySections` flow)
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

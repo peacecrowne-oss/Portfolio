@@ -4,6 +4,7 @@ import { Section } from "@/components/Section";
 import { Badge } from "@/components/Badge";
 import { ProjectLinkButton } from "@/components/ProjectLinkButton";
 import { ProjectPreviewPlaceholder } from "@/components/ProjectPreviewPlaceholder";
+import { LeadForgeArchitectureDiagram } from "@/components/case-study/LeadForgeArchitectureDiagram";
 import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
 import type { CaseStudySection } from "@shared/types/projects";
@@ -169,7 +170,11 @@ export function ProjectCaseStudy() {
             </CaseStudyBlock>
 
             <CaseStudyBlock title="Architecture">
-              <ParagraphBlock label="Architecture" paragraphs={project.architecture} />
+              {project.slug === "leadforge-ai-system" ? (
+                <LeadForgeArchitectureDiagram />
+              ) : (
+                <ParagraphBlock label="Architecture" paragraphs={project.architecture} />
+              )}
             </CaseStudyBlock>
           </>
         )}

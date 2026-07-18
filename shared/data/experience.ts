@@ -35,6 +35,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Perform regular data backups and execute recovery procedures to prevent data loss.",
       "Monitor database performance and assist in identifying and resolving basic issues.",
       "Manage user access and permissions in accordance with Company Policies.",
+      "Integrated data from multiple source systems into centralized databases, supporting ETL workflows and enabling accurate, consistent reporting.",
     ],
   },
 ];

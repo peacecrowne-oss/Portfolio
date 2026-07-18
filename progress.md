@@ -2496,6 +2496,27 @@ The existing `POST /api/contact` endpoint only accepted `name`/`email`/`message`
 
 ---
 
+## Data Administrator Responsibility Added ✔
+
+**Objective:** on request, add a new responsibility bullet to the Data Administrator (RCCG) role in the Experience section.
+
+### Changes
+
+- `shared/data/experience.ts` — added "Integrated data from multiple source systems into centralized databases, supporting ETL workflows and enabling accurate, consistent reporting." as the fifth bullet under Data Administrator.
+
+### Files Modified
+
+- `shared/data/experience.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: new bullet renders as the fifth item under Data Administrator, exact wording confirmed, zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

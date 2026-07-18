@@ -2732,6 +2732,31 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## Experience Dates Revised (RCCG & Joisen) ✔
+
+**Objective:** on request, update RCCG's and Joisen's date ranges to month-level precision; leave Colaberry unchanged.
+
+### Changes
+
+- `shared/data/experience.ts`:
+  - RCCG: `startDate`/`endDate` changed from `"2015"`/`"2022"` to `"May 2015"`/`"July 2020"`.
+  - Joisen: `startDate`/`endDate` changed from `"2022"`/`"2025"` to `"August 2020"`/`"June 2025"`.
+  - Colaberry left as-is (`"2025"`/`"Present"`), per explicit instruction.
+
+### Files Modified
+
+- `shared/data/experience.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: confirmed "May 2015 — July 2020" (RCCG), "August 2020 — June 2025" (Joisen), and "2025 — Present" (Colaberry, unchanged); no leftover old date strings; badge still fits cleanly on one line at the longer month-level length; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

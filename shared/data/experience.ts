@@ -17,8 +17,8 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Data Analyst",
     company: "Joisen Inc",
-    startDate: "2022",
-    endDate: "2025",
+    startDate: "August 2020",
+    endDate: "June 2025",
     location: "Houston, Texas",
     responsibilities: [
       "Cleaned, transformed, and prepared large datasets by filtering data, handling missing values, and ensuring data accuracy.",
@@ -30,8 +30,8 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Data Administrator",
     company: "RCCG",
-    startDate: "2015",
-    endDate: "2022",
+    startDate: "May 2015",
+    endDate: "July 2020",
     location: "Houston, Texas",
     responsibilities: [
       "Managed and optimized SQL Server databases, ensuring high availability, data integrity and security.",

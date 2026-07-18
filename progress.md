@@ -2332,6 +2332,39 @@ Content matches the user-supplied spec exactly: the six-layer system flow (Users
 
 ---
 
+## LeadForge Tech Stack Redesigned as a Visual Card Grid ✔
+
+**Objective:** on request, replace LeadForge's plain-badge Tech Stack section with a modern, recruiter-friendly card grid matching the Architecture section's visual style — a responsive 3/2/1-column grid of category cards (icon, title, pill-shaped tech badges), following a detailed design spec.
+
+### Accuracy check against real source code
+
+The spec's content included two claims not previously verified in this engagement's research: Uvicorn as part of the backend, and "Background Tasks" as an architecture pattern. Grepped the real LeadForge source (`c:/COLABERRY/INTERNSHIP/LeadForge-AI-System`) before building: `backend/requirements.txt` pins `uvicorn==0.40.0`, and FastAPI's `BackgroundTasks` is genuinely used in `backend/routes/leads.py` and `backend/routes/nl_search.py`. Both confirmed accurate, not fabricated.
+
+### Approach
+
+Built a new component (`LeadForgeTechStack.tsx`) rather than restyling the generic `techStackGroups` renderer, since the request called for a specific card-grid layout with icons — not a data shape all projects share. Wired it into `ProjectCaseStudy.tsx`'s existing Tech Stack block behind the same `project.slug === "leadforge-ai-system"` check already used for the Architecture and preview-image overrides; every other project (BigMart included) keeps rendering through the original `techStackGroups`/`technologies` badge logic untouched. Six categories per the spec — Frontend (Monitor icon), Backend (Server), Database (Database), Integrations (Globe), Development Tools (Wrench), Architecture (Layers) — each a card with a colored icon badge and pill-shaped technology chips, using the same accent-color/glass-card/hover-lift conventions as the Architecture diagram. Dropped the component's own internal "Tech Stack" heading to avoid duplicating the outer `CaseStudyBlock` title — kept the subtitle ("Technologies powering the LeadForge AI platform.") centered above the grid instead.
+
+### Changes
+
+- `client/src/components/case-study/LeadForgeTechStack.tsx` — new component: subtitle + responsive 3/2/1-column grid of six category cards.
+- `client/src/pages/ProjectCaseStudy.tsx` — Tech Stack block now renders `LeadForgeTechStack` for LeadForge specifically, falling back to the existing `techStackGroups`/`technologies` rendering for all other projects.
+
+### Files Modified
+
+- `client/src/components/case-study/LeadForgeTechStack.tsx` — new file
+- `client/src/pages/ProjectCaseStudy.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: all six category titles render at desktop (1440px, 3 columns), tablet (834px, 2 columns), and mobile (390px, 1 column); confirmed in both dark mode (default) and light mode (via the real theme toggle); zero console errors in any combination
+- Confirmed BigMart's case study page is completely unaffected
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

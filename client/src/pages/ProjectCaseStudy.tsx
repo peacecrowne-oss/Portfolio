@@ -5,6 +5,7 @@ import { Badge } from "@/components/Badge";
 import { ProjectLinkButton } from "@/components/ProjectLinkButton";
 import { ProjectPreviewPlaceholder } from "@/components/ProjectPreviewPlaceholder";
 import { LeadForgeArchitectureDiagram } from "@/components/case-study/LeadForgeArchitectureDiagram";
+import { LeadForgeTechStack } from "@/components/case-study/LeadForgeTechStack";
 import { withBasePath } from "@/lib/basePath";
 import { PROJECTS } from "@shared/data/projects";
 import type { CaseStudySection } from "@shared/types/projects";
@@ -180,7 +181,9 @@ export function ProjectCaseStudy() {
         )}
 
         <CaseStudyBlock title="Tech Stack">
-          {project.techStackGroups && project.techStackGroups.length > 0 ? (
+          {project.slug === "leadforge-ai-system" ? (
+            <LeadForgeTechStack />
+          ) : project.techStackGroups && project.techStackGroups.length > 0 ? (
             <div className="grid gap-6 sm:grid-cols-3">
               {project.techStackGroups.map((group) => (
                 <div key={group.label}>

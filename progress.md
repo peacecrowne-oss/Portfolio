@@ -2365,6 +2365,37 @@ Built a new component (`LeadForgeTechStack.tsx`) rather than restyling the gener
 
 ---
 
+## LeadForge GitHub Button Iconified, Live Demo Relabeled ✔
+
+**Objective:** on request, replace the "GitHub" text label with a GitHub icon, and replace the "Live Demo · Coming Soon" placeholder text with "View Demo", on LeadForge's Featured Project card and case study page.
+
+### Scope note
+
+`ProjectLinkButton` is a shared component used by every project's GitHub/Live Demo buttons, not LeadForge-specific. However, LeadForge is currently the only project with a real `githubUrl` (BigMart's is `null`) and the only one with a `null` `liveDemoUrl` (BigMart has a real live demo link), so both the GitHub button and the "coming soon" placeholder state are, in practice, only ever rendered for LeadForge today — changing the shared component achieves the requested LeadForge-only effect without adding slug-based conditionals for a case that can't currently occur elsewhere.
+
+### Changes
+
+- lucide-react's icon set no longer ships brand/logo icons (checked the installed package — only generic `Git*` icons like `GitBranch`/`GitCommit`/`GitFork` remain, no `Github` octocat). Added a small inline SVG `GithubIcon` directly inside `ProjectLinkButton.tsx` (reusing the same stroke-style octocat path already used by `SocialLinks.tsx`, so the mark is visually consistent across the site) rather than pulling in a new icon-library dependency for one icon.
+- `ProjectLinkButton` now accepts an optional `icon?: "github"` prop; when set, it renders the icon (with `aria-label` on the link for accessibility) instead of the text label. The disabled/"coming soon" state no longer appends `· Coming Soon` to the visible text — it now shows the label plainly (the `title` attribute still surfaces "coming soon" on hover).
+- All three call sites (`Projects.tsx` grid card, `ProjectCaseStudy.tsx` hero, `ProjectCaseStudy.tsx` bottom CTA) updated: GitHub button passes `icon="github"`; the "Live Demo" label changed to `"View Demo"`.
+
+### Files Modified
+
+- `client/src/components/ProjectLinkButton.tsx`
+- `client/src/sections/Projects.tsx`
+- `client/src/pages/ProjectCaseStudy.tsx`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: GitHub button renders as an icon-only link with `aria-label="GitHub"` and a visible SVG (1 on the grid card, 2 on the case study page — hero + bottom CTA); "View Demo" renders in place of "Live Demo · Coming Soon" everywhere; zero console errors
+- Confirmed BigMart's case study page (no `githubUrl`) shows no GitHub button and its already-active "View Demo" button is unaffected beyond the label text
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

@@ -128,9 +128,9 @@ export function ProjectCaseStudy() {
 
             <div className="mt-8 flex flex-wrap gap-3">
               {project.githubUrl && (
-                <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" />
+                <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" icon="github" />
               )}
-              <ProjectLinkButton label="Live Demo" href={project.liveDemoUrl} variant="primary" />
+              <ProjectLinkButton label="View Demo" href={project.liveDemoUrl} variant="primary" />
             </div>
           </div>
 
@@ -271,9 +271,9 @@ export function ProjectCaseStudy() {
 
         <div className="flex flex-wrap gap-3 border-t border-slate-200 pt-10 dark:border-white/10">
           {project.githubUrl && (
-            <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" />
+            <ProjectLinkButton label="GitHub" href={project.githubUrl} variant="secondary" icon="github" />
           )}
-          <ProjectLinkButton label="Live Demo" href={project.liveDemoUrl} variant="primary" />
+          <ProjectLinkButton label="View Demo" href={project.liveDemoUrl} variant="primary" />
         </div>
       </Section>
     </>

@@ -2832,6 +2832,26 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## Adidas Dashboard Screenshot Replaced ✔
+
+**Objective:** on request, swap the Adidas dashboard image for an updated screenshot.
+
+### Changes
+
+- Overwrote `client/public/adidas-dashboard.png` with the new user-supplied screenshot (an updated version of the dashboard — different map style/layout, dated 12/29/2025 refresh vs. the prior 2/1/2023). No code changes needed since `imageUrl` already points to this filename.
+
+### Files Modified
+
+- `client/public/adidas-dashboard.png`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: new image confirmed fully loaded (`naturalWidth: 1382`, matching the new file) on both the case-study hero and the grid card; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

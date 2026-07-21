@@ -2874,6 +2874,35 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## Adidas Dashboard Image Swapped for Animated GIF ✔
+
+**Objective:** on request, replace the Adidas dashboard's static screenshot with an animated GIF demo reel.
+
+### Note on verification
+
+The supplied GIF (8.1MB) exceeded the inline image-processing size limit in this environment (same limit that applies to pasted chat images), so it couldn't be visually confirmed before use — unlike every other image swap this engagement. Proceeded based on the explicit file path and its clearly-matching filename (`Adidas Dashboard.gif`, from the user's own Power BI project folder), then verified the *result* thoroughly after the fact (file loads, renders, animates) rather than the source file beforehand.
+
+### Changes
+
+- Copied the user-supplied GIF to `client/public/adidas-dashboard.gif`; removed the now-unused `client/public/adidas-dashboard.png`.
+- `shared/data/projects.ts` — Adidas's `imageUrl` changed from `"/adidas-dashboard.png"` to `"/adidas-dashboard.gif"`.
+
+### Files Modified
+
+- `client/public/adidas-dashboard.gif` — new file
+- `client/public/adidas-dashboard.png` — deleted
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: `/adidas-dashboard.gif` returns `200`, image element reports `complete: true` with a real `naturalWidth`, confirmed visually mid-animation on both the case-study hero and the grid card; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

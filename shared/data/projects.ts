@@ -465,7 +465,7 @@ export const PROJECTS: Project[] = [
     screenshots: null,
     githubUrl: null,
     liveDemoUrl: null,
-    imageUrl: "/adidas-dashboard.png",
+    imageUrl: "/adidas-dashboard.gif",
     featured: false,
     hasCaseStudy: true,
     caseStudyLinkLabel: "Project Details",

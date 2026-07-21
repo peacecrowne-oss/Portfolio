@@ -2810,6 +2810,28 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## Adidas Moved to Unfeatured, Live Demo Dropped ✔
+
+**Objective:** on request, reverse Adidas's featured status (unfeature it, joining BigMart) and drop its live demo link.
+
+### Changes
+
+- `shared/data/projects.ts` — Adidas entry: `featured: true` → `false`; `liveDemoUrl` (the Power BI embed link) → `null`.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: grid order now LeadForge (featured) → BigMart → Adidas (both unfeatured, in array order); Adidas's case-study hero no longer shows the "Featured Project" badge; "View Demo" now renders as the disabled dashed-border placeholder (a `<span>`, not a link) instead of linking to the Power BI URL; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

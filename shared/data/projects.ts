@@ -464,10 +464,9 @@ export const PROJECTS: Project[] = [
     showScreenshotsSection: false,
     screenshots: null,
     githubUrl: null,
-    liveDemoUrl:
-      "https://app.powerbi.com/view?r=eyJrIjoiNWM4ZThiZjItYmJlNS00NWY2LTljOTktZTc1MGE3Yzc1M2ZlIiwidCI6ImYxYWQ2ODFmLTZmNjItNDNhOS04MjQxLTA3MDMxNjBlMTM0OCIsImMiOjN9",
+    liveDemoUrl: null,
     imageUrl: "/adidas-dashboard.png",
-    featured: true,
+    featured: false,
     hasCaseStudy: true,
     caseStudyLinkLabel: "View Project",
   },

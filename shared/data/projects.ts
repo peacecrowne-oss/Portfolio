@@ -313,4 +313,162 @@ export const PROJECTS: Project[] = [
     hasCaseStudy: true,
     caseStudyLinkLabel: "View Project",
   },
+  {
+    slug: "adidas-us-sales-dashboard",
+    title: "Adidas US Sales Dashboard",
+    description:
+      "Built an interactive Power BI dashboard analyzing Adidas' U.S. sales performance from 2020–2021, tracking total sales, profitability, and growth trends across product categories, sales channels, and geographic regions.",
+    caseStudyOverview: null,
+    technologies: ["Power BI", "DAX", "Power Query", "Excel"],
+    techStackGroups: [
+      { label: "Data & Analytics", items: ["Power BI", "DAX (Data Analysis Expressions)"] },
+      { label: "Data Processing", items: ["Power Query (Data Cleaning & Transformation)", "Excel Dataset"] },
+      {
+        label: "Core Technologies",
+        items: [
+          "KPI Monitoring",
+          "Interactive Dashboards",
+          "Geographic Data Visualization",
+          "Dynamic Filtering",
+        ],
+      },
+    ],
+    businessProblem: null,
+    solution: null,
+    architecture: null,
+    features: [
+      "KPI cards for quick performance overview (Total Sales, Profit, Growth)",
+      "Monthly trend analysis (Month/Quarter/Year view)",
+      "Geographic map for U.S. location-based insights",
+      "Product category performance breakdown",
+      "Sales method comparison (In-store, Outlet, Online)",
+      "Dynamic filtering by date and location",
+    ],
+    challenges: null,
+    outcome: null,
+    caseStudySections: [
+      {
+        heading: "Overview",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Adidas AG is one of the world's leading sportswear brands, with a strong global presence and high customer satisfaction.",
+          },
+          {
+            type: "paragraph",
+            text: "This project analyzes Adidas U.S. sales performance from 2020–2021 using Power BI, focusing on key business drivers such as sales trends, profitability, product performance, and sales channels.",
+          },
+        ],
+      },
+      {
+        heading: "Business Problem",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Retail organizations generate large volumes of data, but without structured analysis, it becomes difficult to:",
+          },
+          {
+            type: "list",
+            items: [
+              "Track sales performance over time",
+              "Understand profitability and margin trends",
+              "Identify top-performing products and locations",
+              "Optimize sales channels (in-store vs online vs outlet)",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "Adidas needed a centralized solution to transform raw sales data into actionable insights.",
+          },
+        ],
+      },
+      {
+        heading: "Solution",
+        blocks: [
+          { type: "paragraph", text: "Developed an interactive Power BI dashboard that:" },
+          {
+            type: "list",
+            items: [
+              "Tracks Total Sales, Profit, and Growth KPIs",
+              "Analyzes monthly sales trends (MoM, YoY)",
+              "Visualizes geographic performance across the U.S.",
+              "Breaks down performance by product categories and sales channels",
+              "Enables dynamic filtering by date and location",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Key Metrics (KPIs)",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Total Sales: $900M",
+              "Total Profit: $332M",
+              "Operating Profit Margin: 36.91%",
+              "Sales Growth (MoM): 9.5%",
+              "Monthly Sales Average: ~$37M",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Key Insights",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "In-store sales dominate, contributing the highest revenue",
+              "Men's Street Footwear is the top-performing category",
+              "Online sales show growth potential but are underutilized",
+              "Sales trends reveal seasonal spikes and demand patterns",
+              "Strong profit margins indicate effective pricing strategy",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Business Impact",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Enabled real-time performance monitoring",
+              "Helped identify high-performing products and regions",
+              "Highlighted opportunities to expand online sales",
+              "Supported data-driven strategic decisions",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "My Role",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Designed and developed the end-to-end Power BI dashboard, built the data model and relationships, created DAX measures for KPIs and trends, and delivered insight-driven visualizations for stakeholders.",
+          },
+        ],
+      },
+      {
+        heading: "Outcome",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "This project transformed raw Adidas sales data into a centralized, insight-driven dashboard, enabling stakeholders to better understand performance, identify growth opportunities, and improve overall business strategy.",
+          },
+        ],
+      },
+    ],
+    showScreenshotsSection: false,
+    screenshots: null,
+    githubUrl: null,
+    liveDemoUrl:
+      "https://app.powerbi.com/view?r=eyJrIjoiNWM4ZThiZjItYmJlNS00NWY2LTljOTktZTc1MGE3Yzc1M2ZlIiwidCI6ImYxYWQ2ODFmLTZmNjItNDNhOS04MjQxLTA3MDMxNjBlMTM0OCIsImMiOjN9",
+    imageUrl: "/adidas-dashboard.png",
+    featured: true,
+    hasCaseStudy: true,
+    caseStudyLinkLabel: "View Project",
+  },
 ];

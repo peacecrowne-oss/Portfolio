@@ -2780,6 +2780,36 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## Third Featured Project Added: Adidas US Sales Dashboard ✔
+
+**Objective:** on request, add a third project to the Featured Projects section — a Power BI dashboard case study, using content and a dashboard screenshot the user supplied directly.
+
+### Clarified before implementing (per this project's no-fabrication rule)
+
+- **Live demo link:** asked whether a real Power BI embed URL existed rather than leaving it blank or inventing one — user provided the real `app.powerbi.com/view` link.
+- **Featured status:** asked whether it should carry the "Featured Project" badge (like LeadForge) or sit unfeatured (like BigMart) — user chose featured, as an addition alongside LeadForge.
+- **Screenshot:** asked for the actual dashboard image file path (as with the earlier LeadForge screenshots) rather than trying to extract it from the pasted image directly; verified the file's content matched what was shown in chat before using it.
+
+### Changes
+
+- Saved the user-supplied dashboard screenshot to `client/public/adidas-dashboard.png`.
+- `shared/data/projects.ts` — new entry, `slug: "adidas-us-sales-dashboard"`, modeled on BigMart's structure (flexible `caseStudySections` rather than the fixed Business Problem/Solution/Architecture fields, since this is also a Power BI dashboard case study, not a coded system). All content — KPIs, business problem, solution, insights, business impact, role, outcome — transcribed directly from the user's write-up, no invented figures or claims. `techStackGroups` and `features` built directly from the user's "Tools & Technologies" and "Dashboard Features" lists. `caseStudyLinkLabel: "View Project"` (matching BigMart, the other dashboard-style project). `imageUrl: "/adidas-dashboard.png"`, `liveDemoUrl` set to the provided Power BI embed link, `githubUrl: null` (no repo for a Power BI project), `featured: true`.
+
+### Files Modified
+
+- `client/public/adidas-dashboard.png` — new file
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: Adidas card appears in the Featured Projects grid (ordered alongside LeadForge, ahead of unfeatured BigMart, per the sort-by-`featured` logic); case-study page loads at `/projects/adidas-us-sales-dashboard`, shows the "Featured Project" badge, correct tech badges, a working "View Demo" button linking to the Power BI embed URL, the dashboard screenshot (confirmed fully loaded, not just present in the DOM — an early check caught its own lazy-load timing race, not a real bug), and all case-study sections (Key Metrics, Key Insights, Business Impact, etc.) rendering the exact user-supplied figures; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

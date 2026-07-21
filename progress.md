@@ -2757,6 +2757,29 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## Contact Email Updated ✔
+
+**Objective:** on request, change the contact email from `peacecrowne@gmail.com` to `opcrowne@gmail.com`.
+
+### Changes
+
+- `shared/data/profile.ts` — `social.email` updated to `opcrowne@gmail.com`. Checked the server for any hardcoded "send to" address that would also need updating — none exists (the contact form just forwards the submitted payload; delivery address isn't hardcoded there).
+
+### Files Modified
+
+- `shared/data/profile.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes for `client` and `server`
+- `npm run lint` — passes, no errors
+- Docker Desktop had stopped running since the last session; relaunched it and waited for the daemon to come back up before rebuilding
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: new email visible on the Email contact card and correctly reflected in the `mailto:` link's `href`; old email address fully gone from the page; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

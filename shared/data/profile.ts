@@ -11,7 +11,7 @@ export const PROFILE: Profile = {
   social: {
     github: "https://github.com/peacecrowne-oss",
     linkedin: "https://www.linkedin.com/in/omolola-makinde-14bbb440",
-    email: "peacecrowne@gmail.com",
+    email: "opcrowne@gmail.com",
   },
   resumeUrl: "/resume.pdf",
   highlights: [

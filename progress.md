@@ -2852,6 +2852,28 @@ The existing workflow was pinned to Node 20; the user's spec asked for Node 22.
 
 ---
 
+## BigMart & Adidas Case Study Link Relabeled ✔
+
+**Objective:** on request, change the grid card's case-study link label from "View Project" to "Project Details" for BigMart and Adidas. LeadForge's "Technical Overview" is untouched.
+
+### Changes
+
+- `shared/data/projects.ts` — `caseStudyLinkLabel` changed from `"View Project"` to `"Project Details"` for both the BigMart and Adidas entries.
+
+### Files Modified
+
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: "Project Details →" renders for both BigMart and Adidas; confirmed no leftover "View Project" label anywhere (the only remaining "View Project" substring match is the unrelated hero "View Projects" CTA button); LeadForge's "Technical Overview" unchanged; zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

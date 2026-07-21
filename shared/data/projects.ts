@@ -311,7 +311,7 @@ export const PROJECTS: Project[] = [
     imageUrl: "/bigmart-dashboard.gif",
     featured: false,
     hasCaseStudy: true,
-    caseStudyLinkLabel: "View Project",
+    caseStudyLinkLabel: "Project Details",
   },
   {
     slug: "adidas-us-sales-dashboard",
@@ -468,6 +468,6 @@ export const PROJECTS: Project[] = [
     imageUrl: "/adidas-dashboard.png",
     featured: false,
     hasCaseStudy: true,
-    caseStudyLinkLabel: "View Project",
+    caseStudyLinkLabel: "Project Details",
   },
 ];

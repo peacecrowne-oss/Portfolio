@@ -2903,6 +2903,34 @@ The supplied GIF (8.1MB) exceeded the inline image-processing size limit in this
 
 ---
 
+## Fourth Project Added: Walmart Store Sales Dashboard ✔
+
+**Objective:** on request, add a fourth Power BI dashboard project (Walmart, 45-store YoY sales analysis Feb 2010–Oct 2012), using content and a dashboard GIF the user supplied directly.
+
+### Clarified before implementing
+
+Asked the same two questions as for Adidas rather than assuming: live demo link (user chose none — `liveDemoUrl` stays `null`, "View Demo" shows as the disabled placeholder) and featured status (user chose unfeatured, joining BigMart and Adidas). Also visually confirmed the supplied GIF (2.9MB, under this environment's size limit) matched the write-up's KPIs before using it — unlike the prior Adidas GIF, which had to be used unverified due to its larger size.
+
+### Changes
+
+- Copied the user-supplied GIF to `client/public/walmart-dashboard.gif`.
+- `shared/data/projects.ts` — new entry, `slug: "walmart-store-sales-dashboard"`, modeled on the same flexible `caseStudySections` structure as BigMart/Adidas. All content — KPIs, business problem, solution, insights, business impact, role, outcome — transcribed directly from the user's write-up, no invented figures. `techStackGroups` and `features` built from the user's "Technology Stack" and "Dashboard Features" lists. `caseStudyLinkLabel: "Project Details"` (matching the other two dashboard projects). `liveDemoUrl: null`, `githubUrl: null`, `featured: false`.
+
+### Files Modified
+
+- `client/public/walmart-dashboard.gif` — new file
+- `shared/data/projects.ts`
+- `progress.md` — this entry
+
+### Validation Results
+
+- `npm run build` — passes
+- `npm run lint` — passes, no errors
+- `docker compose up --build -d` — all containers healthy
+- Playwright verification against the Dockerized site: Walmart card appears in the grid (unfeatured group, after BigMart and Adidas); case-study page loads at `/projects/walmart-store-sales-dashboard`, no "Featured Project" badge, "View Demo" renders as the disabled placeholder, dashboard GIF confirmed fully loaded (not just present in the DOM), and all case-study sections render the exact user-supplied figures (Average Monthly Sales $561.43M, Sales YoY -0.54%, CPI $171.58, CPI YoY +0.99%); zero console errors
+
+---
+
 ## Current Sprint
 
 *Version 2.1 (Docker) complete and validated locally. Awaiting direction: deploy (Dockerized or otherwise), wire the client to consume the live API, refresh `requirements.md` for the new structure, begin Version 2.2 (Kubernetes/cloud container work), or move on to Version 1.1 content/feature work.*

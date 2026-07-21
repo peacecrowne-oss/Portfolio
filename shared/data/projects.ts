@@ -470,4 +470,162 @@ export const PROJECTS: Project[] = [
     hasCaseStudy: true,
     caseStudyLinkLabel: "Project Details",
   },
+  {
+    slug: "walmart-store-sales-dashboard",
+    title: "Walmart Store Sales Dashboard",
+    description:
+      "Built an interactive Power BI dashboard analyzing year-over-year sales performance across 45 Walmart stores (Feb 2010–Oct 2012), examining holiday sales trends and the impact of economic indicators like CPI and unemployment rate.",
+    caseStudyOverview: null,
+    technologies: ["Power BI", "DAX", "Power Query"],
+    techStackGroups: [
+      { label: "Data & Analytics", items: ["Power BI", "DAX (Data Analysis Expressions)"] },
+      {
+        label: "Data Processing",
+        items: ["Power Query (Data Transformation & Cleaning)", "Retail Dataset (45 Stores)"],
+      },
+      {
+        label: "Core Technologies",
+        items: [
+          "KPI Monitoring",
+          "YoY Trend Analysis",
+          "Economic Indicator Correlation",
+          "Interactive Filtering",
+        ],
+      },
+    ],
+    businessProblem: null,
+    solution: null,
+    architecture: null,
+    features: [
+      "KPI cards for Sales, YoY Growth, and CPI trends",
+      "Monthly sales trend analysis with YoY comparison",
+      "Holiday sales breakdown (Super Bowl, Labor Day, Thanksgiving, Christmas)",
+      "Sales vs Unemployment Rate correlation analysis",
+      "Bubble chart showing Sales vs CPI relationship",
+      "Interactive filtering by year and time period",
+    ],
+    challenges: null,
+    outcome: null,
+    caseStudySections: [
+      {
+        heading: "Overview",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "This project analyzes year-over-year sales performance across 45 Walmart stores in the U.S. between February 2010 and October 2012.",
+          },
+          {
+            type: "paragraph",
+            text: "The analysis takes place during a critical economic recovery period following the 2008 financial recession, where retail businesses—including Walmart—experienced fluctuating consumer demand and economic pressure.",
+          },
+        ],
+      },
+      {
+        heading: "Business Problem",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "During the post-recession period, retail organizations faced challenges such as:",
+          },
+          {
+            type: "list",
+            items: [
+              "Declining or unstable year-over-year sales performance",
+              "Impact of economic indicators (e.g., CPI, unemployment rate) on purchasing behavior",
+              "Difficulty understanding seasonal trends and holiday-driven sales spikes",
+              "Limited insights into how external economic factors affect store-level performance",
+            ],
+          },
+          {
+            type: "paragraph",
+            text: "Walmart needed a data-driven solution to better understand sales trends, economic impact, and performance variability across stores.",
+          },
+        ],
+      },
+      {
+        heading: "Solution",
+        blocks: [
+          { type: "paragraph", text: "Developed an interactive Power BI dashboard to:" },
+          {
+            type: "list",
+            items: [
+              "Track monthly sales performance and YoY trends",
+              "Analyze holiday-driven sales patterns",
+              "Evaluate the relationship between sales and economic indicators (CPI, unemployment rate)",
+              "Provide insights into store-level and time-based performance",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Key Metrics",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Average Monthly Sales: $561.43M",
+              "Sales YoY Change: -0.54% (slight decline)",
+              "Consumer Price Index (CPI): $171.58",
+              "CPI YoY Change: +0.99%",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Key Insights",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Sales showed slight YoY decline (-0.54%), indicating post-recession recovery challenges",
+              "Holiday periods (Super Bowl & Labor Day) drove the highest sales performance",
+              "Higher unemployment levels correlated with lower sales performance",
+              "CPI fluctuations influenced consumer purchasing power and spending behavior",
+              "Monthly trends revealed volatility in demand during recovery period",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Business Impact",
+        blocks: [
+          {
+            type: "list",
+            items: [
+              "Enabled understanding of economic impact on retail sales",
+              "Identified high-performing holiday periods for strategic focus",
+              "Provided insights for demand planning and pricing strategies",
+              "Supported data-driven decision-making during economic uncertainty",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "My Role",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "Designed and developed the end-to-end Power BI dashboard, built the data model and relationships, created DAX measures for YoY, CPI, and trend analysis, and delivered insight-driven visualizations for stakeholders.",
+          },
+        ],
+      },
+      {
+        heading: "Outcome",
+        blocks: [
+          {
+            type: "paragraph",
+            text: "This dashboard transformed Walmart's store-level sales data into a centralized analytical solution, enabling stakeholders to understand sales trends, economic influences, and seasonal performance, and make informed decisions to improve revenue and operational efficiency.",
+          },
+        ],
+      },
+    ],
+    showScreenshotsSection: false,
+    screenshots: null,
+    githubUrl: null,
+    liveDemoUrl: null,
+    imageUrl: "/walmart-dashboard.gif",
+    featured: false,
+    hasCaseStudy: true,
+    caseStudyLinkLabel: "Project Details",
+  },
 ];

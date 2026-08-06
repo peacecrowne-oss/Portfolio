@@ -8,7 +8,7 @@ import { PROFILE } from "@shared/data/profile";
 const HERO_TOOLS = ["Power BI", "SQL", "DAX", "Power Query", "SSIS", "Python", "Claude"];
 
 const HERO_STATS = [
-  { value: "6+", label: "years in Data" },
+  { value: "5+", label: "years in Data" },
   { value: "10+", label: "projects delivered" },
   // Customer Service, Accounting, Data Analytics, and Consulting.
   { value: "4", label: "industries served" },

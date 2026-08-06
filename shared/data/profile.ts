@@ -21,7 +21,9 @@ export const PROFILE: Profile = {
   ],
   about: {
     intro: [
-      "A Business Intelligence Developer and Data Analyst with expertise in building interactive Power BI dashboards and scalable analytics solutions using Microsoft Fabric, Power BI, SQL, and Azure. Experienced in developing semantic models, advanced DAX calculations, Power Query transformations, Dataflows Gen2, and Direct Lake solutions to deliver high-performance analytics. Proficient in writing SQL queries for data extraction, analysis, and optimization using joins, temp tables, CTEs, system functions, stored procedures, and views. Skilled in database design, ETL development, and data modeling. Expertise in managing Power BI Service and Microsoft Fabric workspaces, deployment pipelines, scheduled refreshes, security, and Power BI Apps to deliver secure, enterprise-grade BI solutions.",
+      "A Business Intelligence Developer and Data Analyst with expertise in building interactive Power BI dashboards utilizing Microsoft Fabric, Power BI (DAX, Power Query) and SQL to deliver actionable business insight for organizational decision making.",
+      "Proficiency in writing SQL queries for data extraction, analysis, and optimization using joins, temp tables, CTEs, system functions, stored procedures, and views with a vast skill in database design, ETL development, and data modeling.",
+      "Experienced in developing semantic models, Dataflows Gen2, and Direct Lake solutions for high-performance analytics as well as managing Power BI Service and Microsoft Fabric workspaces, deployment pipelines, scheduled refreshes, Role Level Security, and Power BI Apps to deliver secure, enterprise-grade BI solutions.",
     ],
     background: {
       journey:

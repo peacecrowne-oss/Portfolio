@@ -99,7 +99,7 @@ export function Hero() {
             </p>
           </div>
 
-          <p className="max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+          <p className="max-w-2xl text-justify text-lg leading-relaxed text-slate-600 dark:text-slate-400">
             {PROFILE.valueProposition}
           </p>
 

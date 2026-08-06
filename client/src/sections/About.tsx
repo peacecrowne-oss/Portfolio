@@ -24,7 +24,7 @@ export function About() {
             {about.intro.map((paragraph) => (
               <p
                 key={paragraph}
-                className="text-base leading-relaxed text-slate-600 dark:text-slate-400"
+                className="text-justify text-base leading-relaxed text-slate-600 dark:text-slate-400"
               >
                 {paragraph}
               </p>

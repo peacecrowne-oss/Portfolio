@@ -5,7 +5,16 @@ import { Badge } from "@/components/Badge";
 import { withBasePath } from "@/lib/basePath";
 import { PROFILE } from "@shared/data/profile";
 
-const HERO_TOOLS = ["Power BI", "SQL", "DAX", "Power Query", "SSIS", "Python", "Claude"];
+const HERO_TOOLS = [
+  "Power BI",
+  "Microsoft Fabric",
+  "SQL",
+  "DAX",
+  "Power Query",
+  "SSIS",
+  "Python",
+  "Claude",
+];
 
 const HERO_STATS = [
   { value: "5+", label: "years in Data" },

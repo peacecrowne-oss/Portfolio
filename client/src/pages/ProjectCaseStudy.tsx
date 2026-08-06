@@ -99,7 +99,7 @@ export function ProjectCaseStudy() {
     <>
       <Section className="!pb-0 dark:bg-[#08111F]">
         <a
-          href="/#projects"
+          href={withBasePath("/#projects")}
           className="inline-flex items-center gap-1 rounded-sm text-sm font-medium text-slate-600 transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-slate-400 dark:hover:text-white dark:focus-visible:ring-white"
         >
           ← Back to Projects

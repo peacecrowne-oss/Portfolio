@@ -3,6 +3,7 @@ import { Container } from "@/components/Container";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { NAV_LINKS } from "@/constants/navigation";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import { withBasePath } from "@/lib/basePath";
 
 const linkBaseClasses =
   "rounded-sm border-b-2 border-transparent pb-0.5 text-sm font-medium text-slate-700 transition-colors hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-slate-300 dark:hover:text-white dark:focus-visible:ring-white";
@@ -23,7 +24,7 @@ export function Navbar() {
       <Container>
         <div className="flex h-16 items-center justify-between">
           <a
-            href="/#home"
+            href={withBasePath("/#home")}
             className="rounded-sm text-lg font-semibold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 dark:text-white dark:focus-visible:ring-white"
           >
             Portfolio
@@ -36,7 +37,7 @@ export function Navbar() {
                 return (
                   <li key={link.href}>
                     <a
-                      href={link.href}
+                      href={withBasePath(link.href)}
                       aria-current={isActive ? "page" : undefined}
                       className={`${linkBaseClasses} ${isActive ? linkActiveClasses : ""}`}
                     >
@@ -93,7 +94,7 @@ export function Navbar() {
                 return (
                   <li key={link.href}>
                     <a
-                      href={link.href}
+                      href={withBasePath(link.href)}
                       aria-current={isActive ? "page" : undefined}
                       onClick={() => setIsMenuOpen(false)}
                       className={`block px-3 py-2 ${linkBaseClasses} ${isActive ? linkActiveClasses : ""}`}

@@ -7,7 +7,7 @@ export const PROFILE: Profile = {
   location: "Houston, Texas",
   phone: "832-277-7883",
   valueProposition:
-    "Microsoft Certified Power BI Data Analyst specializing in Business Intelligence, Power BI, SQL, DAX, and ETL development on Azure. I build interactive dashboards and AI-powered analytics solutions that turn complex data into clear, actionable business decisions.",
+    "Microsoft Certified Power BI Data Analyst specializing in Business Intelligence, Power BI, SQL, DAX, and ETL development. I build interactive Power BI dashboards and AI-powered analytics solutions that turn complex data into clear, actionable business decisions.",
   social: {
     github: "https://github.com/peacecrowne-oss",
     linkedin: "https://www.linkedin.com/in/omolola-makinde-14bbb440",

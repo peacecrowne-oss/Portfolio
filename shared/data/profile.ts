@@ -7,7 +7,7 @@ export const PROFILE: Profile = {
   location: "Houston, Texas",
   phone: "832-277-7883",
   valueProposition:
-    "I build interactive Power BI dashboards and AI-powered analytics solutions that turn complex data into clear, actionable business decisions.",
+    "I build interactive Power BI dashboards that turn complex data into clear, actionable business decisions.",
   social: {
     github: "https://github.com/peacecrowne-oss",
     linkedin: "https://www.linkedin.com/in/omolola-makinde-14bbb440",

@@ -12,7 +12,7 @@ export function About() {
           <img
             src={withBasePath("/profile-photo.jpeg")}
             alt={PROFILE.name}
-            className="h-48 w-48 rounded-full border-4 border-white object-cover sm:h-56 sm:w-56 lg:h-64 lg:w-64 dark:border-[#08111F]"
+            className="h-48 w-48 rounded-full border-4 border-white object-cover object-top sm:h-56 sm:w-56 lg:h-64 lg:w-64 dark:border-[#08111F]"
           />
         </div>
 

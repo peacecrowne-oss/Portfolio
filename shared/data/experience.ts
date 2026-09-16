@@ -20,7 +20,7 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Data Analyst",
     company: "Joisen Institute and Analytics",
-    startDate: "August 2020",
+    startDate: "August 2022",
     endDate: "June 2025",
     location: "Houston, Texas",
     responsibilities: [
@@ -35,8 +35,8 @@ export const EXPERIENCE: ExperienceEntry[] = [
   {
     role: "Database Administrator",
     company: "RCCG",
-    startDate: "May 2015",
-    endDate: "July 2020",
+    startDate: "January 2020",
+    endDate: "July 2022",
     location: "Houston, Texas",
     responsibilities: [
       "Managed and optimized SQL Server databases, ensuring high availability, data integrity, security, and optimal query performance while improving database processing efficiency.",
@@ -44,6 +44,24 @@ export const EXPERIENCE: ExperienceEntry[] = [
       "Integrated and consolidated data from multiple source systems into centralized databases, supporting ETL processes and enabling consistent, reliable reporting.",
       "Performed data extraction, transformation, validation, and cleansing to improve data quality and ensure accurate reporting across multiple business functions.",
       "Monitored database performance, optimized indexes and queries, and implemented performance tuning techniques to improve system efficiency and data accessibility.",
+    ],
+  },
+  {
+    role: "Cloud Support Specialist",
+    company: "RCCG",
+    startDate: "January 2006",
+    endDate: "December 2019",
+    location: "Maputo, Mozambique",
+    responsibilities: [
+      "Developed and maintained databases and data systems by creating cloud storage accounts for the organization's database.",
+      "Extracted data from primary and secondary sources with the help of automated tools.",
+      "Assessed the quality and meaning of data through analysis.",
+      "Interpreted data and analyzed results using statistical techniques.",
+      "Troubleshot and resolved technical issues while providing customer support.",
+      "Monitored cloud systems for performance issues, threats, and outages.",
+      "Implemented and managed security measures to protect data and applications.",
+      "Developed technical plans for new deployments and supported them by responding to client questions.",
+      "Collaborated with engineering, security, and other IS teams.",
     ],
   },
 ];

@@ -55,13 +55,24 @@ export const EXPERIENCE: ExperienceEntry[] = [
     responsibilities: [
       "Developed and maintained databases and data systems by creating cloud storage accounts for the organization's database.",
       "Extracted data from primary and secondary sources with the help of automated tools.",
-      "Assessed the quality and meaning of data through analysis.",
       "Interpreted data and analyzed results using statistical techniques.",
-      "Troubleshot and resolved technical issues while providing customer support.",
+      "Resolved technical issues and provided customer support.",
       "Monitored cloud systems for performance issues, threats, and outages.",
       "Implemented and managed security measures to protect data and applications.",
       "Developed technical plans for new deployments and supported them by responding to client questions.",
-      "Collaborated with engineering, security, and other IS teams.",
+    ],
+  },
+  {
+    role: "Front Office Manager",
+    company: "Nestle",
+    startDate: "July 2004",
+    endDate: "December 2005",
+    location: "Lagos, Nigeria",
+    responsibilities: [
+      "Served as the first point of contact for customers, visitors, vendors, and business partners, providing a professional and welcoming experience.",
+      "Coordinated visitor access, appointments, meeting arrangements, and front-office activities to ensure smooth and efficient operations.",
+      "Collaborated with the Administrative team to support daily office operations, internal communication, scheduling, and administrative activities.",
+      "Managed incoming telephone calls, responded to general inquiries, and efficiently transferred calls to the appropriate departments and employees.",
     ],
   },
 ];
